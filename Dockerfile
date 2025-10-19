@@ -1,41 +1,41 @@
-# Use PHP 8.2 with Apache
-FROM php:8.2-apache
+# Use official PHP image
+FROM php:8.2
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Install dependencies and PHP extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libonig-dev libxml2-dev zip curl nodejs npm \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
-    && a2enmod rewrite
+    git \
+    unzip \
+    nodejs \
+    npm \
+    libzip-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    curl \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy all project files
+# Copy all project files into container
 COPY . .
 
-# Install PHP dependencies (Laravel)
-RUN composer install --no-dev --no-interaction --optimize-autoloader
+# Install PHP dependencies
+RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-# Install Node dependencies and build assets (if package.json exists)
-RUN if [ -f package.json ]; then npm install && npm run build; fi
+# Install Node dependencies and build assets
+RUN npm install && npm run build
 
-# Set correct permissions for storage and cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Ensure Laravel has writable folders
+RUN chmod -R 775 storage bootstrap/cache
 
-# Set Apache document root to /public
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+# Expose port 8000 for php artisan serve
+EXPOSE 8000
 
-# Fix "ServerName" warning
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# Expose the port (Railway will replace this automatically)
-EXPOSE 8080
-
-# Clear Laravel cache
-RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
-
-# Start Apache in foreground
-CMD ["apache2-foreground"]
+# Run database migrations automatically (optional)
+# You can comment this line if you don’t want it to run every start
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
