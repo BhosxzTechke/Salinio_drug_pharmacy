@@ -13,11 +13,16 @@ COPY . .
 
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
+# Clear old caches
 RUN php artisan config:clear && php artisan cache:clear && php artisan route:clear
 
+# Fix permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Change Apache root to Laravel public
+# Set Apache root to Laravel public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Optional: suppress ServerName warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 EXPOSE 80

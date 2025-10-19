@@ -38,11 +38,39 @@ class AdminController extends Controller
 
 
 
-        return view('index', compact('totalProfit', 'totalSales', 'totalOrders', 'avgOrder'));     
+        /////// for dynamic chart
+
+        // Total sales today
+        $todaySales = Order::whereDate('order_date', Carbon::today())
+                            ->where('order_status', 'complete')
+                            ->sum('total');
+
+        // Target sales (example: daily target, you can store in settings table)
+        $targetSales = 10000; // example static, or get from DB
+
+        // Last week sales
+        $lastWeekSales = Order::whereBetween('order_date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
+                                ->where('order_status', 'complete')
+                                ->sum('total');
+
+        // Last month sales
+        $lastMonthSales = Order::whereBetween('order_date', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
+                                ->where('order_status', 'complete')
+                                ->sum('total');
+
+
+        // Calculate percentage for circle
+        $percentage = $targetSales > 0 ? round(($todaySales / $targetSales) * 100, 2) : 0;
+
+
+
+        return view('index', compact('percentage','totalProfit', 'totalSales', 'totalOrders', 'avgOrder','todaySales', 'targetSales', 'lastWeekSales', 'lastMonthSales'));     
 
 
     }    // End Method
     
+
+
 
 
 
