@@ -35,10 +35,19 @@ class FrontendController extends Controller
 
 
             //// /FIFO TRACKING
-                $inventory = Inventory::where('quantity', '>', 10)
-                ->select('product_id', DB::raw('SUM(quantity) as total_quantity'), 'selling_price')
+            $inventory = Inventory::select(
+                    'product_id',
+                    DB::raw('SUM(quantity) as total_quantity'),
+                    DB::raw('MAX(created_at) as latest_date'),
+                    'selling_price'
+                )
+                ->where('quantity', '>', 10)
                 ->groupBy('product_id', 'selling_price')
-                ->latest()->take(8)->inRandomOrder()->get();
+                ->orderByDesc('latest_date')
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+
 
 
             $bestSellers = $inventory
