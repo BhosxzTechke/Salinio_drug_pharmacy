@@ -32,5 +32,8 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 8080 (Railway default)
 EXPOSE 8080
 
-# Run migrations and start Laravel server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
+# # Run migrations and start Laravel server
+# CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
+
+# Run migrations and seeder automatically
+CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8000
