@@ -19,9 +19,13 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Build frontend assets (only if using npm/Vite)
-RUN if [ -f package.json ]; then npm install && npm run build; fi
+# Install Node.js and build frontend
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    if [ -f package.json ]; then npm install && npm run build; fi
 
+
+    
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
