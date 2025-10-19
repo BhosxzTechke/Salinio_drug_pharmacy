@@ -36,4 +36,4 @@ EXPOSE 8080
 # CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080
 
 # Run migrations and seeder automatically
-CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan migrate --force --seed && php artisan serve --host=0.0.0.0 --port=8080
