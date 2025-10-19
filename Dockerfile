@@ -19,25 +19,31 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Install Node.js and build frontend
+# Install Node.js and build frontend (for Laravel Breeze/Vite)
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
-    if [ -f package.json ]; then npm install && npm run build; fi
+    if [ -f package.json ]; then \
+        npm install && \
+        npm run build; \
+    fi
 
-# Set correct permissions
+# Set correct permissions for storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Set Apache document root to Laravel's /public
+# Set Apache DocumentRoot to /public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Make Apache listen to Railway's dynamic port
-RUN echo "Listen ${PORT:-80}" > /etc/apache2/ports.conf
+# Ensure Apache listens on Railway’s dynamic port
+RUN echo "Listen ${PORT:-8080}" > /etc/apache2/ports.conf
 
-# Expose the same port Railway will use
+# Expose Railway port
 EXPOSE ${PORT}
 
-# Clear Laravel caches (optional)
+# Clear Laravel caches (optional but good for production)
 RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Copy and make entrypoint executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
