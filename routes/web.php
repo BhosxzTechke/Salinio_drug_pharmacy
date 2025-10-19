@@ -937,7 +937,7 @@ use Illuminate\Http\Request;
             ///////////////////////// Roles ///////////////////////////
 
                         //Show All Permissions AND SHOW ROLES TABLE
-            Route::get('/permission', 'AllPermission')->name('all.permission')->middleware('permission:view-all-permissions');
+            Route::get('/permission', 'AllPermission')->name('all.permission');
 
 
                          //Add Roles Form
@@ -971,7 +971,7 @@ use Illuminate\Http\Request;
 
 
             //View Roles in Permission
-            Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission')->middleware('permission:view-all-roles-in-permissions');
+            Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission');
 
 
 
@@ -998,16 +998,16 @@ use Illuminate\Http\Request;
             Route::controller(AdminController::class)->group(function () {
 
             //All Admin User Table
-            Route::get('/admin/all', 'AllAdmin')->name('all.admin')->middleware('permission:view-all-admin-accounts');
+            Route::get('/admin/all', 'AllAdmin')->name('all.admin');
 
 
-            Route::get('/admin/Create', 'CreateAdmin')->name('create.admin')->middleware('permission:add-admin-account');
+            Route::get('/admin/Create', 'CreateAdmin')->name('create.admin');
             
             Route::post('/admin/Store', 'StoreAdmin')->name('Store.admin');
 
             
             // EDIT ADMIN
-            Route::get('/admin/edit/{id}', 'EditAdmin')->name('edit.admin')->middleware('permission:edit-admin-account');
+            Route::get('/admin/edit/{id}', 'EditAdmin')->name('edit.admin');
 
 
             // Update ADMIN
