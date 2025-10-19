@@ -23,6 +23,10 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
+# Build assets (if using Vite or Laravel Mix)
+RUN npm install && npm run build
+
+
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
