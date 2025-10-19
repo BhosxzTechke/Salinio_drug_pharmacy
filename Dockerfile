@@ -1,28 +1,42 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    unzip \
+    zip \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libsodium-dev \
+    libpq-dev \
+    default-mysql-client \
+    default-libmysqlclient-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath gd zip sodium \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libonig-dev libxml2-dev zip curl \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
-    && a2enmod rewrite
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
+# Copy existing application directory contents
 COPY . .
 
-RUN composer install --optimize-autoloader --no-dev --no-interaction
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Clear old caches
-RUN php artisan config:clear && php artisan cache:clear && php artisan route:clear
+# Set permissions for Laravel
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Fix permissions
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Expose port
+EXPOSE 8000
 
-# Set Apache root to Laravel public
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-
-# Optional: suppress ServerName warning
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-EXPOSE 80
+# Run Laravel server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
