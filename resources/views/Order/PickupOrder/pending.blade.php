@@ -1,0 +1,188 @@
+@extends('admin_dashboard')
+@section('admin')
+
+
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+ 
+                                    </div>
+                                    <h4 class="page-title">Pickup Orders Table</h4>
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+
+ <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                <thead>
+
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Order #</th>
+                                        <th>Order Source</th>
+                                        <th>Name</th>
+                                        <th>Order Date</th>
+                                        <th>Payment</th>
+                                        <th>Invoice</th>
+                                        <th>Pay</th>
+                                        <th>Order Status</th>
+                                        <th>Order Type</th>
+                                        <th>Action</th>
+                                    </tr>
+
+
+                    </thead>
+                    
+                    
+    <tbody>
+        {{-- Order table Fillable --}}
+    @php $sl = 1 @endphp
+    @foreach ($Orders as $data)
+        <tr id="order-row-{{ $data->id }}">
+    
+            <td>{{ $sl++ }}</td>
+            <td>Order#:{{$data->id }}</td>
+            <td>{{ $data->order_source }}</td>
+            <td>{{ $data->customer->name ?? '' }}</td>
+            <td>{{ $data->order_date }}</td>
+            <td>{{ $data->payment_status }}</td>
+            <td>{{ $data->invoice_no }}</td>
+            <td>{{ $data->pay }}</td>
+            <td><span class="badge bg-danger"> {{ $data->order_status ?? '' }}</span></td>
+            <td><span class="badge bg-warning"> {{ $data->order_type ?? '' }}</span></td>
+            <td>
+
+                    <button class="btn btn-sm btn-info mark-shipped" data-id="{{ $data->id }}">Mark as Complete</button>
+                    <button class="btn btn-sm btn-danger mark-cancelled" data-id="{{ $data->id }}">Cancel</button>
+
+                <a href="{{ route('details', $data->id) }}" class="btn btn-sm btn-info">View Details</a>
+            </td>
+        </tr>
+@endforeach
+
+
+
+</tbody>
+                    </table>
+
+                                    </div> <!-- end card body-->
+                                </div> <!-- end card -->
+                            </div><!-- end col-->
+                        </div>
+                        <!-- end row-->
+
+
+       
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                {{-- <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <script>document.write(new Date().getFullYear())</script> &copy; UBold theme by <a href="">Coderthemes</a> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end footer-links d-none d-sm-block">
+                                    <a href="javascript:void(0);">About Us</a>
+                                    <a href="javascript:void(0);">Help</a>
+                                    <a href="javasc
+                                    ript:void(0);">Contact Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer --> --}}
+
+            </div>
+
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+$(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    });
+
+    // Mark as Shipped
+    $('.mark-shipped').click(function() {
+        let id = $(this).data('id');
+
+        Swal.fire({
+            title: 'Mark as Complete Pickup?',
+            text: 'Are you sure you want to mark this pickup as Complete?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Complete it!',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("{{ route('ajax.pickup.complete') }}", { id: id }, function(data) {
+                    if (data.success) {
+                        $('#order-row-' + id).fadeOut();
+                        Swal.fire('Success', data.message, 'success');
+                    }
+                });
+            }
+        });
+    });
+
+
+
+    // Cancel Order
+    $('.mark-cancelled').click(function() {
+        let id = $(this).data('id');
+
+        Swal.fire({
+            title: 'Cancel this order?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Cancel it!',
+            cancelButtonText: 'No, go back'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("{{ route('orders.ajax.cancelled') }}", { id: id }, function(data) {
+                    if (data.success) {
+                        $('#order-row-' + id).fadeOut();
+                        Swal.fire('Cancelled', data.message, 'success');
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+
+
+
+@endsection
