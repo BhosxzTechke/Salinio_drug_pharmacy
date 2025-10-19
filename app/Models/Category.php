@@ -25,11 +25,11 @@ class Category extends Model
     protected static function booted()
     {
         static::creating(function ($category) {
-            $category->slug = Str::slug($category->name);
+            $category->slug = Str::slug($category->category_name);
         });
 
         static::updating(function ($category) {
-            $category->slug = Str::slug($category->name);
+            $category->slug = Str::slug($category->category_name);
         });
     }
 

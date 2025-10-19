@@ -19,7 +19,7 @@
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Edit Category</h4>
                                 </div>
                             </div>
                         </div>     
@@ -49,7 +49,7 @@
 
                                                             <div class="mb-3">
                                                                 <label for="name" class="">Category Name</label>
-                                                                <input type="text" name="name" value="{{ $CatData->category_name }}" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Customer name">
+                                                                <input type="text" name="category" value="{{ $CatData->category_name }}" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Customer name">
                                                         
                                                                 @error('name')
                                                           <span class="text-danger"> {{ $message }} </span>
@@ -62,7 +62,7 @@
     
 
                                                     <div class="text-end">
-                                                        <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save Changes</button>
+                                                        <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Update Changes</button>
                                                     </div>
                                                     
                                                 </form>

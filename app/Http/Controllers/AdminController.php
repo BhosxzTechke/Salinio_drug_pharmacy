@@ -16,15 +16,29 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\RunBackup;
 use Illuminate\Support\Str;
-
-
+use App\Models\Orderdetails;
+use App\Models\Order;
 class AdminController extends Controller
 {
     //
 
     public function dashboard()
     {
-        return view('index');     
+
+    $totalProfit = Orderdetails::sum('profit');
+
+        // Total Sales (completed orders)
+        $totalSales = Order::where('order_status', 'complete')->sum('total');
+
+        // Total Orders (completed)
+        $totalOrders = Order::where('order_status', 'complete')->count();
+
+        // Average Order Value
+        $avgOrder = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
+
+
+
+        return view('index', compact('totalProfit', 'totalSales', 'totalOrders', 'avgOrder'));     
 
 
     }    // End Method

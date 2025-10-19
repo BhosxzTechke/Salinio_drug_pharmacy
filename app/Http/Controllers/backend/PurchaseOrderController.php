@@ -97,10 +97,10 @@ public function SavePurchaseOrder(Request $request)
 
         Cart::instance('purchaseOrder')->destroy();
 
-        return redirect()->route('purchase.order')->with([
-            'message' => 'Purchase Order successfully created!',
-            'alert-type' => 'success',
-        ]);
+            return redirect()->route('purchase.order')->with([
+                'message' => 'Purchase Order successfully created!',
+                'alert-type' => 'success',
+            ]);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
         // Laravel handles validation errors automatically

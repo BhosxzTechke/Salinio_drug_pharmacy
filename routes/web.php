@@ -551,7 +551,7 @@ use Illuminate\Http\Request;
 
     ///////// SHOWING FORM DETAILS
 
-    Route::get('Received/Order/{id}', 'ReceivedOrderDetails')->name('Received.Order')->middleware('permission:view-received-form');
+    Route::get('Received/Order/{id}', 'ReceivedOrderDetails')->name('Received.Order');
 
 
 
