@@ -1,28 +1,23 @@
-# Use PHP CLI version (no Apache)
-FROM php:8.2-cli
+FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
-    git unzip nodejs npm libzip-dev libpng-dev libonig-dev libxml2-dev zip curl \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+    git unzip libzip-dev libpng-dev libonig-dev libxml2-dev zip curl \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
+    && a2enmod rewrite
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-# ✅ Install Composer packages
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-# ✅ Install Node packages
-RUN npm install
+RUN php artisan config:clear && php artisan cache:clear && php artisan route:clear
 
-# ✅ This ensures Bootstrap/Tailwind are compiled before running Laravel
-RUN npm run build || npm run production
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-# ✅ Fix folder permissions
-RUN chmod -R 775 storage bootstrap/cache
+# Change Apache root to Laravel public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-EXPOSE 8000
-
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+EXPOSE 80
