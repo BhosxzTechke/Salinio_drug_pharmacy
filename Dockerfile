@@ -4,7 +4,7 @@ FROM php:8.2-apache
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libonig-dev libxml2-dev zip curl \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd \
@@ -19,20 +19,25 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Install Node.js and build frontend (for Laravel Mix)
+# Install Node.js and build frontend
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     if [ -f package.json ]; then npm install && npm run build; fi
 
-# Set proper permissions
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Configure Apache to use Laravel's public directory
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Set Apache document root to Laravel's /public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Expose default Apache port
-EXPOSE 80
+# Make Apache listen to Railway's dynamic port
+RUN echo "Listen ${PORT:-80}" > /etc/apache2/ports.conf
 
-# Start Apache (no artisan serve)
+# Expose the same port Railway will use
+EXPOSE ${PORT}
+
+# Clear Laravel caches (optional)
+RUN php artisan config:clear && php artisan cache:clear && php artisan view:clear
+
+# Start Apache
 CMD ["apache2-foreground"]
