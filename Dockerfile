@@ -24,10 +24,11 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Node.js (for npm and Laravel Mix)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm@latest \
+# Install Node.js 18 (stable for Laravel Mix)
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    && npm install -g npm@9 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
