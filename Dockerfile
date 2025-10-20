@@ -24,12 +24,14 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Node.js 18 (stable for Laravel Mix)
+# Install Node.js 18 and npm (stable for Laravel Mix)
 RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     && npm install -g npm@9 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
 
 # Set working directory
 WORKDIR /var/www/html
