@@ -33,7 +33,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy package files first for caching
+# Copy only package files first (for caching)
 COPY package*.json ./
 
 # Install npm dependencies
@@ -42,17 +42,20 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Compile assets (Tailwind, Mix, Bootstrap)
+# Compile Laravel Mix assets (Tailwind, Bootstrap, JS)
 RUN npm run production
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions for Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
+# Set proper permissions
+RUN chown -R www-data:www-data \
+    /var/www/html/storage \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/public
 
-# Expose port 8080
+# Expose the port Laravel runs on
 EXPOSE 8080
 
-# Run Laravel server
+# Serve the Laravel app
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
