@@ -429,7 +429,7 @@
 
 
 
- @if(Auth::user()->can('order-menu'))
+@if(Auth::user()->can('pickup-order-menu'))
                         <li>
                         <a href="#pickup" data-bs-toggle="collapse">
                             <i class="mdi mdi-storefront-outline"></i>
