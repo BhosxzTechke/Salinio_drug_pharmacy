@@ -60,7 +60,7 @@ $PosData = Inventory::where('quantity', '>', 0)
     $discounts = DB::table('discounts')->where('active', 1)->get();
 
     // 6. Pass all data to the view
-    return view('pos.pos', compact(
+    return view('POS.pos', compact(
         'PosData',
         'Customer',
         'totalInclusive',
