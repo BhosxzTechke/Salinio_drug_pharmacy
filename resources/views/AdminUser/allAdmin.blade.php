@@ -94,7 +94,7 @@
                                     @endif
 
 
-                                    @if(auth::user()->can('view-temporary-password'))
+                                    {{-- @if(auth::user()->can('view-temporary-password')) --}}
                                     <button 
                                         type="button" 
                                         class="btn btn-secondary rounded-pill waves-effect waves-light" 
@@ -104,7 +104,7 @@
                                         {{ $data->must_change_password ? '' : 'disabled' }}>
                                         Show Temp Password
                                     </button>
-                                @endif
+                                {{-- @endif --}}
                             @endif
                             </td>
                         </tr>
