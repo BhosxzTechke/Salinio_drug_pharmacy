@@ -37,11 +37,17 @@ public function viewPos()
     // 4. Load customers, inventory, categories
     $Customer = Customer::where('added_by_staff', 1)->latest()->get();
 
-    $PosData = Inventory::where('quantity', '>', 0)
-    ->select('product_id', DB::raw('SUM(quantity) as total_quantity'), 'selling_price')
+$PosData = Inventory::where('quantity', '>', 0)
+    ->select(
+        'product_id',
+        'selling_price',
+        DB::raw('SUM(quantity) as total_quantity'),
+        DB::raw('MAX(created_at) as latest_created')
+    )
     ->groupBy('product_id', 'selling_price')
-    ->latest()
+    ->orderByDesc('latest_created')
     ->get();
+
 
     
 

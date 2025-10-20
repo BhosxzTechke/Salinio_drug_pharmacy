@@ -905,6 +905,7 @@ use Illuminate\Http\Request;
             
         });
 
+        
         //////////////////////////////// PERMISSIONS ///////////////////////
             Route::controller(RoleController::class)->group(function () {
 
