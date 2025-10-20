@@ -288,8 +288,11 @@ public function StoreProfile(Request $request)
 
 public function StoreAdmin(Request $request)
 {
+
+
+
         $request->validate([
-            'id' => 'required|exists:users,id',
+            // 'id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|numeric|unique:users,phone',
@@ -315,7 +318,7 @@ public function StoreAdmin(Request $request)
     $user->email = $request->email;
     $user->phone = $request->phone;
     $user->password = Hash::make($randomPassword);
-    $user->temp_password = $randomPassword; // ⚠️ plain password (short-term)
+    $user->temp_password = $randomPassword;
     $user->must_change_password = true;
     $user->save();
 

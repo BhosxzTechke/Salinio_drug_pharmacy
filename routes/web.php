@@ -909,7 +909,7 @@ use Illuminate\Http\Request;
             Route::controller(RoleController::class)->group(function () {
 
             //Show All Permissions AND SHOW ROLES TABLE
-            Route::get('/roles', 'AllRoles')->name('all.roles')->middleware('permission:view-all-roles');
+            Route::get('/roles', 'AllRoles')->name('all.roles');
 
 
             //Add Permissions

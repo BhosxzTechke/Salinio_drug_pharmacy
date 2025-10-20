@@ -78,12 +78,12 @@
                                 @else
 
                                 
-                                    @if(Auth::user()->can('edit-admin-account'))
+                                    {{-- @if(Auth::user()->can('edit-admin-account')) --}}
                                         <a href="{{ route('edit.admin', $data->id) }}" 
                                             class="btn btn-success rounded-pill waves-effect waves-light">
                                             <i class="fa-solid fa-square-pen"></i> Edit
                                         </a>
-                                    @endif
+                                    {{-- @endif --}}
 
                                     @if(Auth::user()->can('delete-admin-account'))
                                         <a href="{{ route('delete.admin', $data->id) }}" 

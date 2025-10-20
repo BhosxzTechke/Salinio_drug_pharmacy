@@ -1,3 +1,4 @@
+# Use PHP 8.2 CLI image
 FROM php:8.2-cli
 
 # Install system dependencies
@@ -23,19 +24,34 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install Node.js (for npm and Laravel Mix)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy existing application directory contents
+# Copy package files first for caching
+COPY package*.json ./
+
+# Install npm dependencies
+RUN npm install
+
+# Copy the rest of the application
 COPY . .
+
+# Compile assets (Tailwind, Mix, Bootstrap)
+RUN npm run production
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions for Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
 
-# Expose port
+# Expose port 8080
 EXPOSE 8080
 
 # Run Laravel server

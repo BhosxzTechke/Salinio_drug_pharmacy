@@ -103,7 +103,7 @@
                             
                 <div class="form-check mb-2 form-check-primary">
 
-        {{-- Checked Category , Supplier --}}
+        {{-- Checkbox --}}
         <input class="form-check-input rounded-circle" type="checkbox" value=""
             id="customckeck1" {{ App\Models\User::roleHasPermissions($roles, $permissions) ? 'checked' : ''}} >
         <label class="form-check-label"  for="customckeck1">{{ $group->group_name }}</label>
@@ -212,5 +212,45 @@
     </script>
 
 
+
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+    // Select All
+    $('#custome_selectAll').on('change', function () {
+        $('input[type=checkbox]').prop('checked', $(this).is(':checked'));
+    });
+
+    // if pinindot si group mag automatic maseselect lahat ng permission nia
+    $('.group-checkbox').on('change', function () {
+        let groupIndex = $(this).attr('id').split('_')[1];
+        $(`.permission-checkbox[data-group="${groupIndex}"]`).prop('checked', $(this).is(':checked'));
+        updateSelectAll();
+    });
+
+    // Permission checkbox change
+    $('.permission-checkbox').on('change', function () {
+        let groupIndex = $(this).data('group');
+        let groupPermissions = $(`.permission-checkbox[data-group="${groupIndex}"]`);
+        let groupCheckedCount = groupPermissions.filter(':checked').length;
+
+        //  Check group if at least 1 permission is selected
+        $(`#group_${groupIndex}`).prop('checked', groupCheckedCount > 0);
+
+        updateSelectAll();
+    });
+
+
+
+
+    function updateSelectAll() {
+        let allChecked = $('.permission-checkbox').length === $('.permission-checkbox:checked').length;
+        $('#custome_selectAll').prop('checked', allChecked);
+    }
+
+});
+</script>
 
 @endsection
