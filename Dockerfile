@@ -47,9 +47,14 @@ RUN npm run production
 
 # Install PHP dependencies (with Composer allowed as root)
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
-# COMPOSER_ALLOW_SUPERUSER=1 Lets Composer run as root
 
-
+# --- ✅ NEW SECTION: Clear Laravel + Spatie caches on build ---
+RUN php artisan config:clear || true \
+&& php artisan cache:clear || true \
+&& php artisan route:clear || true \
+&& php artisan view:clear || true \
+&& php artisan permission:cache-reset || true
+# '|| true' prevents the build from stopping if artisan isn’t ready yet.
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
@@ -59,4 +64,3 @@ EXPOSE 8080
 
 # Run Laravel server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
-
