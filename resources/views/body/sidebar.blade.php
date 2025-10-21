@@ -211,7 +211,7 @@
 
 
 
-                        {{-- @if(Auth::user()->can('category-menu')) --}}
+                        @if(Auth::user()->can('category-menu'))
                         <li>
                             <a href="#cat" data-bs-toggle="collapse">
                                 <i class="fas fa-store"></i>
@@ -227,7 +227,7 @@
 
                             </div>  
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
 
                         
@@ -506,7 +506,7 @@
 
 
 
-                {{-- @if(Auth::user()->can('view-all-reports')) --}}
+                @if(Auth::user()->can('audit-trail-menu'))
                 <li>
                     <a href="#audit" data-bs-toggle="collapse">
                         <i class="mdi mdi-file-document-outline"></i>
@@ -518,24 +518,24 @@
                 <div class="collapse" id="audit">
                     <ul class="nav-second-level">
 
-                        @if(Auth::user()->can('view-audit-trail'))
+                        @if(Auth::user()->can('view-audit-trail-action'))
                             <li>
                                 <a href="{{ route('audit.trail')}}">Audit By Action</a>
                             </li>
                         @endif
 
 
-                        {{-- @if(Auth::user()->can('view-weekly-sales-report')) --}}
+                        @if(Auth::user()->can('view-audit-trail-log'))
                         <li>
                             <a href="{{ route('audit.log') }}">Audit By Log</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
 
                         </ul>
                     </div>
                 </li>
-            {{-- @endif --}}
+            @endif
 
 
           @if(Auth::user()->can('manage-commerce-settings'))
@@ -550,11 +550,11 @@
 
 
 
-        @if(Auth::user()->can('all-reports'))
+        @if(Auth::user()->can('all-reports-section'))
             <li class="menu-title mt-2">Reports</li>
 
 
-            @if(Auth::user()->can('view-all-reports'))
+            @if(Auth::user()->can('reports-menu'))
                 <li>
                     <a href="#SalesReport" data-bs-toggle="collapse">
                         <i class="mdi mdi-chart-bar"></i>
@@ -587,15 +587,16 @@
                         @endif
 
 
-                        
+                        @if(Auth::user()->can('view-top-sellings'))
                         <li>
                             <a href="{{ route('top.sellings') }}">Top Selling Products</a>
                         </li>
+                                                @endif
 
                         </ul>
                     </div>
                 </li>
-            @endif
+        @endif
 
 
 
@@ -716,7 +717,7 @@
 
 
 
-    @if(Auth::user()->can('custom'))
+    @if(Auth::user()->can('custom-section'))
         <li class="menu-title mt-2">Custom</li>
 
 
@@ -753,11 +754,11 @@
         {{-- <li class="menu-title mt-2">GENERAL SETTINGS</li> --}}
 
 
-        @if(Auth::user()->can('business-name-menu'))
+        @if(Auth::user()->can('change-logo-name-menu'))
             <li>
                 <a href="#businessName" data-bs-toggle="collapse">
                     <i class="mdi mdi-rename-box"></i>
-                    <span>Modify Business Name </span>
+                    <span>Modify Logo Name </span>
                     <span class="menu-arrow"></span>
                 </a>
 
@@ -767,7 +768,7 @@
 
                     @if(Auth::user()->can('change-business-name'))
                     <li>
-                        <a href="{{ route('business.name')}}">Change Business Name</a>
+                        <a href="{{ route('business.name')}}">Change Logo Name</a>
                     </li>
                     @endif
                     
@@ -782,11 +783,12 @@
 
 
 
-    {{-- @if(Auth::user()->can('general-settings')) --}}
+    @if(Auth::user()->can('general-settings-section'))
 
-            {{-- @if(Auth::user()->can('roles-and-permission')) --}}
-                    <li class="menu-title mt-2">GENERAL SETTINGS</li>
+    <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
+
+            @if(Auth::user()->can('roles-and-permission-menu'))
             <li>
                 <a href="#sidebarExpages" data-bs-toggle="collapse">
                     <i class="mdi mdi-account-key"></i>
@@ -794,39 +796,39 @@
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="sidebarExpages">
-                    <ul class="nav-second-level">
+                    <ul class="nav-second-level">   
 
-                        {{-- @if(Auth::user()->can('view-all-permissions')) --}}
+                        @if(Auth::user()->can('view-all-permissions'))
                         <li>
                             <a href="{{ route('all.permission') }}">All Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
-                        {{-- @if(Auth::user()->can('view-all-roles')) --}}
+                        @if(Auth::user()->can('view-all-roles'))
                         <li>
                             <a href="{{ route('all.roles') }}">All Roles</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
-                        {{-- @if(Auth::user()->can('manage-roles-and-permissions')) --}}
+                        @if(Auth::user()->can('manage-roles-and-permissions'))
                         <li>
                             <a href="{{ route('add.roles.permission') }}">Roles in Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
-                        {{-- @if(Auth::user()->can('view-all-roles-in-permissions')) --}}
+                        @if(Auth::user()->can('view-all-roles-in-permissions'))
                         <li>
                             <a href="{{ route('all.roles.permission') }}">All Roles in Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
                     </ul>
 
                 </div>
             </li>
-                {{-- @endif --}}
+                @endif
 
 
-                {{-- @if(Auth::user()->can('user-account-menu')) --}}
+                @if(Auth::user()->can('user-account-menu'))
                     <li>
                             <a href="#admin" data-bs-toggle="collapse">
                                 <i class="mdi mdi-account-circle"></i>
@@ -836,24 +838,24 @@
                             <div class="collapse" id="admin">
                                 <ul class="nav-second-level">
 
-                                    {{-- @if(Auth::user()->can('view-all-admin-accounts')) --}}
+                                    @if(Auth::user()->can('view-all-user-accounts'))
                                     <li>
                                         <a href="{{ route('all.admin') }}">All Users</a>
                                     </li>
-                                    {{-- @endif --}}
+                                    @endif
 
-                                    {{-- @if(Auth::user()->can('add-admin-account')) --}}
+                                    @if(Auth::user()->can('add-user-account'))
                                     <li>
                                         <a href="{{ route('create.admin') }}">Add Users</a>
                                     </li>
-                                    {{-- @endif --}}
+                                    @endif
 
                                 </ul>
 
 
                             </div>
                         </li>
-                {{-- @endif --}}
+                @endif
 
 
 
@@ -870,7 +872,7 @@
                             <div class="collapse" id="backup">
                                     <ul class="nav-second-level">
 
-                                            @if(Auth::user()->can('backup-database'))
+                                            @if(Auth::user()->can('view-backup-database'))
                                                     <li>
                                                         <a href="{{ route('backup.database')}}">Backup Database</a>
                                                     </li>

@@ -82,8 +82,10 @@
         <option value="orders"> Orders</option>
         <option value="stock"> Stock </option>
         <option value="roles"> Roles</option> 
-        <option value="purchaseorder"> Purchase Order</option>           
-                </select>
+        <option value="purchaseorder"> Purchase Order</option>    
+        <option value="pickuporder"> Pickup Order</option>    
+        <option value="generalsettings"> General Settings</option>           
+        </select>
            
         </div>
     </div>

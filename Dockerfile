@@ -48,7 +48,6 @@ RUN npm run production
 # Install PHP dependencies (with Composer allowed as root)
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
-# --- ✅ NEW SECTION: Clear Laravel + Spatie caches on build ---
 RUN php artisan config:clear || true \
 && php artisan cache:clear || true \
 && php artisan route:clear || true \

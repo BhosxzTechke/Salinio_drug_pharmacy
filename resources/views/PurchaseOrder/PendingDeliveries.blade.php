@@ -61,9 +61,9 @@
                     <td><span class="badge badge-pill bg-danger"> {{ $data->status }}</span></td>
 
                     <td>
-                        {{-- @if(Auth::user()->can('receive-pending-order')) --}}
+                        @if(Auth::user()->can('receive-pending-order-button'))
                         <a href="{{ route('Received.Order', $data->id)}}" class="btn btn-dark rounded-pill waves-effect waves-light">Received Delivery</a>
-                        {{-- @endif --}}
+                        @endif
                     </td>
                 </tr>
                     @endforeach
