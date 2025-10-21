@@ -6,6 +6,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
     if (config('app.env') === 'production') {
         URL::forceScheme('https');
     }
+
+        // Disable ONLY_FULL_GROUP_BY in SQL mode
+    DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
 
     // Share categories with all views
     View::composer('*', function ($view) {
