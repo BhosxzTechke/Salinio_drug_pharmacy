@@ -591,14 +591,15 @@
                         <li>
                             <a href="{{ route('top.sellings') }}">Top Selling Products</a>
                         </li>
-                                                @endif
+                        @endif
 
                         </ul>
                     </div>
                 </li>
+            @endif
+
+
         @endif
-
-
 
 
 
@@ -711,7 +712,6 @@
 
                         {{-- @endif --}}
 
-                    @endif
 
 
 
@@ -746,7 +746,7 @@
                     </ul>
                 </div>
             </li>
-            @endif
+        @endif
 
 
 
@@ -771,10 +771,10 @@
                         <a href="{{ route('business.name')}}">Change Logo Name</a>
                     </li>
                     @endif
-                    
-                </ul>
-            </div>
-        </li>
+                        
+                    </ul>
+                </div>
+            </li>
         @endif
 
 
@@ -785,16 +785,16 @@
 
     @if(Auth::user()->can('general-settings-section'))
 
-    <li class="menu-title mt-2">GENERAL SETTINGS</li>
+        <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
 
             @if(Auth::user()->can('roles-and-permission-menu'))
-            <li>
-                <a href="#sidebarExpages" data-bs-toggle="collapse">
-                    <i class="mdi mdi-account-key"></i>
-                    <span> Roles and Permission </span>
-                    <span class="menu-arrow"></span>
-                </a>
+                <li>
+                    <a href="#sidebarExpages" data-bs-toggle="collapse">
+                        <i class="mdi mdi-account-key"></i>
+                        <span> Roles and Permission </span>
+                        <span class="menu-arrow"></span>
+                    </a>
                 <div class="collapse" id="sidebarExpages">
                     <ul class="nav-second-level">   
 
@@ -823,9 +823,9 @@
                         @endif
                     </ul>
 
-                </div>
-            </li>
-                @endif
+                    </div>
+                </li>
+            @endif
 
 
                 @if(Auth::user()->can('user-account-menu'))
@@ -883,7 +883,10 @@
                         </li>
                 @endif
 
-            {{-- @endif --}}
+        @endif
+
+
+        
     {{-- @endif --}}
 
         </div>
