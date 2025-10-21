@@ -45,8 +45,11 @@ COPY . .
 # Compile assets (Tailwind, Mix, Bootstrap)
 RUN npm run production
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Install PHP dependencies (with Composer allowed as root)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+# COMPOSER_ALLOW_SUPERUSER=1 Lets Composer run as root
+
+
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
