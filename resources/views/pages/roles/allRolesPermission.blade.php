@@ -55,7 +55,7 @@
                     {{-- @if($item->name === 'Super Admin')
                         <span class="badge bg-success">Protected</span>
                     @else --}}
-
+                    
                         @if(Auth::user()->can('edit-role-permissions-button'))
                             <a href="{{ route('edit.roles.permission', $item->id) }}" class="btn btn-blue rounded-pill waves-effect waves-light">Edit</a>
                         @endif

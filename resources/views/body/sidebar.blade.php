@@ -441,14 +441,14 @@
                         <div class="collapse" id="pickup">
                             <ul class="nav-second-level">
 
-                                {{-- @if(Auth::user()->can('view-pending-orders')) --}}
+                                @if(Auth::user()->can('view-pending-pickup-orders'))
                                 <li><a href="{{ route('pending.pickup') }}">Pending Pickup</a></li>
-                                {{-- @endif --}}
+                                @endif
 
 
-                        {{-- @if(Auth::user()->can('view-all-shipping-orders')) --}}
+                        @if(Auth::user()->can('view-complete-pickup-orders'))
                                 <li><a href="{{ route('complete.pickup') }}">Complete Pickup</a></li>
-                            {{-- @endif --}}
+                            @endif
 
                                 </ul>
                             </div>
@@ -783,12 +783,12 @@
 
 
 
-    {{-- @if(Auth::user()->can('general-settings-section')) --}}
+    @if(Auth::user()->can('general-settings-section'))
 
         <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
 
-            {{-- @if(Auth::user()->can('roles-and-permission-menu')) --}}
+            @if(Auth::user()->can('roles-and-permission-menu'))
                 <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
@@ -816,16 +816,16 @@
                         </li>
                         @endif
 
-                        {{-- @if(Auth::user()->can('view-all-roles-in-permissions')) --}}
+                        @if(Auth::user()->can('view-all-roles-in-permissions'))
                         <li>
                             <a href="{{ route('all.roles.permission') }}">All Roles in Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
                     </ul>
 
                     </div>
                 </li>
-            {{-- @endif --}}
+            @endif
 
 
                 @if(Auth::user()->can('user-account-menu'))
@@ -883,7 +883,7 @@
                         </li>
                 @endif
 
-        {{-- @endif --}}
+        @endif
 
 
         
