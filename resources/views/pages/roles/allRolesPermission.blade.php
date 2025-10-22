@@ -42,7 +42,7 @@
                     
     
         <tbody>
-        	@foreach($roles as $key=> $item)
+        @foreach($roles as $key=> $item)
             <tr>
                 <td>{{ $key+1 }}</td> 
                 <td>{{ $item->name }}</td>

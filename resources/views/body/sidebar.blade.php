@@ -783,12 +783,12 @@
 
 
 
-    @if(Auth::user()->can('general-settings-section'))
+    {{-- @if(Auth::user()->can('general-settings-section')) --}}
 
         <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
 
-            @if(Auth::user()->can('roles-and-permission-menu'))
+            {{-- @if(Auth::user()->can('roles-and-permission-menu')) --}}
                 <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
@@ -816,16 +816,16 @@
                         </li>
                         @endif
 
-                        @if(Auth::user()->can('view-all-roles-in-permissions'))
+                        {{-- @if(Auth::user()->can('view-all-roles-in-permissions')) --}}
                         <li>
                             <a href="{{ route('all.roles.permission') }}">All Roles in Permission</a>
                         </li>
-                        @endif
+                        {{-- @endif --}}
                     </ul>
 
                     </div>
                 </li>
-            @endif
+            {{-- @endif --}}
 
 
                 @if(Auth::user()->can('user-account-menu'))
@@ -883,7 +883,7 @@
                         </li>
                 @endif
 
-        @endif
+        {{-- @endif --}}
 
 
         
