@@ -63,10 +63,10 @@ public function StoreProduct(Request $request)
             'subcategory_id'        => 'required|integer|exists:subcategories,id',
             'brand_id'              => 'required|integer|exists:brands,id',
             'description'           => 'required|string|min:10',
-            'dosage_form'           => 'required|string|max:50',
+            'dosage_form'           => 'nullable|string|max:50',
             'target_gender'         => 'required|string', // adjust values as per your options
             'age_group'             => 'required|string|max:50',
-            'health_concern'        => 'required|string|max:100',
+            'health_concern'        => 'nullable|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
             'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:2048', // 2MB max
