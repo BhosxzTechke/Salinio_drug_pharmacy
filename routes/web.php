@@ -1179,7 +1179,6 @@ use Illuminate\Http\Request;
      Route::get('/About/page', 'AboutShow')->name('about.show');
 
 
-
    });
 
 

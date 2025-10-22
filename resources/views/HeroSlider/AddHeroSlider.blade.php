@@ -28,7 +28,7 @@
                         <!-- end page title -->
 
 
-  <div class="row">
+<div class="row">
 
                         <div class="col-lg-8 col-xl-12">
                                 <div class="card">

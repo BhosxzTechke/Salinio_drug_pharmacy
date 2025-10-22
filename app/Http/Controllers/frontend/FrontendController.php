@@ -27,7 +27,8 @@ class FrontendController extends Controller
 
         public function index()
         {
-            $categories = Category::latest()->take(6)->get();
+            $categori = Category::latest()->take(5)->get();
+
             $HeroSlider = HeroSlider::where('is_active', 1)->get();
             $brand = Brand::all();
 
@@ -77,11 +78,11 @@ class FrontendController extends Controller
 
             // If logged in as customer → show customer dashboard
             if (Auth::guard('customer')->check()) {
-                return view('Ecommerce.CustomerDashboard', compact('categories', 'newArrivals', 'bestSellers', 'HeroSlider', 'inventory', 'brand'));
+                return view('Ecommerce.CustomerDashboard', compact('categori', 'newArrivals', 'bestSellers', 'HeroSlider', 'inventory', 'brand'));
             }
 
             // If not logged in → fallback to home
-            return view('Ecommerce.home', compact('categories', 'newArrivals', 'bestSellers', 'HeroSlider','inventory', 'brand'));
+            return view('Ecommerce.home', compact('categori', 'newArrivals', 'bestSellers', 'HeroSlider','inventory', 'brand'));
         }
 
 

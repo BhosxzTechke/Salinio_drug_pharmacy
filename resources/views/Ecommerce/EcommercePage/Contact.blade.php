@@ -9,6 +9,7 @@
 
 
 
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 md:px-0 py-10">
 
 
   <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

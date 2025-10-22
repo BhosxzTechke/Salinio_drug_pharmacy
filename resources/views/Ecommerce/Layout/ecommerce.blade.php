@@ -119,10 +119,10 @@
         ✕
     </button>
 
-    <!-- Progress bar -->
+    {{-- <!-- Progress bar -->
     <div id="toast-progress" class="absolute bottom-0 left-0 h-1 bg-current rounded-b-2xl opacity-50"
         style="width: 100%;"></div>
-</div>
+</div> --}}
 
 
 
