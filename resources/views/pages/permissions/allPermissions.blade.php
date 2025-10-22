@@ -47,12 +47,11 @@
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->group_name }}</td> 
                 <td>
-                    @if(Auth::user()->can('edit-permission'))
+
+
         <a href="{{ route('edit.permission',$item->id) }}" class="btn btn-blue rounded-pill waves-effect waves-light">Edit</a>
-                    @endif
-                    @if(Auth::user()->can('delete-permission'))
+     
         <a href="{{ route('delete.permission',$item->id) }}" class="btn btn-danger rounded-pill waves-effect waves-light" id="delete">Delete</a>
-                    @endif
                 </td>
             </tr>
             @endforeach

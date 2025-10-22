@@ -14,7 +14,6 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                  <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#login-modal">Add Category</button>
 
                                         </ol>
 

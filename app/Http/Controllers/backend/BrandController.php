@@ -140,6 +140,15 @@ public function UpdateBrand(Request $request)
         $brand = Brand::findOrFail($id);
         $old_image = $brand->logo;
 
+        if ($brand->products()->count() > 0) {
+            return redirect()->back()->with([
+                'message' => 'Cannot delete: Brand has associated products',
+                'alert-type' => 'error',
+            ]);
+        }
+
+
+
         if (file_exists($old_image)) {
             unlink($old_image);
         }
