@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\Order;
-use App\Models\OrderDetails;
+use App\Models\Orderdetails;
 
 
 /**
@@ -66,7 +66,7 @@ use HasFactory;
         
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class, 'product_id'); // adjust column names if different
+        return $this->hasMany(Orderdetails::class, 'product_id'); // adjust column names if different
     }
 
 

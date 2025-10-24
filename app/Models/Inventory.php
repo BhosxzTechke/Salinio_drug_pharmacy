@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
-use App\Models\OrderDetails;
+use App\Models\Orderdetails;
 use App\Models\Supplier;
 
 
@@ -38,7 +38,7 @@ class Inventory extends Model
             
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class, 'product_id'); // adjust column names if different
+        return $this->hasMany(Orderdetails::class, 'product_id'); // adjust column names if different
     }
 
     /////////////////// SUB CATEGORY RELATION /////////////////
