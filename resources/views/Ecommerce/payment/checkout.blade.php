@@ -117,11 +117,11 @@
 
 
 <div class="mb-6">
-    <form method="POST" action="{{ route('cart.checkout') }}" class="space-y-3">
+    <form id="myForm" method="POST" action="{{ route('cart.checkout') }}" class="space-y-3">
     @csrf
     
         <p class="text-sm font-medium uppercase">Delivery Address</p>
-        <div class="mt-2 flex justify-between items-start">
+        <div class="form-group mt-2 flex justify-between items-start">
 
             @php
                 $customer = Auth::guard('customer')->user();
@@ -171,13 +171,14 @@
         <input type="hidden" name="order_date" value="{{ now() }}">
         <input type="hidden" name="order_status" value="pending">
         <input type="hidden" name="total_products" value="{{ Cart::instance('ecommerce')->count() }}">
-        <input type="hidden" name="shipping_address_id" value="{{ $Customer->shipping_address_id ?? '' }}">
+        <input type="hidden" name="shipping_address_id" value="{{ $Customer->shipping_address_id ?? '' }}" required="">
 
                     
             
   
         <input type="hidden" name="shipping_address_id" 
-           value="{{ session('shipping_address_id') ?? Auth::guard('customer')->user()->defaultAddress?->id ?? '' }}">
+           value="{{ session('shipping_address_id') ?? Auth::guard('customer')->user()->defaultAddress?->id ?? '' }}" required="">
+
 
             </div>
 
@@ -302,11 +303,6 @@
 
   </div>
 </div>
-
-
-
-
-
 
 
 

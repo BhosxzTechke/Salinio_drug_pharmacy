@@ -108,7 +108,12 @@
         </form>
     </aside>
 
+
+
+
     <!-- PRODUCT GRID -->
+
+
     <main class="md:col-span-3">
         <h1 class="text-2xl font-bold mb-4">{{ $category->name }}</h1>
 
@@ -128,6 +133,9 @@
                 <p class="col-span-4 text-center text-gray-500">No products in this category.</p>
             @endforelse
         </div>
+
+
+        
 
         <div id="paginationLinks" class="mt-6">
             {{ $inventory->links() }}

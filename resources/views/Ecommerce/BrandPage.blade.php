@@ -35,10 +35,14 @@
 
 
 
+
+    <main class="md:col-span-3">
+
 <!-- Product Grid with Wishlist -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+<section class="max-w-7xl mx-auto px-4 sm:px-3 lg:px-8 pb-12">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         @foreach ($inventory as $inventories)
         <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
             <div class="relative">
@@ -61,10 +65,10 @@
             </div>
             <h3 class="text-lg font-semibold text-indigo-700 mb-1">{{ $inventories->product->product_name }}</h3>
             {{-- <p class="text-gray-500 text-sm mb-2">{{ $inventories->product->short_description }}</p> --}}
-            <div class="flex items-center justify-between mt-auto">
-                <span class="text-xl font-bold text-green-600">₱{{ number_format($inventories->product->selling_price, 2) }}</span>
+            <div class="grid grid-cols-1 gap-2">
+                <span class="text-s font-bold text-green-600">₱{{ number_format($inventories->product->selling_price, 2) }}</span>
                 <a href="{{ route('product.show', $inventories->product_id) }}">
-                <button class="bg-neutral-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">View Details</button> </a>
+                <button class="bg-neutral-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-medium transition">View Details</button> </a>
             </div>
         </div>
         @endforeach
@@ -80,7 +84,7 @@
             @endif
         </div>
 
-
+    </main>
 
 </section>
 

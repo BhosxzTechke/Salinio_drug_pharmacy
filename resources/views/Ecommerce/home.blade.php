@@ -3,7 +3,7 @@
 
 
 <section class="bg-gray-50 pt-6">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto px-1 sm:px-6 lg:px-8">
     <div class="relative pb-4">
 
       <!-- Carousel -->
@@ -28,6 +28,7 @@
           </div>
           @endforeach
         </div>
+        
 
         <!-- Arrows -->
         <button id="prev" class="absolute left-4 top-1/2 -translate-y-1/2 btn btn-circle">❮</button>
@@ -49,7 +50,7 @@
 
 
 <section class="bg-gray-50 pt-10">
-  <div class="max-w-6xl mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white shadow-sm rounded-xl overflow-hidden">
       <div class="p-6">
         <!-- Section title -->

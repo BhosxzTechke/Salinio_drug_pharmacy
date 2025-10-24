@@ -2,6 +2,9 @@
 
 @section('content')
 
+
+
+
 <div class="min-h-screen bg-base-200 p-6 flex justify-center">
   <div class="w-full max-w-5xl">
     <!-- Profile Header -->
@@ -35,11 +38,15 @@
 
 
     <!-- Tabs -->
-    <div role="tablist" class="tabs tabs-bordered w-full">
-      <input type="radio" name="profile_tabs" role="stab" class="tab text-green-500 [checked]:text-black" aria-label="Account Info" checked />
-      <div role="tabpanel" class="tab-content mt-4">
+    <div role="tablist" class="tabs tabs-bordered w-full h-10 sm:h-12 md:h-14 lg:h-16">
+    
+    
+      <input type="radio" name="profile_tabs" role="stab" class="tab text-green-500 [checked]:text-black text-xs sm:text-sm md:text-base lg:text-lg"  aria-label="Account Info" checked />
+      <div role="tabpanel" class="tab-content mt-1">
         <div class="card bg-base-100 shadow">
            
+
+
           <div class="card-body space-y-4">
 
 
@@ -64,15 +71,15 @@
 
 
 
-<!-- Order History Tab -->
-<input 
-  type="radio" 
-  name="profile_tabs" 
-  role="tab" 
-  class="tab text-green-500 checked:text-black" 
-  aria-label="Order History" 
-  checked
-/>
+  <!-- Order History Tab -->
+  <input 
+    type="radio" 
+    name="profile_tabs" 
+    role="tab" 
+    class="tab text-green-500 [checked]:text-black text-xs sm:text-sm md:text-base lg:text-lg"
+    aria-label="Order History" 
+  />
+
 
 <!-- Order History Panel -->
 <div role="tabpanel" class="tab-content mt-4">
@@ -101,7 +108,7 @@
               );
             @endphp
 
-            <tr class="flex flex-col md:table-row border-b md:border-0 p-4 md:p-0 hover:bg-gray-50 transition">
+            <tr id="order-row-{{ $order->id }}"  class="flex flex-col md:table-row border-b md:border-0 p-4 md:p-0 hover:bg-gray-50 transition">
               
               <!-- Order Number -->
               <td class="md:table-cell px-0 md:px-6 py-2 font-medium text-gray-900">
@@ -139,7 +146,7 @@
               <!-- Cancel / Refund -->
               <td class="md:table-cell px-0 md:px-6 py-2 md:text-center">
                 @if (!in_array($order->order_status, ['cancelled', 'shipped', 'complete']))
-                  <button class="btn btn-sm btn-error mark-cancelled" data-id="{{ $order->id }}">
+                  <button class="btn btn-sm btn-error mark-cancelled-customer" data-id="{{ $order->id }}">
                     Cancel
                   </button>
                 @else
@@ -179,15 +186,12 @@
 
 
 
-
-
-
 <!-- Tab -->
 <input 
   type="radio" 
   name="profile_tabs" 
   role="tab" 
-  class="tab text-green-500 [checked]:text-black" 
+  class="tab text-green-500 [checked]:text-black text-xs sm:text-sm md:text-base lg:text-lg" 
   aria-label="Cancelled Orders" 
 />
 
@@ -207,7 +211,6 @@
           <th class="px-6 py-3 text-center">Order Date</th>
           <th class="px-6 py-3 text-right">Total Amount</th>
           <th class="px-6 py-3 text-center">Order Status</th>
-          <th class="px-6 py-3 text-center">Invoice</th>
           <th class="px-6 py-3 text-center">View Items</th> <!-- ✅ New Column -->
         </tr>
       </thead>
@@ -234,7 +237,7 @@
               <td class="md:table-cell px-0 md:px-6 py-2 font-semibold text-gray-900 md:text-right">
                 <span class="md:hidden font-semibold block">Total:</span>
                 @if($detail->product && $detail->product->selling_price !== null)
-                  ${{ number_format($detail->product->selling_price * $detail->quantity, 2) }}
+                  ₱{{ number_format($detail->product->selling_price * $detail->quantity, 2) }}
                 @else
                   N/A
                 @endif   
@@ -250,12 +253,7 @@
 
 
 
-              <!-- Invoice Link -->
-              <td class="md:table-cell px-0 md:px-6 py-2 md:text-center">
-                <a href="" class="btn btn-outline btn-xs">
-                  View Invoice
-                </a>
-              </td>
+        
 
               <!-- ✅ View Item Button -->
               <td class="md:table-cell px-0 md:px-6 py-2 md:text-center">
@@ -283,57 +281,6 @@
 
 
 
-
-
-
-
-
-{{-- 
-    <!-- Modal for this specific order -->
-    <div id="OrderDetailsModal{{ $item->id }}"
-         class="fixed inset-0 hidden z-50 flex items-center justify-center">
-
-        <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/50"
-             onclick="document.getElementById('OrderDetailsModal{{ $item->id }}').classList.add('hidden')"></div>
-
-        <!-- Modal panel -->
-        <div class="relative bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 z-10">
-            <h3 class="text-xl font-bold mb-4">Order Details</h3>
-
-            <!-- Order Info -->
-            <div class="space-y-2 mb-4">
-                <p><span class="font-semibold">Order ID:</span> #{{ $item->id }}</p>
-                <p><span class="font-semibold">Date:</span> {{ $item->created_at->format('M d, Y') }}</p>
-                <p><span class="font-semibold">Customer:</span> {{ $item->customer->name }}</p>
-                <p><span class="font-semibold">Status:</span> 
-                    <span class="badge {{ $item->status === 'Processing' ? 'badge-success' : 'badge-warning' }}">
-                        {{ $item->status }}
-                    </span>
-                </p>
-            </div>
-
-
-
-            <!-- Actions -->
-            <div class="flex justify-end gap-3 mt-4">
-                <button type="button"
-                        onclick="document.getElementById('OrderDetailsModal{{ $item->id }}').classList.add('hidden')"
-                        class="btn btn-ghost">
-                    Close
-                </button>
-                <form action="" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-error text-white">Cancel Order</button>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-
-
-
-    
 
       
       <input type="radio" name="profile_tabs" role="tab" class="tab text-green-500 [checked]:text-black" aria-label="Addresses" />
@@ -371,39 +318,45 @@
 
 
 <script>
-      $(document).ready(function() {
-      $.ajaxSetup({
+
+$(document).ready(function() {
+    $.ajaxSetup({
       headers: {
-      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
+    });
+
+  
+    $('.mark-cancelled-customer').click(function() {
+      let id = $(this).data('id');
+
+      Swal.fire({
+          title: 'Cancel this order?',
+          text: 'This action cannot be undone!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, Cancel it!',
+          cancelButtonText: 'No, go back'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.post("{{ route('Customer.order.cancelled') }}", { id: id }, function(data) {
+                  if (data.success) {
+                      $('#order-row-' + id).fadeOut();
+                      Swal.fire('Cancelled', data.message, 'success');
+                  } else {
+                      Swal.fire('Error', data.message, 'error');
+                  }
+
+              }).fail(function(xhr) {
+                  Swal.fire('Error', 'Unauthorized or session expired', 'error');
+              });
+          }
       });
+    });
 
 
-      // Cancel Order
-      $('.mark-cancelled').click(function() {
-          let id = $(this).data('id');
+    });
 
-          Swal.fire({
-              title: 'Cancel this order?',
-              text: 'This action cannot be undone!',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Yes, Cancel it!',
-              cancelButtonText: 'No, go back'
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  $.post("{{ route('Customer.order.cancelled') }}", { id: id }, function(data) {
-                      if (data.success) {
-                          $('#order-row-' + id).fadeOut();
-                          Swal.fire('Cancelled', data.message, 'success');
-                      }
-                  });
-              }
-          });
-      });
-
-
-});
 </script>
 
 

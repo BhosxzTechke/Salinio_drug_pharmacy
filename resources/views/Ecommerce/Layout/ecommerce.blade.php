@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'My Pharmacy Shop')</title>
 
         <!-- Scripts -->
@@ -20,7 +21,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
   <!-- Page-specific CSS -->
 
-   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
 
 
 
@@ -29,9 +30,7 @@
 
 </head>
 
-
-
-<body class="bg-gray-100">
+<body class="bg-gray-100 overflow-x-hidden">
 
 <!-- GLOBAL FULLSCREEN LOADER -->
 <div id="global-loader" aria-hidden="true"
@@ -109,6 +108,7 @@
         </div>
     @endif
 
+    
     <!-- Message -->
     <p class="text-sm sm:text-base font-medium flex-1">
         {{ Session::get('message') }}

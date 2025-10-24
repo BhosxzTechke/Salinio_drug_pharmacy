@@ -22,6 +22,9 @@ class CommerceController extends Controller
     }
 
 
+
+
+
 public function UpdateVat(Request $request)
 {
     $validated = $request->validate([
@@ -68,6 +71,7 @@ public function UpdateVat(Request $request)
 
     return redirect()->back()->with($notification);
 }
+
 
 
 

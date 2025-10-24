@@ -60,7 +60,9 @@
                         <span class="badge badge-sm indicator-item bg-violet-500 text-white">{{ $ItemCart->count() }}</span>
                     </div>
                 </div>
-                <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-50 mt-3 w-52 shadow">
+
+                                    
+  <div tabindex="0" class="card card-compact dropdown-content absolute left-0 top-full bg-base-100 z-[9999] mt-3 w-52 shadow">
                     <div class="card-body">
                         <span class="text-lg font-bold">{{ $ItemCart->count() }} Items</span>
                         @foreach ($ItemCart as $item)
@@ -84,7 +86,7 @@
                         <span class="badge badge-sm indicator-item bg-red-500 text-white">3</span>
                     </div>
                 </div>
-                <div tabindex="0" class="card card-compact dropdown-content bg-base-100 z-50 mt-3 w-52 shadow">
+  <div tabindex="0" class="card card-compact dropdown-content absolute left-0 top-full bg-base-100 z-[9999] mt-3 w-52 shadow">
                     <div class="card-body">
                         <span class="text-lg font-bold">3 Wishlist</span>
                         <span class="text-info">Saved Items</span>
@@ -165,7 +167,7 @@
     </button>
 
     <!-- Category List -->
-    <div id="cat-container" class="overflow-hidden w-full px-8">
+    <div id="cat-container" class="overflow-hidden w-full px-8 pt-5">
         <ul id="cat-list" class="flex space-x-3 transition-transform duration-300 ease-in-out">
             @foreach($categories as $category)
                 <li class="min-w-[120px] text-center">

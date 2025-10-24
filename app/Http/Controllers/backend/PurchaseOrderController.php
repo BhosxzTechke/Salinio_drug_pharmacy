@@ -29,7 +29,7 @@ class PurchaseOrderController extends Controller
         $prod = Product::all();
         $sup = Supplier::latest()->get();
 
-        return view('PurchaseOrder.PurchaseOrder', compact('sup','prod'));
+        return view('PurchaseOrder.purchaseOrder', compact('sup','prod'));
     }
 
 

@@ -19,4 +19,6 @@ class AddBatchUuidColumnToActivityLogTable extends Migration
             $table->dropColumn('batch_uuid');
         });
     }
+
+    
 }

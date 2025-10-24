@@ -1291,14 +1291,12 @@ Route::middleware(['auth:customer', 'customer'])->group(function () {
                 Route::get('/pos/Payment/cancel', 'PaypalCancel')->name('paypal.cancel');
 
 
+            });
 
 
-                //////////// order history /////////////
-                Route::post('/Customer/Order/mark-cancelled', [OrderController::class, 'ajaxMarkAsCancelled'])->name('Customer.order.cancelled');
 
-        });
-
-
+                Route::post('/Customer/Order/mark-cancelled', [FrontendOrderController::class, 'ajaxMarkAsCancelled'])
+                    ->name('Customer.order.cancelled');
 
         
             ///////////////////// ONLINE PAYMENT POS /////////////////////////////

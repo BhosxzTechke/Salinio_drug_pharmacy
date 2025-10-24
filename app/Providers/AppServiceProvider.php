@@ -47,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
                 info("Skipping SQL mode change: " . $e->getMessage());
             }
 
+
             // Share categories safely
             View::composer('*', function ($view) {
                 try {

@@ -324,72 +324,73 @@ class OrderController extends Controller
 
 
 
+public function EcommerceCheckout(Request $request)
+{
+    try {
+        // $request->validate([
+        //     'shipping_address_id' => 'required',
+        // ]);
 
-        public function EcommerceCheckout(Request $request)
-                                {
+        if ($request->pay < $request->total) {
+            $notification = [
+                'message' => 'The payment amount must be greater than or equal to the total due.',
+                'alert-type' => 'error'
+            ];
+            return back()->with($notification);
+        }
 
-                                 $request->validate([
-                                        'shipping_address_id' => 'required',
-                                ]);
+        $cartInstance = Cart::instance('ecommerce');
+        $cartTotal = floatval(str_replace(',', '', $cartInstance->total()));
+        $subTotal = floatval(str_replace(',', '', $cartInstance->subtotal()));
+        $vat = floatval(str_replace(',', '', $cartInstance->tax()));
+        $due = $request->pay - $cartTotal;
 
+        if ($request->payment_method === 'paypal') {
+            $provider = new PayPalClient;
+            $provider->setApiCredentials(config('paypal'));
+            $token = $provider->getAccessToken();
+            $provider->setAccessToken($token);
 
+            $paypalOrder = $provider->createOrder([
+                "intent" => "CAPTURE",
+                "application_context" => [
+                    "return_url" => route("paypal.success"),
+                    "cancel_url" => route("paypal.cancel"),
+                ],
+                "purchase_units" => [
+                    [
+                        "amount" => [
+                            "currency_code" => "USD",
+                            "value" => number_format($cartTotal, 2, '.', ''),
+                        ]
+                    ]
+                ]
+            ]);
 
-                                if ($request->pay < $request->total) {
-                                        return back()->with([
-                                        'message' => 'The payment amount must be greater than or equal to the total due.',
-                                        'alert-type' => 'error'
-                                        ]);
-                                }
+            foreach ($paypalOrder['links'] as $link) {
+                if ($link['rel'] === 'approve') {
+                    session(['checkout_data' => $request->all()]);
+                    return redirect()->away($link['href']);
+                }
+            }
 
-                                $cartInstance = Cart::instance('ecommerce');
-                                $cartTotal = floatval(str_replace(',', '', $cartInstance->total()));
-                                $subTotal = floatval(str_replace(',', '', $cartInstance->subtotal()));
-                                $vat = floatval(str_replace(',', '', $cartInstance->tax()));
-                                $due = $request->pay - $cartTotal;
+            $notification = [
+                'message' => 'Unable to initiate PayPal payment. Please try again.',
+                'alert-type' => 'error'
+            ];
+            return back()->with($notification);
+        }
 
-                                // If PayPal, redirect to PayPal approval before committing order
-                                if ($request->payment_method === 'paypal') {
-                                        $provider = new PayPalClient;
-                                        $provider->setApiCredentials(config('paypal'));
-                                        $token = $provider->getAccessToken();
-                                        $provider->setAccessToken($token);
+        return $this->processOrder($request);
 
-                                        $paypalOrder = $provider->createOrder([
-                                        "intent" => "CAPTURE",
-                                        "application_context" => [
-                                                "return_url" => route("paypal.success"),
-                                                "cancel_url" => route("paypal.cancel"),
-                                        ],
-                                        "purchase_units" => [
-                                                [
-                                                "amount" => [
-                                                        "currency_code" => "USD",
-                                                        "value" => number_format($cartTotal, 2, '.', ''),
-                                                ]
-                                                ]
-                                        ]
-                                        ]);
-
-                                        /////// if approve na then dadalin na sa checkout page
-
-                                        foreach ($paypalOrder['links'] as $link) {
-                                        if ($link['rel'] === 'approve') {
-                                                // Save temp checkout data in session (or DB if more secure)
-                                                session([
-                                                'checkout_data' => $request->all()
-                                                ]);
-
-                                                return redirect()->away($link['href']);
-                                        }
-                                        }
-
-                                        return back()->with('error', 'Unable to initiate PayPal payment.');
-                                }
-
-                                // If not PayPal, proceed with direct checkout
-                                return $this->processOrder($request);
+    } catch (\Throwable $th) {
+        $notification = [
+            'message' => 'Something went wrong: ' . $th->getMessage(),
+            'alert-type' => 'error'
+        ];
+        return back()->with($notification);
+    }
 }
-
 
 
 
@@ -623,16 +624,20 @@ foreach ($cartInstance->content() as $item) {
 
 ///////////// AJAX CANCEL ORDER IN HISTORY /////////////
 
+
+
+
         public function ajaxMarkAsCancelled(Request $request)
         {
-                if (!$request->ajax()) {
-                        return response()->json(['error' => 'Invalid request'], 400);
-                }
+                // if (!$request->ajax()) {
+                //         return response()->json(['error' => 'Invalid request'], 400);
+                // }
 
-                $user = auth('customer')->user();
-                if (!$user) {
-                        return response()->json(['error' => 'Unauthorized'], 401);
-                }
+                // $user = auth('customer')->user();
+
+                // if (!$user) {
+                //         return response()->json(['error' => 'Unauthorized'], 401);
+                // }
 
                 $order = Order::findOrFail($request->id);
 
