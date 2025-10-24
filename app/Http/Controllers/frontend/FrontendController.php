@@ -73,7 +73,7 @@ class FrontendController extends Controller
                 ->map(function ($group) {
                     // Sum sold_count from all inventory rows under the same product_id
                     $totalSold = $group->sum(function ($item) {
-                        return $item->orderDetails->sum('quantity');
+                        return $item->Orderdetails->sum('quantity');
                     });
 
                     // Pick the first inventory item for display (e.g., price)
