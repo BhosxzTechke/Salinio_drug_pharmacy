@@ -25,7 +25,7 @@
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Supplier Details</h4>
                                 </div>
                             </div>
                         </div>     
@@ -90,77 +90,7 @@
                                                         </div> <!-- end col -->
 
 
-                                                        
-                                                 <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="text" class="">Supplier Shop Name</label>
-                                                                <p class="text-danger">{{ $supplier->shopname }}</p>
 
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-
-                                                          <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="text" class="">Supplier Type</label>
-                                                                <p class="text-danger">{{ $supplier->type }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-
-
-                                                       <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="text" class="">Supplier Account holder</label>
-                                                                <p class="text-danger">{{ $supplier->account_holder }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-                                                        
-                                                       <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="phone" class="">Supplier Account Number</label>
-                                                                <p class="text-danger">{{ $supplier->account_number }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-
-                                                                                                                
-                                                       <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="text" class="">Supplier Bank Name</label>
-                                                                <p class="text-danger">{{ $supplier->bank_name }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-
-                                                        
-                                                       <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="text" class="">Supplier Branch Name</label>
-                                                                <p class="text-danger">{{ $supplier->bank_branch }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-
-
-
-
-
-                                                <div class="col-md-6">
-                                                           <div class="mb-3">
-                                                                <label for="city" class="form-label">Supplier City</label>
-                                                                <p class="text-danger">{{ $supplier->city }}</p>
-
-                                                            </div>
-                                                        </div> <!-- end col -->
-
-                    
                         
 
 
@@ -185,7 +115,7 @@
     
 
                                                     <div class="text-end">
-                                                        <a href="{{ route('all.supplier')}}"><button type="" name="" class="btn btn-info waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i>Back </button></a>
+                                                        <a href="{{ route('all.supplier')}}"><button type="" name="" class="btn btn-info waves-effect waves-light mt-2"></i>Back </button></a>
                                                     </div>
                                                     
                                                 </form>

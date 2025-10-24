@@ -36,7 +36,6 @@ return new class extends Migration
             $table->string('phone');
             $table->text('address')->nullable();
             $table->string('image');
-            $table->string('city')->nullable();
             $table->timestamps();
         });
 

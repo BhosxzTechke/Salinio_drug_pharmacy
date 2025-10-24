@@ -87,19 +87,6 @@
 
 
 
-                        <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="city" class="form-label">Supplier City</label>
-                                        <input type="text" name="city" class="form-control" id="city" placeholder="Enter Supplier City">
-
-                                    </div>
-                                </div> <!-- end col -->
-
-
-
-
-
-
                                 <div class="form-group mb-3">
                                 <label for="example-fileinput" class="form-label">Supplier Image</label>
                                 <input type="file" name="image" id="image" class="form-control" >

@@ -324,9 +324,9 @@
                 <li><a href="{{ route('add.product') }}">Add Product</a></li>
             @endif
 
-            @if(Auth::user()->can('import-products'))
+            {{-- @if(Auth::user()->can('import-products'))
                 <li><a href="{{ route('import.product') }}">Import Product</a></li>
-            @endif
+            @endif --}}
 
 
             @if(Auth::user()->can('purchase-menu'))

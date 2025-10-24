@@ -100,21 +100,6 @@
                                     </div> <!-- end col -->
 
 
-                                    
-
-                            <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                            <label for="city" class="form-label">Supplier City</label>
-                                            <input type="text" value="{{ $supplier->city }}" name="city" class="form-control @error('city') is-invalid @enderror" id="city" placeholder="Enter Supplier City">
-                                                @error('city')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                        </div>
-                                    </div> <!-- end col -->
-
-
-    
-
 
 
                                     <div class="form-group mb-3">

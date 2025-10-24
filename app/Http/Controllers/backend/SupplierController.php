@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Supplier;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+
 
 class SupplierController extends Controller
 {
@@ -31,13 +33,40 @@ class SupplierController extends Controller
 public function StoreFormSupplier(Request $request)
 {
 
-    $request->validate([
-        'name' => 'required|string|max:200',
-        'email' => 'required|email|unique:suppliers,email|max:200',
-        'phone' => 'required|string|max:200|unique:suppliers,phone','regex:/^(09|\+639|639)\d{9}$/',
-        'address' => 'required|string|max:400',
-        'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-    ]);
+$request->validate([
+    'name' => [
+        'required',
+        'string',
+        'max:200',
+        Rule::unique('suppliers')->where(function ($query) use ($request) {
+            return $query->where('address', $request->address);
+        }),
+    ],
+    'email' => 'required|email|unique:suppliers,email|max:200',
+    'phone' => ['required', 'string', 'max:200', 'unique:suppliers,phone', 'regex:/^(09|\+639|639)\d{9}$/'],
+    'address' => 'required|string|max:400',
+    'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+],
+            [
+            'name.unique' => 'A supplier with the same name and address already exists.',
+            'name.required' => 'Please enter the supplier\'s name.',
+            'name.max' => 'Supplier name cannot exceed 200 characters.',
+
+            'email.required' => 'Please enter an email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.max' => 'Email cannot exceed 200 characters.',
+            'email.unique' => 'This email is already taken.',
+
+            'phone.required' => 'Please enter a phone number.',
+            'phone.max' => 'Phone number cannot exceed 200 characters.',
+            'phone.unique' => 'This phone number is already used.',
+            'phone.regex' => 'Phone number must start with 09, +639, or 639 and contain 9 digits after.',
+
+            'address.required' => 'Please enter an address.',
+            'address.max' => 'Address cannot exceed 400 characters.',
+
+            ]);
+
 
     try {
         $image = $request->file('image');
@@ -55,7 +84,6 @@ public function StoreFormSupplier(Request $request)
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'city' => $request->city,
             'image' => $saveurl,
             'created_at' => Carbon::now(),
         ]);
@@ -109,19 +137,32 @@ public function UpdateSupplier(Request $request)
         $oldData = $supplier->toArray();
 
         
-            $request->validate([
-                'name' => 'required|max:200',
-                'email' => 'required|email|max:200|unique:suppliers,email,' . $supplier_id,
-                'phone' => [
-                    'required',
-                    'max:200',
-                    'unique:suppliers,phone,' . $supplier_id,
-                    'regex:/^(09|\+639|639)\d{9}$/'
-                ],
-                'address' => 'required|max:400',
-                'city' => 'required|max:100',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            ], [
+$request->validate([
+    'name' => [
+        'required',
+        'string',
+        'max:200',
+        // Prevent duplicate supplier with same name and address (except current record)
+        Rule::unique('suppliers')->where(function ($query) use ($request, $supplier_id) {
+            return $query->where('address', $request->address)
+                    ->where('id', '!=', $supplier_id);
+        }),
+    ],
+    'email' => 'required|email|max:200|unique:suppliers,email,' . $supplier_id,
+    'phone' => [
+        'required',
+        'string',
+        'max:200',
+        'regex:/^(09|\+639|639)\d{9}$/',
+        Rule::unique('suppliers', 'phone')->ignore($supplier_id),
+    ],
+    'address' => 'required|string|max:400',
+    'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+],
+
+
+            [
+                'name.unique' => 'A supplier with the same name and address already exists.',
                 'name.required' => 'Please enter the supplier\'s name.',
                 'name.max' => 'Supplier name cannot exceed 200 characters.',
 
@@ -138,8 +179,6 @@ public function UpdateSupplier(Request $request)
                 'address.required' => 'Please enter an address.',
                 'address.max' => 'Address cannot exceed 400 characters.',
 
-                'city.required' => 'Please enter a city.',
-                'city.max' => 'City name cannot exceed 100 characters.',
 
                 'image.image' => 'Uploaded file must be an image.',
                 'image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
@@ -153,7 +192,6 @@ public function UpdateSupplier(Request $request)
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'city' => $request->city,
         ];
 
         if ($request->hasFile('image')) {

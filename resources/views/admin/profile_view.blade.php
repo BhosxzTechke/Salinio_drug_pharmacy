@@ -40,8 +40,8 @@
                                         <h4 class="mb-0">{{ $profileData->name }}</h4>
                                         <p class="text-muted">{{ $profileData->email }}</p>
 
-                                        <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Follow</button>
-                                        <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Message</button>
+                                        {{-- <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Follow</button>
+                                        <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light">Message</button> --}}
 
                                         <div class="text-start mt-3">
                                             <h4 class="font-13 text-uppercase">About Me :</h4>
@@ -54,7 +54,7 @@
                                         
                                         </div>                                    
 
-                                        <ul class="social-list list-inline mt-3 mb-0">
+                                        {{-- <ul class="social-list list-inline mt-3 mb-0">
                                             <li class="list-inline-item">
                                                 <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
                                             </li>
@@ -67,7 +67,7 @@
                                             <li class="list-inline-item">
                                                 <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
                                             </li>
-                                        </ul>   
+                                        </ul>    --}}
                                     </div>                                 
                                 </div> <!-- end card -->
 

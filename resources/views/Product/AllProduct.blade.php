@@ -17,9 +17,9 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
 
-                                        @if(Auth::user()->can('import-products'))
+                                        {{-- @if(Auth::user()->can('import-products'))
                                         <a href="{{ route('import.product') }}"><button type="button" class="btn btn-info rounded-pill waves-effect waves-light me-2"><i class="mdi mdi-cloud-outline me-1"></i> Import </button></a>
-                                            @endif
+                                            @endif --}}
 
                                         @if(Auth::user()->can('export-products'))
                                             <a href="{{ route('download.export') }}"><button type="button" class="btn btn-danger rounded-pill waves-effect waves-light me-1"><i class="mdi mdi-cloud-outline me-1"></i> Export </button></a>

@@ -5,7 +5,7 @@
 
 
                       {{-- Search bar --}}
-                     <li class="d-none d-lg-block">
+                     {{-- <li class="d-none d-lg-block">
                             <form class="app-search">
                                 <div class="app-search-box dropdown">
                                     <div class="input-group">
@@ -86,7 +86,7 @@
                         </li>
     
              
-
+ --}}
 
    
 
@@ -249,24 +249,23 @@
 
 
                                 {{-- Settings  --}}
-                        <li class="dropdown notification-list">
+                 <li class="dropdown notification-list d-none">
                             <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
                                 <i class="fe-settings noti-icon"></i>
                             </a>
                         </li>
     
-                    </ul>
-    
-
+                    </ul> 
 
 
                     <!-- LOGO -->
-                    <div class="logo-box">
-                        <a href="index.html" class="logo logo-dark text-center">
+               <div class="logo-box">
+                        <a href="{{ route('admin.dashboard')}}" class="logo logo-dark text-center">
                             <span class="logo-sm">
                                 <img src="assets/images/logo-sm.png" alt="" height="22">
                                 <!-- <span class="logo-lg-text-light">UBold</span> -->
                             </span>
+
                             <span class="logo-lg">
                                 <img src="assets/images/logo-dark.png" alt="" height="20">
                                 <!-- <span class="logo-lg-text-light">U</span> -->
@@ -281,13 +280,12 @@
                                 <img src="assets/images/logo-light.png" alt="" height="20">
                             </span>
                         </a>
-                    </div>
+                    </div> 
 
-
-
+                    
 
     
-                    <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                    <ul class="list-unstyled topnav-menu topnav-menu-left m-0" style="margin-left: 20px;">
                         <li>
                             <button class="button-menu-mobile waves-effect waves-light">
                                 <i class="fe-menu"></i>
