@@ -101,32 +101,39 @@
     @endphp
 
                             
-                <div class="form-check mb-2 form-check-primary">
-
-        {{-- Checkbox --}}
-        <input class="form-check-input rounded-circle" type="checkbox" value=""
-            id="customckeck1" {{ App\Models\User::roleHasPermissions($roles, $permissions) ? 'checked' : ''}} >
-        <label class="form-check-label"  for="customckeck1">{{ $group->group_name }}</label>
-    </div>  
+<div class="form-check mb-2 form-check-primary">
+    {{-- Group Checkbox --}}
+    <input 
+        class="form-check-input rounded-circle group-checkbox"   
+        type="checkbox"
+        id="group_{{ $group->id }}"                            
+        {{ App\Models\User::roleHasPermissions($roles, $permissions) ? 'checked' : '' }}>
+    <label class="form-check-label" for="group_{{ $group->id }}">
+        {{ $group->group_name }}
+    </label>
 </div>
 
 
 
-
-               
-    <div class="col-md-9">
-        @foreach ($permissions as $permission)
-        <div class="form-check mb-2 form-check-primary">
-                <input class="form-check-input rounded-circle" type="checkbox" name="permission[]" 
-                {{ $roles->hasPermissionTo($permission->name) ? 'checked' : '' }}
-                value="{{ $permission->name }}" id="customcheck{{ $permission->id }} ">
-                <label class="form-check-label" for="customcheck{{ $permission->id }}">{{ $permission->name }}</label>
-        </div>
-        @endforeach 
-            <br>
-        
+<!-- Permissions under that group -->
+<div class="col-md-9">
+  @foreach ($permissions as $permission)
+    <div class="form-check mb-2 form-check-primary">
+      <input 
+          class="form-check-input rounded-circle permission-checkbox"
+          type="checkbox"
+          name="permission[]" 
+          value="{{ $permission->name }}"
+          id="perm_{{ $permission->id }}"
+          data-group="{{ $group->id }}"  
+          {{ $roles->hasPermissionTo($permission->name) ? 'checked' : '' }}
+      >
+      <label class="form-check-label" for="perm_{{ $permission->id }}">
+        {{ $permission->name }}
+      </label>
     </div>
-
+  @endforeach
+</div>
                     
                 </div>
 
@@ -220,37 +227,37 @@ $(document).ready(function () {
 
     // Select All
     $('#custome_selectAll').on('change', function () {
-        $('input[type=checkbox]').prop('checked', $(this).is(':checked'));
+        const isChecked = $(this).is(':checked');
+        $('input[type=checkbox]').prop('checked', isChecked);
     });
 
-    // if pinindot si group mag automatic maseselect lahat ng permission nia
+    // Group checkbox → select all its permissions
     $('.group-checkbox').on('change', function () {
-        let groupIndex = $(this).attr('id').split('_')[1];
-        $(`.permission-checkbox[data-group="${groupIndex}"]`).prop('checked', $(this).is(':checked'));
+        const groupId = $(this).attr('id').split('_')[1];
+        $(`.permission-checkbox[data-group="${groupId}"]`).prop('checked', $(this).is(':checked'));
         updateSelectAll();
     });
 
-    // Permission checkbox change
+    // Permission checkbox → update group checkbox
     $('.permission-checkbox').on('change', function () {
-        let groupIndex = $(this).data('group');
-        let groupPermissions = $(`.permission-checkbox[data-group="${groupIndex}"]`);
-        let groupCheckedCount = groupPermissions.filter(':checked').length;
+        const groupId = $(this).data('group');
+        const groupPermissions = $(`.permission-checkbox[data-group="${groupId}"]`);
+        const groupCheckedCount = groupPermissions.filter(':checked').length;
 
-        //  Check group if at least 1 permission is selected
-        $(`#group_${groupIndex}`).prop('checked', groupCheckedCount > 0);
+        // Check group if at least one permission is checked
+        $(`#group_${groupId}`).prop('checked', groupCheckedCount > 0);
 
         updateSelectAll();
     });
 
-
-
-
+    // Update Select All status
     function updateSelectAll() {
-        let allChecked = $('.permission-checkbox').length === $('.permission-checkbox:checked').length;
+        const allChecked = $('.permission-checkbox').length === $('.permission-checkbox:checked').length;
         $('#custome_selectAll').prop('checked', allChecked);
     }
 
 });
 </script>
+
 
 @endsection

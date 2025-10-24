@@ -13,9 +13,7 @@
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-      <a href="{{ route('add.roles') }}" class="btn btn-primary rounded-pill waves-effect waves-light">Add Roles </a>  
-                                        </ol>
+
                                     </div>
                                     <h4 class="page-title">All Roles</h4>
                                 </div>
@@ -52,21 +50,21 @@
         @else
 
         
-                @if(Auth::user()->can('edit-roles'))
+                {{-- @if(Auth::user()->can('edit-roles')) --}}
                 <a href="{{ route('edit.roles',$item->id) }}" 
                     class="btn btn-success rounded-pill waves-effect waves-light">
                     <i class="fa-solid fa-square-pen"></i> Edit
                 </a>
-                @endif
+                {{-- @endif --}}
 
 
-                @if(Auth::user()->can('delete-roles'))
+                {{-- @if(Auth::user()->can('delete-roles')) --}}
                 <a href="{{ route('delete.roles',$item->id) }}" 
                     class="btn btn-danger rounded-pill waves-effect waves-light"
                     id="delete" title="Delete Data">
                     <i class="fa-solid fa-trash"></i> Delete
                 </a>
-                @endif
+                {{-- @endif --}}
 
         @endif
     </td>

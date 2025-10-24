@@ -783,19 +783,19 @@
 
 
 
-    {{-- @if(Auth::user()->can('general-settings-section'))
- --}}
+@if(Auth::user()->can('general-settings-section'))
+
         <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
 
 
                         <li>
-                    <a href="#sidebarExpages" data-bs-toggle="collapse">
+                    <a href="#roles" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
                         <span> Roles </span>
                         <span class="menu-arrow"></span>
                     </a>
-                <div class="collapse" id="sidebarExpages">
+                <div class="collapse" id="roles">
                     <ul class="nav-second-level">   
 
                         @if(Auth::user()->can('view-all-roles'))
@@ -817,7 +817,7 @@
 
 
 
-            {{-- @if(Auth::user()->can('roles-and-permission-menu')) --}}
+            @if(Auth::user()->can('roles-and-permission-menu'))
                 <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
@@ -827,28 +827,28 @@
                 <div class="collapse" id="sidebarExpages">
                     <ul class="nav-second-level">   
 
-                        {{-- @if(Auth::user()->can('view-all-permissions')) --}}
+                        @if(Auth::user()->can('view-all-permissions'))
                         <li>
                             <a href="{{ route('all.permission') }}">All Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
 
-                        @if(Auth::user()->can('manage-roles-and-permissions'))
+                        @if(Auth::user()->can('add-roles-and-permissions'))
                         <li>
-                            <a href="{{ route('add.roles.permission') }}">Roles in Permission</a>
+                            <a href="{{ route('add.roles.permission') }}">Add Roles in Permission</a>
                         </li>
                         @endif
 
-                        {{-- @if(Auth::user()->can('view-all-roles-in-permissions')) --}}
+                        @if(Auth::user()->can('view-all-roles-in-permissions'))
                         <li>
                             <a href="{{ route('all.roles.permission') }}">All Roles in Permission</a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
                     </ul>
 
                     </div>
                 </li>
-            {{-- @endif --}}
+            @endif
 
 
                 @if(Auth::user()->can('user-account-menu'))
@@ -906,7 +906,7 @@
                         </li>
                 @endif
 
-        {{-- @endif --}}
+        @endif
 
 
         
