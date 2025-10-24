@@ -233,6 +233,8 @@ public function SaveOrderdeliveries(Request $request)
                 'cost_price' => $item['cost_price'],
             ]);
 
+
+
             // 4. Update inventory (FIFO)
             $supplierId = $item['supplier_id'] ?? ($po->supplier_id ?? null);
 
@@ -244,6 +246,9 @@ public function SaveOrderdeliveries(Request $request)
 
             if ($inventoryRow) {
                 $inventoryRow->increment('quantity', $item['quantity_received']);
+                $inventoryRow->status = 'active';
+                $inventoryRow->save();
+                
             } else {
                 Inventory::create([
                     'product_id' => $item['product_id'],

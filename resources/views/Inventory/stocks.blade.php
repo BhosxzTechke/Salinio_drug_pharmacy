@@ -3,6 +3,35 @@
 
 <div class="content">
 
+
+<br>
+    
+
+<form method="GET" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <select name="status" class="form-control">
+            <option value="">-- Filter by Status --</option>
+            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+            <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Expired</option>
+            <option value="out_of_stock" {{ request('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <input type="text" name="product" value="{{ request('product') }}" class="form-control" placeholder="Search by Product name">
+    </div>
+
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="{{ route('show.inventory') }}" class="btn btn-secondary w-100">Reset</a>
+    </div>
+</form>
+
+
+
                     <!-- Start Content-->
                     <div class="container-fluid">
                         
@@ -44,6 +73,8 @@
                                 <th>Supplier</th>
                                 <th>Code</th>
                                 <th>Stock</th> 
+                                <th>Expiration Date</th> 
+                                <th>Status</th> 
                             </tr>
                         </thead>
                     
@@ -66,6 +97,9 @@
                         <button class="btn btn-success waves-effect waves-light">{{ $item->quantity }}</button>
                     @endif
                 </td>
+                <td>{{ $item->expiry_date ?? '' }}</td>
+                <td><button class="btn btn-dark waves-effect waves-light">{{ $item->status }}</button></td>
+
 
             </tr>
             @endforeach

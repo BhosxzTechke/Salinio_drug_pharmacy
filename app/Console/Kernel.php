@@ -19,7 +19,10 @@ class Kernel extends ConsoleKernel
         ->dailyAt('02:00')
         ->withoutOverlapping()
         ->runInBackground();    
-    
+
+    // Example: run every minute just for testing
+        $schedule->command('inventory:update-status')->daily();
+            
     }
 
     /**
@@ -35,11 +38,11 @@ class Kernel extends ConsoleKernel
     }
 
 
-    // app/Console/Kernel.php
-protected function scheduleLOG(Schedule $schedule)
-{
-    $schedule->command('activitylog:clean --days=90')->daily();
-}
+            // app/Console/Kernel.php
+        protected function scheduleLOG(Schedule $schedule)
+        {
+            $schedule->command('activitylog:clean --days=90')->daily();
+        }
 
 
 }

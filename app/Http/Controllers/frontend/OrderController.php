@@ -327,6 +327,13 @@ class OrderController extends Controller
 
         public function EcommerceCheckout(Request $request)
                                 {
+
+                                 $request->validate([
+                                        'shipping_address_id' => 'required',
+                                ]);
+
+
+
                                 if ($request->pay < $request->total) {
                                         return back()->with([
                                         'message' => 'The payment amount must be greater than or equal to the total due.',

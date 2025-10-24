@@ -26,12 +26,31 @@ public function CategoryProduct(Request $request, $slug)
         ->orWhere('subcategory_id', $category->id)
         ->pluck('id');
 
-    $inventoryQuery = Inventory::whereIn('product_id', $productIds)
-        ->where('quantity', '>', 10)
-        ->select('product_id', DB::raw('SUM(quantity) as total_quantity'), 'selling_price')
-        ->groupBy('product_id', 'selling_price');
 
 
+    // $inventoryQuery = Inventory::whereIn('product_id', $productIds)
+    //     ->where('quantity', '>', 10)
+    //     ->select('product_id', DB::raw('SUM(quantity) as total_quantity'), 'selling_price')
+    //     ->groupBy('product_id', 'selling_price');
+
+
+
+        $today = now()->toDateString();
+
+
+        $inventoryQuery = Inventory::whereIn('product_id', $productIds)
+        ->where('quantity', '>', 0)
+            ->where(function ($query) use ($today) {
+                $query->whereNull('expiry_date') // allow items without expiry
+                    ->orWhere('expiry_date', '>', $today); // only include not-expired
+            })
+            ->select(
+                'product_id',
+                'selling_price',
+                DB::raw('SUM(quantity) as total_quantity'),
+                DB::raw('MAX(created_at) as latest_created')
+            )
+            ->groupBy('product_id', 'selling_price');
 
 
 

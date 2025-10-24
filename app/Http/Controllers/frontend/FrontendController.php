@@ -35,20 +35,37 @@ class FrontendController extends Controller
 
 
 
-            //// /FIFO TRACKING
-            $inventory = Inventory::select(
-                    'product_id',
-                    DB::raw('SUM(quantity) as total_quantity'),
-                    DB::raw('MAX(created_at) as latest_date'),
-                    'selling_price'
-                )
-                ->where('quantity', '>', 10)
-                ->groupBy('product_id', 'selling_price')
-                ->orderByDesc('latest_date')
-                ->inRandomOrder()
-                ->take(8)
-                ->get();
+            // //// /FIFO TRACKING
+            // $inventory = Inventory::select(
+            //         'product_id',
+            //         DB::raw('SUM(quantity) as total_quantity'),
+            //         DB::raw('MAX(created_at) as latest_date'),
+            //         'selling_price'
+            //     )
+            //     ->where('quantity', '>', 10)
+            //     ->groupBy('product_id', 'selling_price')
+            //     ->orderByDesc('latest_date')
+            //     ->inRandomOrder()
+            //     ->take(8)
+            //     ->get();
 
+    $today = now()->toDateString();
+
+
+            $inventory = Inventory::where('quantity', '>', 0)
+                ->where(function ($query) use ($today) {
+                    $query->whereNull('expiry_date') // allow items without expiry
+                        ->orWhere('expiry_date', '>', $today); // only include not-expired
+                })
+                ->select(
+                    'product_id',
+                    'selling_price',
+                    DB::raw('SUM(quantity) as total_quantity'),
+                    DB::raw('MAX(created_at) as latest_created')
+                )
+                ->groupBy('product_id', 'selling_price')
+                ->orderByDesc('latest_created')
+                ->get();
 
 
             $bestSellers = $inventory

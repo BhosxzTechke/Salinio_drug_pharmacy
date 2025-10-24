@@ -118,7 +118,7 @@
               <!-- Total -->
               <td class="md:table-cell px-0 md:px-6 py-2 font-semibold text-gray-900 md:text-right">
                 <span class="md:hidden font-semibold block">Total:</span>
-                ${{ number_format($totalAmount, 2) }}
+                ₱{{ number_format($totalAmount, 2) }}
               </td>
 
               <!-- Status -->

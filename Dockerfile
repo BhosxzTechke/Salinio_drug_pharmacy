@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath gd zip sodium \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+    
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -61,5 +62,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 8080
 EXPOSE 8080
 
-# Run Laravel server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Run both Laravel server and scheduler together
+CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=8080 & php artisan schedule:work"]
