@@ -258,7 +258,7 @@ class OrderController extends Controller
                 // Get order
                 $order = Order::with('OrderDetails.product')->findOrFail($id);
 
-                return view('pos.receipt', compact('order'));
+                return view('POS.receipt', compact('order'));
             }
 
 

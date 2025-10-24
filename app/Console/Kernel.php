@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
         ->withoutOverlapping()
         ->runInBackground();    
 
-    // Example: run every minute just for testing
+    // Example: run daily just for testing
         $schedule->command('inventory:update-status')->daily();
             
     }

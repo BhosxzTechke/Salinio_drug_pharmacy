@@ -101,17 +101,15 @@
     @endphp
 
                             
-<div class="form-check mb-2 form-check-primary">
-    {{-- Group Checkbox --}}
-    <input 
-        class="form-check-input rounded-circle group-checkbox"   
-        type="checkbox"
-        id="group_{{ $group->id }}"                            
-        {{ App\Models\User::roleHasPermissions($roles, $permissions) ? 'checked' : '' }}>
-    <label class="form-check-label" for="group_{{ $group->id }}">
-        {{ $group->group_name }}
-    </label>
+                <div class="form-check mb-2 form-check-primary">
+
+        {{-- Checkbox --}}
+        <input class="form-check-input rounded-circle" type="checkbox" value=""
+            id="customckeck1" {{ App\Models\User::roleHasPermissions($roles, $permissions) ? 'checked' : ''}} >
+        <label class="form-check-label"  for="customckeck1">{{ $group->group_name }}</label>
+    </div>  
 </div>
+
 
 
 

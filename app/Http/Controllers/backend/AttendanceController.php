@@ -24,21 +24,24 @@ class AttendanceController extends Controller
                 return view('Attendance.AllAttendance', compact('AttendanceData'));
 
 
-
-
     }
 
+public function AddEmployeeAttendance()
+{
+    // Get employees with role Cashier or Staff
+    $employees = User::role(['Cashier', 'Staff'])->get();
 
-    // ATTENDANCE FORM
-    public function AddEmployeeAttendance(){
+    if ($employees->isEmpty()) {
+        $notification = [
+            'message' => 'No Cashier or Staff found. Please add employees first.',
+            'alert-type' => 'warning',
+        ];
 
-
-         $employees = User::role(['Cashier', 'Staff'])->get();
-
-        return view('Attendance.AddAttendance', compact('employees'));
-
+        return redirect()->back()->with($notification);
     }
 
+    return view('Attendance.AddAttendance', compact('employees'));
+}
 
     
 
