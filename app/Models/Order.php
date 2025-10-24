@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
 use App\Models\Product;
-use App\Models\OrderDetails;
+use App\Models\Orderdetails;
 use App\Models\Address;
 /**
  * @mixin IdeHelperOrder
@@ -68,7 +68,7 @@ class Order extends Model
 
     public function orderDetails()
         {
-            return $this->hasMany(OrderDetails::class, 'order_id');
+            return $this->hasMany(Orderdetails::class, 'order_id');
         }
 
 

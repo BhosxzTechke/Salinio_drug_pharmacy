@@ -352,16 +352,16 @@ public function PaymentWalkin(Request $request)
         //  Loop through cart and create OrderDetails
         foreach (Cart::content() as $item) {
 
-            // Create empty order detail first (we’ll update with batch & profit after)
-            $orderDetail = Orderdetails::create([
-                'order_id'   => $order->id,
-                'product_id' => $item->options->product_id,
-                'quantity'   => $item->qty,
-                'unitcost'   => 0, // will update after FIFO
-                'total'      => $item->qty * $item->price,
-                'batch_number' => null,
-                'profit'     => 0,
-            ]);
+            // // Create empty order detail first (we’ll update with batch & profit after)
+            // $orderDetail = Orderdetails::create([
+            //     'order_id'   => $order->id,
+            //     'product_id' => $item->options->product_id,
+            //     'quantity'   => $item->qty,
+            //     'unitcost'   => 0, // will update after FIFO
+            //     'total'      => $item->qty * $item->price,
+            //     'batch_number' => null,
+            //     'profit'     => 0,
+            // ]);
 
             $quantityToSell = $item->qty;
             $sellingPrice = $item->price;
