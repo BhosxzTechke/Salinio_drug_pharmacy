@@ -57,35 +57,35 @@
               <div class="col-md-6">
         <div class="form-group mb-3">
             <label for="firstname" class="form-label">Group Name </label>
-            <select name="group_name" class="form-select" id="example-select">
-                    <option selected disabled >Select Group  </option>
-                   
-        <option value="pos"> Pos</option>
-        <option value="employee"> Employee</option>
-        <option value="customer"> Customer</option>
-        <option value="supplier"> Supplier</option>
-        <option value="salary"> Salary </option>
-        <option value="attendance"> Attendance </option>
-        <option value="product"> Product </option>
-        <option value="category"> Category </option>
-        <option value="subcategory"> Sub-Category </option>
-        <option value="brand"> Brand </option>
-        <option value="inventory"> Inventory </option>
-        <option value="commerce"> Commerce </option>
-        <option value="audit"> Audit Trail </option>
-        <option value="reports"> Reports </option>
-        <option value="custom"> Custom </option>
-        <option value="rolesandpermission"> Roles and Permission </option>
-        <option value="useraccount"> User Account </option>
-        <option value="backup"> Backup </option>
-        <option value="expense"> Expense </option>
-        <option value="orders"> Orders</option>
-        <option value="stock"> Stock </option>
-        <option value="roles"> Roles</option> 
-        <option value="purchaseorder"> Purchase Order</option>    
-        <option value="pickuporder"> Pickup Order</option>    
-        <option value="generalsettings"> General Settings</option>           
-        </select>
+<select name="group_name" class="form-select" id="example-select">
+    <option selected disabled>Select Group</option>
+
+    <option value="attendance">Attendance</option>
+    <option value="audit">Audit Trail</option>
+    <option value="backup">Backup</option>
+    <option value="brand">Brand</option>
+    <option value="category">Category</option>
+    <option value="commerce">Commerce</option>
+    <option value="customer">Customer</option>
+    <option value="custom">Custom</option>
+    <option value="expense">Expense</option>
+    <option value="general-settings">General Settings</option>
+    <option value="inventory">Inventory</option>
+    <option value="orders">Orders</option>
+    <option value="permission">Roles and Permission</option>
+    <option value="pickup-order">Pickup Order</option>
+    <option value="pos">POS</option>
+    <option value="product">Product</option>
+    <option value="purchase-order">Purchase Order</option>
+    <option value="reports">Reports</option>
+    <option value="roles">Roles</option>
+    <option value="salary">Salary</option>
+    <option value="inventory">Inventory</option>
+    <option value="sub-category">Sub-Category</option>
+    <option value="supplier">Supplier</option>
+    <option value="user-account">User Account</option>
+</select>
+
            
         </div>
     </div>
