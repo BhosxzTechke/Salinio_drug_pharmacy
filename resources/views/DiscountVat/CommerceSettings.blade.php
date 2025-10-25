@@ -82,6 +82,9 @@
 
                 </div>
             </div>
+
+
+
                  {{-- @if(Auth::user()->can('Update Business nam')) --}}
                             <div class="text-end">
                                 <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Update Changes</button>
@@ -117,6 +120,13 @@
 
                     
 
+
+
+
+
+
+
+
                     <!-- Modal -->
                     <div class="modal fade" id="discount-modal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
@@ -128,17 +138,17 @@
                                     <input type="hidden" id="discount_id" value="">
 
                                     <div class="mb-2">
-                                        <label for="discountname" class="form-label">Discount Name</label>
+                                        <label for="discountname" class="form-label">Discount Name <span class="text-danger">*</span></label>
                                         <input id="discountname" class="form-control" placeholder="Discount Name">
                                     </div>
 
                                     <div class="mb-2">
-                                        <label for="discountrate" class="form-label">Discount Rate (%)</label>
+                                        <label for="discountrate" class="form-label">Discount Rate (%) <span class="text-danger">*</span></label>
                                         <input id="discountrate" class="form-control" placeholder="Rate" type="number" min="0">
                                     </div>
 
                                     <div class="mb-2">
-                                        <label for="vat_exempt" class="form-label">Is this VAT Exempt?</label>
+                                        <label for="vat_exempt" class="form-label">Is this VAT Exempt? <span class="text-danger">*</span></label>
                                         <select id="vat_exempt" class="form-control">
                                             <option value="" selected disabled>Select option</option>
                                             <option value="1">Yes</option>
@@ -147,7 +157,7 @@
                                     </div>
 
                                     <div class="mb-2">
-                                        <label for="is_active" class="form-label">Is this Active?</label>
+                                        <label for="is_active" class="form-label">Is this Active? <span class="text-danger">*</span></label>
                                         <select id="is_active" class="form-control">
                                             <option value="" selected disabled>Select option</option>
                                             <option value="1">Active</option>
@@ -166,6 +176,12 @@
 
 
 
+
+
+
+
+
+                    
 <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Manage Discount Settings</h5>
 
         <table id="basic-datatable" class="table dt-responsive nowrap w-100">

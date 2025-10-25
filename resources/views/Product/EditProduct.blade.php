@@ -18,11 +18,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Product</li>
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Edit Profile</h4>
                                 </div>
                             </div>
                         </div>     
@@ -47,168 +47,149 @@
       <input type="hidden" name="old_image" value="{{ $product->product_image }}">
     
 
-    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Edit Product</h5>
-    <div class="row">
+<h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Edit Product</h5>
+<div class="row">
 
-        {{-- Product Name --}}
-        <div class="col-md-6 mb-3">
-            <label for="product_name">Product Name</label>
-            <input type="text" name="product_name" class="form-control"
-                   value="{{ old('product_name', $product->product_name) }}">
-        </div>
+    {{-- Product Name --}}
+    <div class="col-md-6 mb-3">
+        <label for="product_name">Product Name <span class="text-danger">*</span></label>
+        <input type="text" name="product_name" class="form-control"
+               value="{{ old('product_name', $product->product_name) }}">
+    </div>
 
-        {{-- Product Code --}}
-        <div class="col-md-6 mb-3">
-            <label for="product_code">Product Code</label>
-            <input type="text" name="product_code" class="form-control"
-                   value="{{ old('product_code', $product->product_code) }}">
-        </div>
+    {{-- Product Code (optional) --}}
+    <div class="col-md-6 mb-3">
+        <label for="product_code">Product Code</label>
+        <input type="text" name="product_code" class="form-control"
+               value="{{ old('product_code', $product->product_code) }} " readonly=""> 
+    </div>
 
-        {{-- Category --}}
-        <div class="col-md-6 mb-3">
-            <label for="category_id">Category</label>
-            <select name="category_id" id="category_id" class="form-control">
-                <option selected disabled>Select Category</option>
-                @foreach($categories as $cat)
-                    <option value="{{ $cat->id }}" {{ $product->category_id == $cat->id ? 'selected' : '' }}>
-                        {{ $cat->category_name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Category --}}
+    <div class="col-md-6 mb-3">
+        <label for="category_id">Category <span class="text-danger">*</span></label>
+        <select name="category_id" id="category_id" class="form-control">
+            <option selected disabled>Select Category</option>
+            @foreach($categories as $cat)
+                <option value="{{ $cat->id }}" {{ $product->category_id == $cat->id ? 'selected' : '' }}>
+                    {{ $cat->category_name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-        
+    {{-- Subcategory --}}
+    <div class="col-md-6 mb-3">
+        <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
+        <select name="subcategory_id" id="subcategory_id" class="form-control">
+            <option selected disabled>Select Subcategory</option>
+            @foreach($subcategories as $sub)
+                <option value="{{ $sub->id }}" {{ $product->subcategory_id == $sub->id ? 'selected' : '' }}>
+                    {{ $sub->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-        {{-- Subcategory --}}
-        <div class="col-md-6 mb-3">
-            <label for="subcategory_id">Subcategory</label>
-            <select name="subcategory_id" id="subcategory_id" class="form-control">
-                <option selected disabled>Select Subcategory</option>
-                @foreach($subcategories as $sub)
-                    <option value="{{ $sub->id }}" {{ $product->subcategory_id == $sub->id ? 'selected' : '' }}>
-                        {{ $sub->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Brand --}}
+    <div class="col-md-6 mb-3">
+        <label for="brand_id">Brand <span class="text-danger">*</span></label>
+        <select name="brand_id" class="form-control">
+            @foreach($brands as $brand)
+                <option value="{{ $brand->id }}" {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
+                    {{ $brand->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-        {{-- Brand --}}
-        <div class="col-md-6 mb-3">
-            <label for="brand_id">Brand</label>
-            <select name="brand_id" class="form-control">
-                @foreach($brands as $brand)
-                    <option value="{{ $brand->id }}" {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
-                        {{ $brand->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Dosage Form --}}
+    <div class="col-md-6 mb-3">
+        <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
+        <select name="dosage_form" class="form-control">
+            @php $dosageOptions = ['Tablet','Capsule','Syrup','Cream','Ointment']; @endphp
+            @foreach($dosageOptions as $option)
+                <option value="{{ $option }}" {{ $product->dosage_form == $option ? 'selected' : '' }}>
+                    {{ $option }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
+    {{-- Target Gender --}}
+    <div class="col-md-6 mb-3">
+        <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
+        <select name="target_gender" class="form-control">
+            @php $genderOptions = ['Unisex','Male','Female']; @endphp
+            @foreach($genderOptions as $option)
+                <option value="{{ $option }}" {{ $product->target_gender == $option ? 'selected' : '' }}>
+                    {{ $option }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-        {{-- Dosage Form --}}
-        <div class="col-md-6 mb-3">
-            <label for="dosage_form">Dosage Form</label>
-            <select name="dosage_form" class="form-control">
-                @php
-                    $dosageOptions = ['Tablet','Capsule','Syrup','Cream','Ointment'];
-                @endphp
-                @foreach($dosageOptions as $option)
-                    <option value="{{ $option }}" {{ $product->dosage_form == $option ? 'selected' : '' }}>
-                        {{ $option }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Age Group --}}
+    <div class="col-md-6 mb-3">
+        <label for="age_group">Age Group <span class="text-danger">*</span></label>
+        <select name="age_group" class="form-control">
+            @php $ageOptions = ['All','Kids','Adults','Seniors']; @endphp
+            @foreach($ageOptions as $option)
+                <option value="{{ $option }}" {{ $product->age_group == $option ? 'selected' : '' }}>
+                    {{ $option }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
+    {{-- Health Concern (optional) --}}
+    <div class="col-md-6 mb-3">
+        <label for="health_concern">Health Concern</label>
+        <input type="text" name="health_concern" class="form-control"
+               value="{{ old('health_concern', $product->health_concern) }}">
+    </div>
 
+    {{-- Selling Price --}}
+    <div class="col-md-6 mb-3">
+        <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
+        <input type="text" name="selling_price" class="form-control"
+               value="{{ old('selling_price', $product->selling_price) }}">
+    </div>
 
-        {{-- Target Gender --}}
-        <div class="col-md-6 mb-3">
-            <label for="target_gender">Target Gender</label>
-            <select name="target_gender" class="form-control">
-                @php
-                    $genderOptions = ['Unisex','Male','Female'];
-                @endphp
-                @foreach($genderOptions as $option)
-                    <option value="{{ $option }}" {{ $product->target_gender == $option ? 'selected' : '' }}>
-                        {{ $option }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Prescription Required --}}
+    <div class="col-md-6 mb-3">
+        <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
+        <select name="prescription_required" class="form-control">
+            <option value="0" {{ $product->prescription_required == 0 ? 'selected' : '' }}>No</option>
+            <option value="1" {{ $product->prescription_required == 1 ? 'selected' : '' }}>Yes</option>
+        </select>
+    </div>
 
-        {{-- Age Group --}}
-        <div class="col-md-6 mb-3">
-            <label for="age_group">Age Group</label>
-            <select name="age_group" class="form-control">
-                @php
-                    $ageOptions = ['All','Kids','Adults','Seniors'];
-                @endphp
-                @foreach($ageOptions as $option)
-                    <option value="{{ $option }}" {{ $product->age_group == $option ? 'selected' : '' }}>
-                        {{ $option }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    {{-- Description --}}
+    <div class="col-md-12 mb-3">
+        <label for="description">Description <span class="text-danger">*</span></label>
+        <textarea name="description" class="form-control" rows="3">{{ old('description', $product->description) }}</textarea>
+    </div>
 
-        {{-- Health Concern --}}
-        <div class="col-md-6 mb-3">
-            <label for="health_concern">Health Concern</label>
-            <input type="text" name="health_concern" class="form-control"
-                   value="{{ old('health_concern', $product->health_concern) }}">
-        </div>
+    {{-- Expiration Switch (optional) --}}
+    <div class="form-check form-switch mb-3">
+        <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" 
+               value="1" {{ $product->has_expiration == 1  ? 'checked' : '' }}>
+        <label class="form-check-label" for="has_expiration">Has Expiration</label>
+    </div>
 
-  
+    {{-- Product Image (optional) --}}
+    <div class="col-md-6 mb-3">
+        <label for="product_image">Product Image</label>
+        <input type="file" name="product_image" class="form-control">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label>Current Image</label>
+        <img src="{{ $product->product_image ? asset($product->product_image) : url('uploads/noimage.png') }}"
+             class="rounded-circle avatar-lg img-thumbnail" alt="product-image">
+    </div>
 
+</div> <!-- end row -->
 
-        {{-- Selling Price --}}
-        <div class="col-md-6 mb-3">
-            <label for="selling_price">Selling Price</label>
-            <input type="text" name="selling_price" class="form-control"
-                   value="{{ old('selling_price', $product->selling_price) }}">
-        </div>
-
-        {{-- Prescription Required --}}
-        <div class="col-md-6 mb-3">
-            <label for="prescription_required">Prescription Required</label>
-            <select name="prescription_required" class="form-control">
-                <option value="0" {{ $product->prescription_required == 0 ? 'selected' : '' }}>No</option>
-                <option value="1" {{ $product->prescription_required == 1 ? 'selected' : '' }}>Yes</option>
-            </select>
-        </div>
-
-
-
-        {{-- Description --}}
-        <div class="col-md-12 mb-3">
-            <label for="description">Description</label>
-            <textarea name="description" class="form-control" rows="3">{{ old('description', $product->description) }}</textarea>
-        </div>
-
-        
-        <div class="form-check form-switch mb-3">
-                    <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" 
-                    value="" {{ $product->has_expiration == 1  ? 'checked' : '' }} >
-
-
-                    <label class="form-check-label" for="has_expiration">Has Expiration</label>
-                </div>
-
-
-
-        {{-- Product Image --}}
-        <div class="col-md-6 mb-3">
-            <label for="product_image">Product Image</label>
-            <input type="file" name="product_image" class="form-control">
-        </div>
-        <div class="col-md-6 mb-3">
-            <label>Current Image</label>
-            <img src="{{ $product->product_image ? asset($product->product_image) : url('uploads/noimage.png') }}"
-                 class="rounded-circle avatar-lg img-thumbnail" alt="product-image">
-        </div>
-
-    </div> <!-- end row -->
 
     <div class="text-end">
         <button type="submit" class="btn btn-success">Update Product</button>

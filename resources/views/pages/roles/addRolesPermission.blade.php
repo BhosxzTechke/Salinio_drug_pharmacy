@@ -91,58 +91,55 @@
 
     
 
-    <div class="col-md-9">
-        <div class="form-check mb-2 form-check-primary">
+<div class="col-md-9 mb-3">
+    <div class="form-check mb-2 form-check-primary">
+        <input class="form-check-input" type="checkbox" id="custome_selectAll">
+        <label class="form-check-label" for="custome_selectAll">Select All</label>
+    </div>
+</div>
 
-        
-            <input class="form-check-input" type="checkbox" value="" id="custome_selectAll" >
-            <label class="form-check-label"  for="custome_selectAll">Select All</label>
-    </div>     
-
-   </div> <!-- end row -->
-            
-    <br>
-    <br>
-    
-
-@foreach ($permissionGroups as $item)
+@foreach ($permissionGroups as $group)
+    @php $groupSlug = \Illuminate\Support\Str::slug($group->group_name); @endphp
     <div class="row mb-3">
         <div class="col-3">
             <div class="form-check mb-2 form-check-primary">
-                <input class="form-check-input group-checkbox @error('group') is-invalid @enderror" type="checkbox" id="group_{{ $loop->index }}">
-                <label class="form-check-label" for="group_{{ $loop->index }}">{{ $item->group_name }}</label>
-
-            @error('group')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-
-
+                <input 
+                    class="form-check-input group-checkbox" 
+                    type="checkbox" 
+                    id="group_{{ $groupSlug }}">
+                <label class="form-check-label" for="group_{{ $groupSlug }}">{{ $group->group_name }}</label>
             </div>
         </div>
 
-
-
-
         @php
-            $permissions = \App\Models\User::getPermissionByGroup($item->group_name);
+            $permissions = \App\Models\User::getPermissionByGroup($group->group_name);
         @endphp
 
         <div class="col-md-9">
             @foreach ($permissions as $permission)
+                @php $permSlug = \Illuminate\Support\Str::slug($permission->name); @endphp
                 <div class="form-check mb-2 form-check-primary">
                     <input 
                         class="form-check-input permission-checkbox" 
                         type="checkbox" 
                         name="permission[]" 
-                        data-group="{{ $loop->parent->index }}" 
-                        value="{{ $permission->id }}" 
-                        id="perm_{{ $permission->id }}">
-                    <label class="form-check-label" for="perm_{{ $permission->id }}">{{ $permission->name }}</label>
+                        value="{{ $permission->id ?? $permSlug }}" 
+                        id="perm_{{ $permSlug }}" 
+                        data-group="{{ $groupSlug }}">
+                    <label class="form-check-label" for="perm_{{ $permSlug }}">{{ $permission->name }}</label>
                 </div>
             @endforeach
         </div>
     </div>
 @endforeach
+
+
+
+
+
+
+
+
 
 <div class="text-end">
     <button type="submit" class="btn btn-success waves-effect waves-light mt-2">
@@ -213,40 +210,35 @@ document.getElementById('permissionForm').addEventListener('submit', function (e
 
 <script type="text/javascript">
 $(document).ready(function () {
-
     // Select All
     $('#custome_selectAll').on('change', function () {
-        $('input[type=checkbox]').prop('checked', $(this).is(':checked'));
+        const isChecked = $(this).is(':checked');
+        $('input.permission-checkbox, input.group-checkbox').prop('checked', isChecked);
     });
 
-    // if pinindot si group mag automatic maseselect lahat ng permission nia
+    // Group checkbox → select all its permissions
     $('.group-checkbox').on('change', function () {
-        let groupIndex = $(this).attr('id').split('_')[1];
-        $(`.permission-checkbox[data-group="${groupIndex}"]`).prop('checked', $(this).is(':checked'));
+        const groupSlug = $(this).attr('id').replace('group_', '');
+        $(`.permission-checkbox[data-group="${groupSlug}"]`).prop('checked', $(this).is(':checked'));
         updateSelectAll();
     });
 
-    // Permission checkbox change
+    // Permission checkbox → update group checkbox
     $('.permission-checkbox').on('change', function () {
-        let groupIndex = $(this).data('group');
-        let groupPermissions = $(`.permission-checkbox[data-group="${groupIndex}"]`);
-        let groupCheckedCount = groupPermissions.filter(':checked').length;
-
-        //  Check group if at least 1 permission is selected
-        $(`#group_${groupIndex}`).prop('checked', groupCheckedCount > 0);
-
+        const groupSlug = $(this).data('group');
+        const groupPermissions = $(`.permission-checkbox[data-group="${groupSlug}"]`);
+        const groupCheckedCount = groupPermissions.filter(':checked').length;
+        $(`#group_${groupSlug}`).prop('checked', groupCheckedCount > 0);
         updateSelectAll();
     });
 
-
-
-
+    // Update Select All status
     function updateSelectAll() {
-        let allChecked = $('.permission-checkbox').length === $('.permission-checkbox:checked').length;
+        const allChecked = $('.permission-checkbox').length === $('.permission-checkbox:checked').length;
         $('#custome_selectAll').prop('checked', allChecked);
     }
-
 });
+
 </script>
 
 

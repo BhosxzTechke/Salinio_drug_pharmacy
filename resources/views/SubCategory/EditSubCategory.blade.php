@@ -17,7 +17,7 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Sub-Categpru</li>
+                                            <li class="breadcrumb-item active">Sub-Category</li>
                                         </ol>
                                     </div>
                                     
@@ -52,7 +52,7 @@
                         <div class="col-md-9">
 
                             <div class="mb-3">
-                                <label for="brand" class="">Sub-Category Name</label>
+                                <label for="brand" class="">Sub-Category Name <span class="text-danger">*</span></label>
                                 <input type="text" value="{{ $subcategory->name }}" name="name" class="form-control @error('sub-category') is-invalid @enderror" id="sub-category" placeholder="Enter Sub-Category name">
                         
                                 @error('sub-category')
@@ -65,7 +65,7 @@
 
                             <div class="col-md-9">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Category Name</label>
+                                    <label for="name" class="form-label">Category Name <span class="text-danger">*</span></label>
                                 <select name="category_id" class="form-control @error('sub-category') is-invalid @enderror" id="example-select">
                                             <option selected disabled >Select Category </option>
                                             @foreach ($categories as $data)
@@ -89,7 +89,7 @@
     
 
                                 <div class="text-end">
-                                    <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save Changes</button>
+                                    <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Update Changes</button>
                                 </div>
                                                     
                                                 </form>

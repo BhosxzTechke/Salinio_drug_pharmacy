@@ -79,9 +79,18 @@ class Order extends Model
         return $this->belongsTo(Address::class, 'shipping_address_id');
     }
 
+
+
     public function cancelledBy()
     {
         return $this->belongsTo(User::class, 'cancelled_by');
+    }
+
+
+    
+    public function ShippedBy()
+    {
+        return $this->belongsTo(User::class, 'shipped_by');
     }
 
 

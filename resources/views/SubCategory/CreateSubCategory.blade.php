@@ -48,7 +48,7 @@
                         <div class="col-md-9">
 
                             <div class="form-group mb-3">
-                                <label for="brand" class="">Sub-Category Name</label>
+                                <label for="brand" class="">Sub-Category Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" class="form-control @error('sub-category') is-invalid @enderror" id="sub-category" placeholder="Enter Sub-Category name">
                         
                                 @error('sub-category')
@@ -61,7 +61,7 @@
 
                             <div class="col-md-9">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Category Name</label>
+                                    <label for="name" class="form-label">Category Name <span class="text-danger">*</span></label>
                                 <select name="category_id" class="form-control @error('category') is-invalid @enderror" id="example-select">
                                             <option selected disabled >Select Category </option>
                                             @foreach ($categories as $data)

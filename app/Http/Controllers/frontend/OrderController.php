@@ -14,7 +14,9 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmationMail;
+use App\Models\Customer;
 
 
 class OrderController extends Controller
@@ -519,6 +521,21 @@ foreach ($cartInstance->content() as $item) {
 
         DB::commit();
 
+
+
+
+        $customer = Customer::find($request->customer_id);
+            Mail::send('emails.order-complete', [
+                'title' => 'Order Completed Successfully',
+                'name' => $customer->name,
+                'from' => config('mail.from.address'),
+                'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed. Total: ₱" . number_format($order->total, 2),
+            ], function ($message) use ($customer) {
+                $message->to($customer->email)
+                        ->subject('Your Order Confirmation');
+            });
+
+
         return redirect()
             ->route('success.order', $order->id)
             ->with('success', 'Order completed successfully!');
@@ -541,6 +558,9 @@ foreach ($cartInstance->content() as $item) {
 
         return view('Ecommerce.payment.success', compact('order', 'total', 'OrderNumber'));
         }
+
+
+
 
 
         //// Cash success payment

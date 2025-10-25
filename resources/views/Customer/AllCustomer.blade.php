@@ -40,7 +40,6 @@
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Phone </th>
-                                                    <th>ShopName</th>
                                                     <th>Action</th>
                                                 </tr>
 
@@ -57,7 +56,6 @@
                                                     <td>{{ $data->name }}</td>
                                                     <td>{{ $data->email }}</td>
                                                     <td>{{ $data->phone }}</td>
-                                                    <td>{{ $data->shopname }}</td>
                                                 <td>
                                                     @if(Auth::user()->can('edit-customer')) 
                                                         <a href="{{ route('edit.customer', $data->id) }}" class="btn btn-success rounded-pill waves-effect waves-light"><i class="fa-solid fa-square-pen"></i> Edit</a>

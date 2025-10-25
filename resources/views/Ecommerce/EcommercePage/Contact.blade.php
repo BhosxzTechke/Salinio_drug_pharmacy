@@ -57,6 +57,14 @@
           Contact Us
         </h2>
 
+
+        <form action="{{ route('contact.send') }}" method="POST">
+        @csrf
+
+
+        <input type="hidden" name="name" value="{{ Auth::guard('customer')->user()->name ?? 'unknown' }}" id="">
+
+
         <div class="relative mb-4">
           <label for="email" class="text-sm leading-7 text-gray-600"
             >Email</label
@@ -83,6 +91,11 @@
         >
           Send
         </button>
+
+        </form>
+
+
+
       </div>
     </div>
   </div>

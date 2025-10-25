@@ -17,11 +17,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Brand</li>
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Edit Brand</h4>
                                 </div>
                             </div>
                         </div>     
@@ -49,7 +49,7 @@
                         <div class="col-md-6">
 
                             <div class="mb-3">
-                                <label for="brand" class="">Brand Name</label>
+                                <label for="brand" class="">Brand Name <span class="text-danger">*</span></label>
                                 <input type="text" value="{{ $brand->name }}" name="name" class="form-control @error('brand') is-invalid @enderror" id="brand" placeholder="Enter brand name">
                         
                                 @error('brand')
@@ -61,25 +61,27 @@
 
 
 
-                        <div class="mb-3">
-                        <label for="example-fileinput" class="form-label">Brand Logo Image</label>
-                        <input type="file" value="{{ $brand->logo }}" name="image" id="image" class="form-control  @error('image') is-invalid @enderror" >
-                                        @error('image')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                </div>
 
 
 
                <div class="row mb-3">
-                               <label for="example-text-input" class="col-sm-2 col-form-label">Blog Description </label>
+                               <label for="example-text-input" class="col-sm-2 col-form-label">Blog Description <span class="text-danger">*</span> </label>
                                 <div class="col-sm-10">
-                                <textarea id="elm1" name="blog_description">{{ $brand->description }}
+                                <textarea id="elm1" name="description">{{ $brand->description }}
                                     
                                 </textarea>
                          </div>
             </div>
 
+
+            
+                        <div class="mb-3">
+                        <label for="example-fileinput" class="form-label">Brand Logo Image <span class="text-danger">*</span></label>
+                        <input type="file" value="{{ $brand->logo }}" name="image" id="image" class="form-control  @error('image') is-invalid @enderror" >
+                                        @error('image')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                </div>
 
 
                             <div class="col-md-12">
@@ -97,7 +99,7 @@
     
 
                                                     <div class="text-end">
-                                                        <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save Changes</button>
+                                                        <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Update Changes</button>
                                                     </div>
                                                     
                                                 </form>

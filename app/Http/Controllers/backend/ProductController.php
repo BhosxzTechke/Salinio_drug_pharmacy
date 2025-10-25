@@ -18,6 +18,7 @@ use App\Imports\ProductImport;
 use Maatwebsite\Excel\Validators\ValidationException as ExcelValidationException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rule;
 
 
 
@@ -58,19 +59,39 @@ public function StoreProduct(Request $request)
 {
     try {
         $validated = $request->validate([
-            'product_name'          => 'required|string|max:100',
+            'product_name'          => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('brand_id', $request->brand_id)
+                                 ->where('dosage_form', $request->dosage_form);
+                }),
+            ],
             'category_id'           => 'required|integer|exists:categories,id',
             'subcategory_id'        => 'required|integer|exists:subcategories,id',
             'brand_id'              => 'required|integer|exists:brands,id',
             'description'           => 'required|string|min:10',
             'dosage_form'           => 'nullable|string|max:50',
-            'target_gender'         => 'required|string', // adjust values as per your options
+            'target_gender'         => 'required|string|max:50',
             'age_group'             => 'required|string|max:50',
             'health_concern'        => 'nullable|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:2048', // 2MB max
+            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // optional, 2MB max
+        ], [
+            'product_name.required' => 'Please enter the product name.',
+            'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
+            'category_id.required' => 'Please select a category.',
+            'subcategory_id.required' => 'Please select a subcategory.',
+            'brand_id.required' => 'Please select a brand.',
+            'description.required' => 'Please enter a description (at least 10 characters).',
+            'selling_price.required' => 'Please enter the selling price.',
+            'product_image.image' => 'Uploaded file must be an image.',
+            'product_image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
+            'product_image.max' => 'Image must not exceed 2MB.',
         ]);
+
 
         // Auto-generate product code
         $pcode = IdGenerator::generate([
@@ -201,21 +222,38 @@ public function UpdateProduct(Request $request)
 {
     try {
         $request->validate([
-            'id'                    => 'required|exists:products,id',
-            'product_name'          => 'required|string|max:100',
+            'id' => 'required|exists:products,id',
+            'product_name'  => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    return $query->where('brand_id', $request->brand_id)
+                                ->where('dosage_form', $request->dosage_form);
+                })->ignore($request->id),
+            ],
             'product_code'          => 'required|string|max:50',
             'category_id'           => 'required|integer|exists:categories,id',
             'subcategory_id'        => 'required|integer|exists:subcategories,id',
             'brand_id'              => 'required|integer|exists:brands,id',
             'description'           => 'required|string|min:10',
             'dosage_form'           => 'required|string|max:50',
-            'target_gender'         => 'required|string',
+            'target_gender'         => 'required|string|max:50',
             'age_group'             => 'required|string|max:50',
             'health_concern'        => 'required|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
+            'product_name.required' => 'Please enter the product name.',
+            'description.required' => 'Please enter a description (minimum 10 characters).',
+            'product_image.image' => 'Uploaded file must be an image.',
+            'product_image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
+            'product_image.max' => 'Image must not exceed 2MB.',
         ]);
+
+
 
         $product = Product::findOrFail($request->input('id'));
         $oldData = $product->toArray();

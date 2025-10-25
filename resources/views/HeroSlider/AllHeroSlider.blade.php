@@ -40,6 +40,7 @@
                                                     <th>link</th>
                                                     <th>position</th>
                                                     <th>status</th>
+                                                    <th>Action</th>
 
                                                 </tr>
 
@@ -60,12 +61,12 @@
                                                     <td>{{ $data->is_active == 1 ? 'Active' : 'Inactive' }}</td>
 
                                                     <td>
-                                                        @if(Auth::user()->can('Delete Imageslider'))
+                                                        {{-- @if(Auth::user()->can('Delete Imageslider')) --}}
                                                         <a href="{{ route('edit.heroslider', $data->id) }}" class="btn btn-success rounded-pill waves-effect waves-light"><i class="fa-solid fa-square-pen"></i> Edit</a>
-                                                        @endif
-                                                        @if(Auth::user()->can('Edit Imageslider'))
+                                                        {{-- @endif --}}
+                                                        {{-- @if(Auth::user()->can('Edit Imageslider')) --}}
                                                         <a href="{{ route('delete.heroslider', $data->id)}}" class="btn btn-danger rounded-pill waves-effect waves-light" id="delete"  title="Delete Data"><i class="fa-solid fa-trash"></i> Delete</a>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     </td>
                                                 </tr>
                                                     @endforeach

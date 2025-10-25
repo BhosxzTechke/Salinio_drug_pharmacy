@@ -137,13 +137,13 @@
 
 
 
-                                                 <div class="col-md-6">
+                                                 {{-- <div class="col-md-6">
                                                             <div class="mb-3">
                                                                 <label for="text" class="">Due Amount</label>
                                                                 <p class="text-danger">{{ $Order->due }}</p>
 
                                                             </div>
-                                                        </div> <!-- end col -->
+                                                        </div> <!-- end col --> --}}
 
 
 

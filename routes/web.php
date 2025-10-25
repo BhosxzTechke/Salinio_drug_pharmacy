@@ -701,10 +701,24 @@ use Illuminate\Http\Request;
         
             Route::controller(ExpenseController::class)->group(function () {
 
-            //Showing Data in table
+            //Showing add expense form
             Route::get('/add//expense', 'AddExpense')->name('add.expense')->middleware('permission:add-expense');
 
+        
             Route::post('/store//expense', 'StoreExpense')->name('store.expense');
+
+
+            // showing edit expense form
+            route::get('/edit/expense/{id}', 'EditExpense')->name('edit.expense');
+
+            
+            route::put('/update/expense', 'UpdateExpense')->name('update.expense');
+
+            //Delete Expense
+            route::get('/delete/expense/{id}', 'DeleteExpense')->name('delete.expense');
+            
+            //Showing today's expense
+
 
             Route::get('/today/expense', 'TodayExpense')->name('todays.expense')->middleware('permission:view-today-expense');
 
@@ -878,7 +892,7 @@ use Illuminate\Http\Request;
 
 
             // Complete Orders TABLE
-            Route::get('/Order/complete', 'CompleteOrders')->name('complete.order')->middleware('permission:view-all-complete-orders');
+            Route::get('/Order/complete', 'CompleteOrders')->name('complete.order')->middleware('permission:view-complete-orders');
 
 
             //Show Order Details Form
@@ -1170,7 +1184,7 @@ use Illuminate\Http\Request;
      Route::get('/Contact/page', 'ContactShow')->name('contact.show');
 
 
-     Route::post('/Contact/message', 'ContactMessage')->name('contact.submit');
+     Route::post('/Contact/message', 'send')->name('contact.send');
    });
 
 

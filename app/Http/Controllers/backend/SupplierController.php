@@ -32,59 +32,64 @@ class SupplierController extends Controller
 
 public function StoreFormSupplier(Request $request)
 {
+    $request->validate([
+        'name' => [
+            'required',
+            'string',
+            'max:200',
+            Rule::unique('suppliers')->where(function ($query) use ($request) {
+                return $query->where('address', $request->address);
+            }),
+        ],
 
-$request->validate([
-    'name' => [
-        'required',
-        'string',
-        'max:200',
-        Rule::unique('suppliers')->where(function ($query) use ($request) {
-            return $query->where('address', $request->address);
-        }),
-    ],
-    'email' => 'required|email|unique:suppliers,email|max:200',
-    'phone' => ['required', 'string', 'max:200', 'unique:suppliers,phone', 'regex:/^(09|\+639|639)\d{9}$/'],
-    'address' => 'required|string|max:400',
-    'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-],
-            [
-            'name.unique' => 'A supplier with the same name and address already exists.',
-            'name.required' => 'Please enter the supplier\'s name.',
-            'name.max' => 'Supplier name cannot exceed 200 characters.',
+        'email' => 'required|email|unique:suppliers,email|max:200',
+        'phone' => ['required', 'string', 'max:200', 'unique:suppliers,phone', 'regex:/^(09|\+639|639)\d{9}$/'],
+        'address' => 'required|string|max:400',
 
-            'email.required' => 'Please enter an email address.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.max' => 'Email cannot exceed 200 characters.',
-            'email.unique' => 'This email is already taken.',
+    ], [
+        'name.unique' => 'A supplier with the same name and address already exists.',
+        'name.required' => 'Please enter the supplier\'s name.',
+        'name.max' => 'Supplier name cannot exceed 200 characters.',
 
-            'phone.required' => 'Please enter a phone number.',
-            'phone.max' => 'Phone number cannot exceed 200 characters.',
-            'phone.unique' => 'This phone number is already used.',
-            'phone.regex' => 'Phone number must start with 09, +639, or 639 and contain 9 digits after.',
+        'email.required' => 'Please enter an email address.',
+        'email.email' => 'Please enter a valid email address.',
+        'email.max' => 'Email cannot exceed 200 characters.',
+        'email.unique' => 'This email is already taken.',
 
-            'address.required' => 'Please enter an address.',
-            'address.max' => 'Address cannot exceed 400 characters.',
+        'phone.required' => 'Please enter a phone number.',
+        'phone.max' => 'Phone number cannot exceed 200 characters.',
+        'phone.unique' => 'This phone number is already used.',
+        'phone.regex' => 'Phone number must start with 09, +639, or 639 and contain 9 digits after.',
 
-            ]);
-
+        'address.required' => 'Please enter an address.',
+        'address.max' => 'Address cannot exceed 400 characters.',
+        'image.image' => 'Uploaded file must be an image.',
+        'image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
+        'image.max' => 'Image must not be larger than 10MB.',
+    ]);
 
     try {
-        $image = $request->file('image');
-        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+        $saveurl = null; // default if no image uploaded
 
-        // Resize and save image
-        Image::make($image)
-            ->resize(300, 300)
-            ->save(public_path('uploads/supplier_image/') . $name_gen);
+        
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
 
-        $saveurl = 'uploads/supplier_image/' . $name_gen;
+            // Resize and save image
+            Image::make($image)
+                ->resize(300, 300)
+                ->save(public_path('uploads/supplier_image/') . $name_gen);
+
+            $saveurl = 'uploads/supplier_image/' . $name_gen;
+        }
 
         $supplier = Supplier::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'image' => $saveurl,
+            'image' => $saveurl, // null if no image
             'created_at' => Carbon::now(),
         ]);
 
@@ -104,13 +109,17 @@ $request->validate([
         ];
 
         return redirect()->route('all.supplier')->with($notification);
-
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return back()->withErrors($e->validator)->withInput();
     } catch (\Exception $e) {
+        \Log::error('Error saving supplier: ' . $e->getMessage());
 
-        return redirect()->back()->withInput()->with([
-            'message' => 'Something went wrong: ' . $e->getMessage(),
-            'alert-type' => 'error',
-        ]);
+        $notification = [
+            'message' => 'Something went wrong while saving the supplier.',
+            'alert-type' => 'error'
+        ];
+
+        return redirect()->back()->with($notification)->withInput();
     }
 }
 

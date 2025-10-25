@@ -17,11 +17,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Supplier</li>
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Add Supplier</h4>
                                 </div>
                             </div>
                         </div>     
@@ -42,68 +42,51 @@
                         @csrf
 
 
-                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Supplier Info</h5>
-                            <div class="row">
-                                <div class="col-md-6">
+<h5 class="mb-4 text-uppercase">
+    <i class="mdi mdi-account-circle me-1"></i> Supplier Info
+</h5>
 
-                                    <div class="form-group mb-3">
-                                        <label for="name" class="">Supplier Name</label>
-                                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Supplier name">
-                                
-                                    </div>
-                                </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="name" class="">Supplier Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Enter Supplier name">
+        </div>
+    </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="text" class="">Supplier Email</label>
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter Supplier Email">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="email" class="">Supplier Email <span class="text-danger">*</span></label>
+            <input type="email" name="email" class="form-control" id="email" placeholder="Enter Supplier Email">
+        </div>
+    </div> <!-- end col -->
 
-                                        </div>
-                                </div> <!-- end col -->
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="address" class="">Supplier Address <span class="text-danger">*</span></label>
+            <input type="text" name="address" class="form-control" id="address" placeholder="Enter Supplier Address">
+        </div>
+    </div> <!-- end col -->
 
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="phone" class="">Supplier Phone <span class="text-danger">*</span></label>
+            <input type="number" name="phone" class="form-control" id="phone" placeholder="Enter Supplier Phone">
+        </div>
+    </div> <!-- end col -->
 
-                                
+    <div class="form-group mb-3">
+        <label for="example-fileinput" class="form-label">Supplier Image</label>
+        <input type="file" name="image" id="image" class="form-control">
+    </div>
 
-                    <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="text" class="">Supplier Address</label>
-                                        <input type="text" name="address" class="form-control" id="address" placeholder="Enter Supplier Address">
-                    
-                                    </div>
-                                </div> <!-- end col -->
-
-
-
-                        <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="phone" class="">Supplier Phone</label>
-                                        <input type="number" name="phone" class="form-control" id="phone" placeholder="Enter Supplier Phone">
-
-                                    </div>
-                                </div> <!-- end col -->
-
-
-
-
-
-
-                                <div class="form-group mb-3">
-                                <label for="example-fileinput" class="form-label">Supplier Image</label>
-                                <input type="file" name="image" id="image" class="form-control" >
-
-                                        </div>
-
-
-                                    <div class="col-md-12">
-                                <div class="mb-3">
-                                        <label for="example-fileinput" class="form-label"> </label>
-                                        <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail"
-                                                alt="profile-image">
-                                    </div>
-                                </div> <!-- end col -->
-
-
-                            </div> <!-- end row -->
+    <div class="col-md-12">
+        <div class="mb-3">
+            <label for="example-fileinput" class="form-label"></label>
+            <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
 
 
                             <div class="text-end">
@@ -173,10 +156,6 @@ $(document).ready(function () {
                 minlength: 5,
                 maxlength: 400
             },
-            image: {
-                required: true,
-                extension: "jpg|jpeg|png|webp"
-            }
         },
         messages: {
             name: {
@@ -205,10 +184,7 @@ $(document).ready(function () {
                 minlength: "Address must be at least 5 characters",
                 maxlength: "Address can't be longer than 400 characters"
             },
-            image: {
-                required: "Please upload a supplier image",
-                extension: "Only JPG, JPEG, PNG, or WEBP formats are allowed"
-            }
+            
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

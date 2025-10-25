@@ -16,17 +16,30 @@ class ContactController extends Controller
         return view('Ecommerce.EcommercePage.Contact');
     }
 
-    public function ContactMessage(Request $request){
-        // Validate the incoming request data
-        $validated = $request->validate([
+    public function send(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
             'email' => 'required|email',
-            // 'subject' => 'required|string|max:255',
-            // 'message' => 'required|string',
+            'message' => 'required'
         ]);
-        
-        // Use the email from the form as the recipient
-        Mail::to($validated['email'])->send(new ContactMail($validated));
 
-        return back()->with('success', 'Your message has been sent successfully!');
+        $details = [
+            'title' => 'New Contact Message',
+            'body' => $request->message,
+            'from' => $request->email,
+            'name' => $request->name,
+        ];
+
+        Mail::send('emails.contact', $details, function ($message) use ($request) {
+            $message->to('danmichaelantiquina9@gmail.com')
+                    ->subject('New Contact Message from ' . $request->name);
+        });
+
+        return back()->with('success', 'Message sent successfully!');
     }
+
+
+
+
 }

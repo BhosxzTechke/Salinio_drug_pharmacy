@@ -42,93 +42,66 @@
                             @csrf
 
 
-                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Customer Info</h5>
-                            <div class="row">
-                                <div class="col-md-6">
+<h5 class="mb-4 text-uppercase">
+    <i class="mdi mdi-account-circle me-1"></i> Customer Info
+</h5>
 
-                                    <div class="form-group mb-3">
-                                        <label for="name" class="">Customer Name</label>
-                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Customer name">
-                                
-                                        @error('name')
-                                    <span class="text-danger"> {{ $message }} </span>
-                                    @enderror 
-                                    </div>
-                                </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="name" class="">Customer Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Customer name">
+            @error('name')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="text" class="">Customer Email</label>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter Customer Email">
-                                                @error('email')
-                                                    <span class="text-danger"> {{ $message }} </span>
-                                                @enderror
-                                        </div>
-                                </div> <!-- end col -->
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="email" class="">Customer Email <span class="text-danger">*</span></label>
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter Customer Email">
+            @error('email')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="address" class="">Customer Address <span class="text-danger">*</span></label>
+            <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Enter Customer Address">
+            @error('address')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 
-                                
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="phone" class="">Customer Phone <span class="text-danger">*</span></label>
+            <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter Customer Phone">
+            @error('phone')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 
-                    <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="text" class="">Customer Address</label>
-                                        <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Enter Customer Address">
-                                                @error('address')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                    </div>
-                                </div> <!-- end col -->
+    <div class="form-group mb-3">
+        <label for="example-fileinput" class="form-label">Customer Image</label>
+        <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
+        @error('image')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 
-
-
-                        <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="phone" class="">Customer Phone</label>
-                                        <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter Customer Phone">
-                                                @error('phone')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                    </div>
-                                </div> <!-- end col -->
-
-
-
-
-
-                        <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="city" class="form-label">Customer City</label>
-                                        <input type="text" name="city" class="form-control @error('city') is-invalid @enderror" id="city" placeholder="Enter Customer Salary">
-                                                @error('city')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                    </div>
-                                </div> <!-- end col -->
-
-
-
-
-
-
-                                <div class="form-group mb-3">
-                                <label for="example-fileinput" class="form-label">Customer Image</label>
-                                <input type="file" name="image" id="image" class="form-control  @error('image') is-invalid @enderror" >
-                                                @error('image')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                        </div>
-
-
-                                    <div class="col-md-12">
-                                <div class="mb-3">
-                                        <label for="example-fileinput" class="form-label"> </label>
-                                        <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail"
-                                                alt="profile-image">
-                                    </div>
-                                </div> <!-- end col -->
-
-
-                            </div> <!-- end row -->
+    <div class="col-md-12">
+        <div class="mb-3">
+            <label for="example-fileinput" class="form-label"></label>
+            <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+        </div>
+    </div>
+</div> <!-- end row -->
 
 
                                                     <div class="text-end">

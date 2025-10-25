@@ -42,188 +42,213 @@
 <form id="myForm" method="POST" action="{{ route('store.product') }}" enctype="multipart/form-data">
     @csrf
 
-    <h5 class="mb-4 text-uppercase">
-        <i class="mdi mdi-account-circle me-1"></i> Product Info
-    </h5>
-    <div class="row">
-        {{-- Product Name --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="product_name">Product Name</label>
-                <input type="text" name="product_name"
-                        class="form-control @error('product_name') is-invalid @enderror"
-                        id="product_name" placeholder="Enter Product name">
-                @error('product_name')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
+<h5 class="mb-4 text-uppercase">
+    <i class="mdi mdi-account-circle me-1"></i> Product Info
+</h5>
+
+<div class="row">
+
+    {{-- Product Name --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="product_name">Product Name <span class="text-danger">*</span></label>
+            <input type="text" name="product_name"
+                   class="form-control @error('product_name') is-invalid @enderror"
+                   id="product_name" placeholder="Enter Product name">
+            @error('product_name')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        {{-- Category --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="category_id">Category</label>
-                <select name="category_id"
-                        class="form-control @error('category_id') is-invalid @enderror"
-                        id="category_id">
-                    <option selected disabled>Select Category</option>
-                    @foreach ($cat as $data)
-                        <option value="{{ $data->id }}">{{ $data->category_name }}</option>
-                    @endforeach
-                </select>
-                @error('category_id')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
+    {{-- Category --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="category_id">Category <span class="text-danger">*</span></label>
+            <select name="category_id"
+                    class="form-control @error('category_id') is-invalid @enderror"
+                    id="category_id">
+                <option selected disabled>Select Category</option>
+                @foreach ($cat as $data)
+                    <option value="{{ $data->id }}">{{ $data->category_name }}</option>
+                @endforeach
+            </select>
+            @error('category_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        {{-- Subcategory --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="subcategory_id">Subcategory</label>
-                <select name="subcategory_id" class="form-control" id="subcategory_id">
-                    <option selected disabled>Select Subcategory</option>
-                    @foreach ($sub as $data)
-                        <option value="{{ $data->id }}">{{ $data->subcategory_name }}</option>
-                    @endforeach
-                </select>
-            </div>
+    {{-- Subcategory --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
+            <select name="subcategory_id"
+                    class="form-control @error('subcategory_id') is-invalid @enderror"
+                    id="subcategory_id">
+                <option selected disabled>Select Subcategory</option>
+                @foreach ($sub as $data)
+                    <option value="{{ $data->id }}">{{ $data->subcategory_name }}</option>
+                @endforeach
+            </select>
+            @error('subcategory_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-
-
-
-        {{-- Brand --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="brand_id">Brand</label>
-                <select name="brand_id"
-                        class="form-control @error('brand_id') is-invalid @enderror"
-                        id="brand_id">
-                    <option selected disabled>Select Brand</option>
-                    @foreach ($brand as $data)
-                        <option value="{{ $data->id }}">{{ $data->name }}</option>
-                    @endforeach
-                </select>
-                @error('brand_id')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
+    {{-- Brand --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="brand_id">Brand <span class="text-danger">*</span></label>
+            <select name="brand_id"
+                    class="form-control @error('brand_id') is-invalid @enderror"
+                    id="brand_id">
+                <option selected disabled>Select Brand</option>
+                @foreach ($brand as $data)
+                    <option value="{{ $data->id }}">{{ $data->name }}</option>
+                @endforeach
+            </select>
+            @error('brand_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-
-
-        {{-- Dosage Form --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="dosage_form">Dosage Form</label>
-                <select name="dosage_form" class="form-control" id="dosage_form">
-                    <option selected disabled>Select Dosage</option>
-                    <option value="Tablet">Tablet</option>
-                    <option value="Capsule">Capsule</option>
-                    <option value="Syrup">Syrup</option>
-                    <option value="Cream">Cream</option>
-                    <option value="Ointment">Ointment</option>
-                </select>
-            </div>
+    {{-- Dosage Form --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
+            <select name="dosage_form"
+                    class="form-control @error('dosage_form') is-invalid @enderror"
+                    id="dosage_form">
+                <option selected disabled>Select Dosage</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Capsule">Capsule</option>
+                <option value="Syrup">Syrup</option>
+                <option value="Cream">Cream</option>
+                <option value="Ointment">Ointment</option>
+            </select>
+            @error('dosage_form')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        {{-- Target Gender --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="target_gender">Target Gender</label>
-                <select name="target_gender" class="form-control" id="target_gender">
-                    <option selected disabled>Select Gender</option>
-                    <option value="Unisex">Unisex</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
+    {{-- Target Gender --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
+            <select name="target_gender"
+                    class="form-control @error('target_gender') is-invalid @enderror"
+                    id="target_gender">
+                <option selected disabled>Select Gender</option>
+                <option value="Unisex">Unisex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            @error('target_gender')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-
-
-        {{-- Age Group --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="age_group">Age Group</label>
-                <select name="age_group" class="form-control" id="age_group">
-                    <option selected disabled>Select Age Group</option>
-                    <option value="All">All</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Adults">Adults</option>
-                    <option value="Seniors">Seniors</option>
-                </select>
-            </div>
+    {{-- Age Group --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="age_group">Age Group <span class="text-danger">*</span></label>
+            <select name="age_group"
+                    class="form-control @error('age_group') is-invalid @enderror"
+                    id="age_group">
+                <option selected disabled>Select Age Group</option>
+                <option value="All">All</option>
+                <option value="Kids">Kids</option>
+                <option value="Adults">Adults</option>
+                <option value="Seniors">Seniors</option>
+            </select>
+            @error('age_group')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        {{-- Health Concern --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="health_concern">Health Concern</label>
-                <input type="text" name="health_concern" class="form-control" id="health_concern">
-            </div>
+    {{-- Health Concern (optional) --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="health_concern">Health Concern</label>
+            <input type="text" name="health_concern" class="form-control" id="health_concern">
         </div>
+    </div>
 
-
-
-
-
-        {{-- Selling Price --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="selling_price">Selling Price</label>
-                <input type="text" name="selling_price" class="form-control" id="selling_price" required>
-            </div>
+    {{-- Selling Price --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
+            <input type="text" name="selling_price"
+                   class="form-control @error('selling_price') is-invalid @enderror"
+                   id="selling_price" min="1">
+            @error('selling_price')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-
-
-
-        {{-- Prescription Required --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="prescription_required">Prescription Required</label>
-                <select name="prescription_required" class="form-control" id="prescription_required">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
+    {{-- Prescription Required --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
+            <select name="prescription_required"
+                    class="form-control @error('prescription_required') is-invalid @enderror"
+                    id="prescription_required">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            @error('prescription_required')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        <div class="form-check form-switch mb-3">
-                    <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" value="1" checked>
-                    <label class="form-check-label" for="has_expiration">Has Expiration</label>
-                </div>
+    {{-- Expiration Switch --}}
+    <div class="form-check form-switch mb-3">
+        <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" value="1" checked>
+        <label class="form-check-label" for="has_expiration">Has Expiration</label>
+    </div>
 
-
-
-
-
-        {{-- Description --}}
-        <div class="col-md-12">
-            <div class="form-group mb-3">
-                <label for="description">Description</label>
-                <textarea name="description" class="form-control" rows="3" id="description"></textarea>
-            </div>
+    {{-- Description --}}
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            <label for="description">Description <span class="text-danger">*</span></label>
+            <textarea name="description"
+                      class="form-control @error('description') is-invalid @enderror"
+                      rows="3" id="description"></textarea>
+            @error('description')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+    </div>
 
-        {{-- Product Image --}}
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="image">Product Image</label>
-                <input type="file" name="product_image" id="image" class="form-control">
-            </div>
+    {{-- Product Image (optional) --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="image">Product Image</label>
+            <input type="file" name="product_image" id="image" class="form-control">
         </div>
+    </div>
 
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label>Preview</label>
-                <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-            </div>
+    {{-- Preview --}}
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label>Preview</label>
+            <img id="showImage" src="{{ url('uploads/noimage.png') }}"
+                 class="rounded-circle avatar-lg img-thumbnail"
+                 alt="profile-image">
         </div>
+    </div>
 
-    </div> <!-- end row -->
+</div> <!-- end row -->
+
+
 
     <div class="text-end">
         <button type="submit" class="btn btn-success waves-effect waves-light mt-2">

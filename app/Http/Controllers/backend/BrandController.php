@@ -82,10 +82,15 @@ public function UpdateBrand(Request $request)
         $request->validate([
             'name' => 'required|string|max:100|unique:brands,name,' . $brand_id,
             'description' => 'nullable|string|max:500',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
         ], [
+            
+            'image.max' => 'The image must not be more than 10MB.',
+            'image.mimes' => 'Only JPG, JPEG, PNG, and WEBP formats are allowed.',  
             'name.required' => 'Please input brand name',
             'name.unique' => 'Brand name already used',
+                
+
         ]);
 
         $brand = Brand::findOrFail($brand_id);

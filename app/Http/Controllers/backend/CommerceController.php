@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Vat;
 use Illuminate\Http\Request;
 use App\Models\Discount;
+use Illuminate\Validation\Rule;
+
 
 class CommerceController extends Controller
 {
@@ -78,35 +80,71 @@ public function UpdateVat(Request $request)
 
 
 
-        public function AddAjaxDiscount(Request $request)
-        {
-            // Validate frontend field names
-            $validated = $request->validate([
-                'discountname' => 'required|string|max:255',
-                'discountrate' => 'required|numeric|min:0|max:100',
-                'vat_exempt' => 'required|boolean',
-                'is_active' => 'required|boolean',
-            ]);
+public function AddAjaxDiscount(Request $request)
+{
+    try {
+        // Validate input
+        $validated = $request->validate([
+            'discountname' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/[a-zA-Z]/', // must contain at least one letter Black Friday 50% is valid, 50% is not
+                Rule::unique('discounts', 'name') // unique in DB
+            ],
+            'discountrate' => 'required|numeric|min:0|max:100',
+            'vat_exempt' => 'required|boolean',
+            'is_active' => 'required|boolean',
+        ], [
+            'discountname.required' => 'Please enter a discount name.',
+            'discountname.unique' => 'This discount name already exists.',
+            'discountname.regex' => 'Discount name must contain at least one letter and cannot be only numbers.',
+            'discountrate.required' => 'Please enter the discount rate.',
+            'discountrate.numeric' => 'Discount rate must be a number.',
+            'discountrate.min' => 'Discount rate cannot be less than 0.',
+            'discountrate.max' => 'Discount rate cannot exceed 100.',
+            'vat_exempt.required' => 'VAT exemption status is required.',
+            'is_active.required' => 'Active status is required.',
+        ]);
+
+        // Convert percentage to decimal if needed
+        $rate = (float) $validated['discountrate'];
+
+        // Save discount
+        $discount = Discount::create([
+            'name' => $validated['discountname'],
+            'rate' => $rate,
+            'vat_exempt' => $validated['vat_exempt'],
+            'active' => $validated['is_active'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Discount added successfully!',
+            'data' => $discount
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Return validation errors as JSON
+        return response()->json([
+            'success' => false,
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Exception $e) {
+        // Log and return generic error
+        \Log::error('Error adding discount: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong while adding the discount.'
+        ], 500);
+    }
+}
 
 
-             ///  (e.g., 15) to decimal fraction (0.15)
-            $rate = (float) $validated['discountrate'];
 
-            // Map frontend names → DB column names
-            $discount = Discount::create([
-                'name' => $validated['discountname'],   // maps to 'name' column in DB
-                'rate' => $rate,  
-                'vat_exempt' => $validated['vat_exempt'],
-                'active' => $validated['is_active'],
-            ]);
 
-            // 3️⃣ Return JSON response for your AJAX
-            return response()->json([
-                'success' => true,
-                'message' => 'Discount added successfully!',
-                'data' => $discount
-            ]);
-        }
 
 
 
@@ -115,7 +153,13 @@ public function UpdateAjaxDiscount(Request $request)
     // Validate frontend field names
     $validated = $request->validate([
         'id' => 'required|exists:discounts,id',
-        'discountname' => 'required|string|max:255',
+        'discountname' => [
+            'required',
+            'string',
+            'max:255',
+            'regex:/[a-zA-Z]/', // ensures at least one letter (not purely numeric)
+            Rule::unique('discounts', 'name')->ignore($request->id), // unique except current
+        ],
         'discountrate' => 'required|numeric|min:0|max:100',
         'vat_exempt' => 'required|boolean',
         'is_active' => 'required|boolean',
@@ -123,7 +167,6 @@ public function UpdateAjaxDiscount(Request $request)
 
     // Find the discount by ID
     $discount = Discount::findOrFail($validated['id']);
-
     $oldData = $discount->toArray();
 
     $rate = (float) $validated['discountrate'];
@@ -137,23 +180,26 @@ public function UpdateAjaxDiscount(Request $request)
 
     $newData = $discount->fresh()->toArray();
 
-    //  Log activity (Spatie)
-    activity('discount') // Log name
-        ->performedOn($discount) // Related model
-        ->causedBy(auth()->user()) // Who made the change
+    // Log activity (Spatie)
+    activity('discount')
+        ->performedOn($discount)
+        ->causedBy(auth()->user())
         ->withProperties([
             'old' => $oldData,
             'new' => $newData,
         ])
         ->log('Updated Discount information.');
 
-    //  Return AJAX JSON response
+    // Return AJAX JSON response
     return response()->json([
         'success' => true,
         'message' => 'Discount updated successfully!',
         'data' => $discount
     ]);
 }
+
+
+
 
 
 

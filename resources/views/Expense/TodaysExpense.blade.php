@@ -66,7 +66,9 @@ $TodaysExpense = App\Models\Expense::where('date', $date)->sum('amount');
                                                     <td>{{ $data->month }}</td>
                                                     <td>{{ $data->year }}</td>
                                                     <td>{{ $data->date }}</td>
-                                                    <td><a href="" class="btn btn-success rounded-pill waves-effect waves-light"><i class="fa-solid fa-square-pen"></i> Edit</a>
+                                                    <td><a href="{{ route('edit.expense', $data->id )}}" class="btn btn-success rounded-pill waves-effect waves-light"><i class="fa-solid fa-square-pen"></i> Edit</a>
+                                                        <a href="{{ route('delete.expense',$data->id) }}" class="btn btn-danger rounded-pill waves-effect waves-light" id="delete"  title="Delete Data"><i class="fa-solid fa-trash"></i> Delete</a>
+                                                    
                                                     </td>
                                                 </tr>
                                                     @endforeach

@@ -47,7 +47,7 @@
                         <div class="col-md-6">
 
                             <div class="form-group mb-3">
-                                <label for="brand" class="">Brand Name</label>
+                                <label for="brand" class="">Brand Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" class="form-control" id="brand" placeholder="Enter brand name">
                 
                             </div>
@@ -55,7 +55,7 @@
 
 
                <div class="row mb-3">
-                               <label for="example-text-input" class="col-sm-2 col-form-label">Blog Description </label>
+                               <label for="example-text-input" class="col-sm-2 col-form-label">Blog Description  <span class="text-danger">*</span></label>
                                 <div class="form-group col-sm-10">
                                 <textarea name="description" id="elm1" name="blog_description"></textarea>
                          </div>
@@ -63,7 +63,7 @@
 
 
                         <div class="form-group mb-3">
-                        <label for="example-fileinput" class="form-label">Brand Logo Image</label>
+                        <label for="example-fileinput" class="form-label">Brand Logo Image <span class="text-danger">*</span></label>
                         <input type="file" name="image" id="image" class="form-control  @error('image') is-invalid @enderror" >
                                         @error('image')
                                             <span class="text-danger">{{ $message }}</span>

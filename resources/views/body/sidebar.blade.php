@@ -446,7 +446,7 @@
                                 @endif
 
 
-                        @if(Auth::user()->can('view-complete-pickup-orders'))
+                        @if(Auth::user()->can('e'))
                                 <li><a href="{{ route('complete.pickup') }}">Complete Pickup</a></li>
                             @endif
 
@@ -788,8 +788,9 @@
         <li class="menu-title mt-2">GENERAL SETTINGS</li>
 
 
+            @if(Auth::user()->can('roles-menu'))
 
-                        <li>
+                <li>
                     <a href="#roles" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
                         <span> Roles </span>
@@ -813,11 +814,11 @@
 
                     </div>
                 </li>
+                @endif
 
 
 
-
-            @if(Auth::user()->can('roles-and-permission-menu'))
+            {{-- @if(Auth::user()->can('roles-and-permission-menu')) --}}
                 <li>
                     <a href="#sidebarExpages" data-bs-toggle="collapse">
                         <i class="mdi mdi-account-key"></i>
@@ -848,7 +849,7 @@
 
                     </div>
                 </li>
-            @endif
+            {{-- @endif --}}
 
 
                 @if(Auth::user()->can('user-account-menu'))

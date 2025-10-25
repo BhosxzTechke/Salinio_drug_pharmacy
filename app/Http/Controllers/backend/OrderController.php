@@ -434,6 +434,9 @@ public function ajaxMarkAsCancelled(Request $request)
     }
 
 
+
+
+    
     public function CreatePDF($id) {
         $order = Order::findOrFail($id);
         $orderDetails = Orderdetails::where('order_id', $id)->get();

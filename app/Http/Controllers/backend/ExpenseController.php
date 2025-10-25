@@ -48,6 +48,55 @@ class ExpenseController extends Controller
     }
 
 
+        public function EditExpense($id) {
+
+            $ExpenseData = Expense::findOrFail($id);
+            return view('Expense.EditExpense', compact('ExpenseData'));
+
+        }
+
+
+        public function UpdateExpense(Request $request) {
+
+            $expenseID = $request->input('id');
+
+            $request->validate([
+                'details' => 'required|string|max:255',
+            ]); 
+
+            Expense::findOrFail($expenseID)->update([
+                'details' => $request->input('details'),
+                'amount' => $request->input('amount'),
+                'month' => $request->input('month'),
+                'year' => $request->input('year'),
+                'date' => $request->input('date'),
+                'updated_at' => Carbon::now(), 
+
+            ]); 
+            $notification = array(
+                'message' => 'Succesfully Updated Expense',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('todays.expense')->with($notification);
+        }
+
+
+
+        public function DeleteExpense($id) {
+
+            $expenseID = Expense::findOrFail($id); 
+
+            $expenseID->delete();
+
+            $notification = array(
+                'message' => 'Succesfully Deleted Expense',
+                'alert-type' => 'success'
+            );
+            return redirect()->back()->with($notification);
+        }
+
+
+        
 
     public function TodayExpense() {
 

@@ -61,11 +61,8 @@
             <td>{{ $data->cancelledBy->name ?? '' }}</td>
             <td><span class="badge bg-success">{{ $data->order_status ?? '' }}</span></td>
             <td>
-
-
-                @if(Auth::user()->can('view-cancel-details'))
                 <a href="{{ route('details', $data->id) }}" class="btn btn-sm btn-info">View Details</a>
-                @endif<td> 
+              <td> 
       
             </tr>
    @endforeach

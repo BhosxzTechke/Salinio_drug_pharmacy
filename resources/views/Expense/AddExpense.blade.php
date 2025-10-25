@@ -17,7 +17,7 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Expense</li>
                                         </ol>
                                     </div>
                                     
@@ -61,7 +61,7 @@
                                                         <div class="col-md-12">
                                                             <div class="mb-6">
                                                                 <label for="text" class="">Amount </label>
-                                                                <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" id="amount" placeholder="Enter Amount">
+                                                                <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" id="amount" placeholder="Enter Amount" min="1">
                                                                      @error('amount')
                                                                           <span class="text-danger"> {{ $message }} </span>
                                                                      @enderror

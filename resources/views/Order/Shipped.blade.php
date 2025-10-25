@@ -13,7 +13,6 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                           <a href=""><button type="button" class="btn btn-success rounded-pill waves-effect waves-light">Add Customer</button></a>
                                         </ol>
 
                                     </div>
@@ -59,7 +58,7 @@
             <td>{{ $data->invoice_no }}</td>
             <td>{{ $data->customer->name ?? '' }}</td>
             <td>{{ $data->shipped_at ?? '' }}</td>
-            <td>{{ $data->shipped_by ?? '' }}</td>
+            <td>{{ $data->ShippedBy->name ?? '' }}</td>
             <td>{{ $data->payment_status }}</td>
             <td><span class="badge bg-danger"> {{ $data->order_status }}</span></td>
             <td>

@@ -49,76 +49,70 @@
 
                             <input type="hidden" name="id" value="{{ $supplier->id }}">
 
+<h5 class="mb-4 text-uppercase">
+    <i class="mdi mdi-account-circle me-1"></i> Supplier Info
+</h5>
 
-                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Supplier Info</h5>
-                                <div class="row">
-                                    <div class="col-md-6">
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="name" class="">Supplier Name <span class="text-danger">*</span></label>
+            <input type="text" value="{{ $supplier->name }}" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Supplier name">
+            @error('name')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror 
+        </div>
+    </div>
 
-                                        <div class="form-group mb-3">
-                                            <label for="name" class="">Supplier Name</label>
-                                            <input type="text" value="{{ $supplier->name }}" name="name" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Enter Supplier name">
-                                    
-                                            @error('name')
-                                    <span class="text-danger"> {{ $message }} </span>
-                                    @enderror 
-                                        </div>
-                                    </div>
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="email" class="">Supplier Email <span class="text-danger">*</span></label>
+            <input type="email" value="{{ $supplier->email }}" name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter Supplier Email">
+            @error('email')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div> <!-- end col -->
 
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="text" class="">Supplier Email</label>
-                                            <input type="email" value="{{ $supplier->email }}"  name="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter Supplier Email">
-                                                @error('email')
-                                                    <span class="text-danger"> {{ $message }} </span>
-                                                @enderror
-                                        </div>
-                                    </div> <!-- end col -->
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="address" class="">Supplier Address <span class="text-danger">*</span></label>
+            <input type="text" value="{{ $supplier->address }}" name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Enter Supplier Address">
+            @error('address')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div> <!-- end col -->
 
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label for="phone" class="">Supplier Phone <span class="text-danger">*</span></label>
+            <input type="number" value="{{ $supplier->phone }}" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter Supplier Phone">
+            @error('phone')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div> <!-- end col -->
 
-                                    
+    <div class="form-group mb-3">
+        <label for="example-fileinput" class="form-label">Supplier Image</label>
+        <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
+        @error('image')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
 
-                        <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                            <label for="text" class="">Supplier Address</label>
-                                            <input type="text" value="{{ $supplier->address }}"  name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Enter Supplier Address">
-                                                @error('address')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                        </div>
-                                    </div> <!-- end col -->
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            <label for="example-fileinput" class="form-label"></label>
+            <img id="showImage" 
+                 src="{{ (!empty($supplier->image)) ? url($supplier->image) : url('uploads/noimage.png') }}" 
+                 class="rounded-circle avatar-lg img-thumbnail" 
+                 alt="profile-image">
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
 
-
-
-                            <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="phone" class="">Supplier Phone</label>
-                                            <input type="number" value="{{ $supplier->phone }}"  name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter Supplier Phone">
-                                                @error('phone')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                        </div>
-                                    </div> <!-- end col -->
-
-
-
-
-                                    <div class="form-group mb-3">
-                                    <label for="example-fileinput" class="form-label">Customer Image</label>
-                                    <input type="file" name="image" id="image" class="form-control  @error('image') is-invalid @enderror" >
-                                                @error('image')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                        </div>
-
-                                    <div class="col-md-12">
-                                    <div class="form-group mb-3">
-                                            <label for="example-fileinput" class="form-label"> </label>
-                                            <img id="showImage" src="{{ (!empty($supplier->image)) ? url($supplier->image) : url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail">
-                                        </div>
-                                    </div> <!-- end col -->
-
-
-                                </div> <!-- end row -->
 
 
                                 <div class="text-end">
