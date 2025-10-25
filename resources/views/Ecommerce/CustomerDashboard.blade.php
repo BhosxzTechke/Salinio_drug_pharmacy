@@ -62,8 +62,9 @@
           @foreach ($inventory as $inventories)
             <form method="POST" action="{{ url('/ecommerce/add') }}" class="w-full">
               @csrf
-              <div class="bg-white w-full shadow-md hover:shadow-lg transition-shadow duration-200 rounded-xl overflow-hidden relative">
-                <!-- Product image -->
+              <div class="bg-white w-full shadow-md hover:shadow-lg transition-shadow duration-200 rounded-xl overflow-hidden relative group">
+                
+                <!-- Product Image -->
                 <figure class="relative">
                   <img
                     src="{{ asset($inventories->product->product_image) }}"
@@ -96,19 +97,45 @@
                       </svg>
                     </button>
                   </div>
+
+                  <!-- Overlay for Prescription Required IF 1 SIYA SA COLUMN DATA-->
+                  @if($inventories->product->prescription_required)
+                    <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
+                      <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full mb-2">
+                        Prescription Required
+                      </span>
+                      <p class="text-white text-sm mb-3 px-3">
+                        Available only in-store with a valid prescription.
+                      </p>
+                      <a href="{{ route('contact.show') }}"
+                         class="bg-white text-gray-800 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-gray-100 transition">
+                         Visit Our Store
+                      </a>
+                    </div>
+                  @endif
                 </figure>
 
-                <!-- Card content -->
+                <!-- Card Content -->
                 <div class="p-3">
-                  <h2 class="text-gray-800 text-base sm:text-lg font-semibold">
+                  <h2 class="text-gray-800 text-base sm:text-lg font-semibold line-clamp-1">
                     {{ $inventories->product->product_name }}
                   </h2>
-                  <p class="text-gray-600 text-xs sm:text-sm line-clamp-2">
+                  <p class="text-gray-600 text-xs sm:text-sm line-clamp-2 mb-3">
                     {{ $inventories->product->description }}
                   </p>
-                  <div class="mt-3 flex justify-end">
-                    <button type="submit" class="btn btn-sm btn-neutral">Add to Cart</button>
-                  </div>
+
+                  {{--  IF HINDI SIA PRESCRIPTION REQUIRED OR 0 THEN PEDE MAG ADD TO CART --}}
+                  @if(!$inventories->product->prescription_required)
+                    <button type="submit" 
+                            class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1 w-full">
+                      Add to Cart
+                    </button>
+                  @else
+                    <button type="button"
+                            class="btn bg-gray-400 text-white cursor-not-allowed w-full">
+                      In-Store Only
+                    </button>
+                  @endif
                 </div>
               </div>
             </form>

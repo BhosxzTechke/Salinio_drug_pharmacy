@@ -71,10 +71,22 @@
 
 
       @if($inventory->product->prescription_required)
-        <button class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1">Upload Prescription</button>
+        <div class="text-center space-y-2">
+          <p class="text-sm text-red-500 font-semibold">
+            This medicine requires a valid prescription and can only be purchased in-store.
+          </p>
+          <a href="{{ route('contact.show') }}" 
+            class="btn bg-gray-500 text-white hover:bg-gray-600 flex-1">
+            Visit Our Store
+          </a>
+        </div>
       @else
-        <button type="submit" class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1">Add to Cart</button>
+        <button type="submit" 
+                class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1">
+          Add to Cart
+        </button>
       @endif
+
 
 
     </div>

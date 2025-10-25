@@ -66,23 +66,23 @@ public function EcommerceAddCart(Request $request)
     {
     $cartItem = Cart::instance('ecommerce')->get($rowId);
 
-    if (!$cartItem) {
-        return back()->with('error', 'Item not found in cart.');
-    }
+                if (!$cartItem) {
+                    return back()->with('error', 'Item not found in cart.');
+                }
 
-    $qty = $cartItem->qty;
+                $qty = $cartItem->qty;
 
-    if ($request->action === 'increase') {
-        $qty++;
-    } elseif ($request->action === 'decrease' && $qty > 1) {
-        $qty--;
-    } elseif ($request->has('qty')) {
-        $qty = max(1, (int) $request->qty); // manual input
-    }
+                if ($request->action === 'increase') {
+                    $qty++;
+                } elseif ($request->action === 'decrease' && $qty > 1) {
+                    $qty--;
+                } elseif ($request->has('qty')) {
+                    $qty = max(1, (int) $request->qty); // manual input
+                }
 
-    Cart::instance('ecommerce')->update($rowId, $qty);
+                Cart::instance('ecommerce')->update($rowId, $qty);
 
-    return back()->with('success', 'Cart updated.');
+                return back()->with('success', 'Cart updated.');
     }
 
 
@@ -123,7 +123,6 @@ public function EcommerceAddCart(Request $request)
                 
 
 
- 
 
 
 

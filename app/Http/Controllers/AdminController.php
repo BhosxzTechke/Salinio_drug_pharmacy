@@ -73,11 +73,13 @@ class AdminController extends Controller
 
 
 
-
+        ///// ADMIN LOGOUT
         public function destroy(Request $request): RedirectResponse
     {
         if (Auth::check()) {
+
         Cart::store(Auth::id()); // save cart to DB
+        
     }
 
     

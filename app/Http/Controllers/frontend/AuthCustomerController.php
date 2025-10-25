@@ -69,7 +69,7 @@ class AuthCustomerController extends Controller
             // Restore cart for the authenticated customer
             if (Auth::guard('customer')->check()) {
                 
-                Cart::restore(Auth::guard('customer')->id());
+                Cart::instance('ecommerce')->restore(Auth::guard('customer')->id());
             }
 
             $notification = [
@@ -105,29 +105,36 @@ class AuthCustomerController extends Controller
 
 
 
-       public function destroyCustomer(Request $request): RedirectResponse
-    {
-            if (Auth::guard('customer')->check()) {
-                Cart::store(Auth::guard('customer')->id()); // save cart to DB
+                    //// CUSTOMER LOGOUT    
+            public function destroyCustomer(Request $request): RedirectResponse
+            {
+                if (Auth::guard('customer')->check()) {
+                    $customerId = Auth::guard('customer')->id();
+
+                    // Erase old stored cart before saving a new one
+                    Cart::instance('ecommerce')->erase($customerId);
+
+                    // Save the current cart to DB
+                    Cart::instance('ecommerce')->store($customerId);
+                }
+
+                // Logout the customer
+                Auth::guard('customer')->logout();
+
+                // Clear session and regenerate CSRF token
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+
+
+                $notification = [
+                    'message' => 'Customer Logout Successfully',
+                    'alert-type' => 'info'
+                ];
+
+                return redirect()->route('home')->with($notification);
             }
-            
-        Auth::guard('customer')->logout();
 
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-
-            $notification = array(
-            'message' => 'Customer Logout Successfully',
-            'alert-type' => 'info'
-        );    
-
-
-
-
-     return redirect()->route('home')->with($notification);
-   }
 
 
 
