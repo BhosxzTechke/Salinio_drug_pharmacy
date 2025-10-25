@@ -6,6 +6,7 @@
 
 
 <br>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
@@ -259,21 +260,145 @@
         font-family: 'Poppins', sans-serif;
     }
 </style>
-<section class="flex flex-col items-center justify-center mx-auto max-md:mx-2 max-md:px-2 max-w-5xl w-full text-center rounded-2xl py-20 md:py-24 bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/banners/image-1.png')] bg-cover bg-center bg-no-repeat">
-    <h1 class="text-2xl md:text-3xl font-medium text-white max-w-2xl">About Salinio Drug Pharmacy</h1>
-    <div class="h-[3px] w-32 my-1 bg-gradient-to-l from-transparent to-green-600"></div>
-    <p class="text-sm md:text-base text-white max-w-xl">
-Salinio Drug Pharmacy is dedicated to making quality and affordable medicines accessible to everyone. We provide trusted prescription and over-the-counter products, vitamins, and wellness essentials — all from licensed suppliers. With our online service, you can conveniently order your health needs anytime, anywhere.    </p>
-    <a href="/Contact/page"><button class="px-8 py-2.5 mt-4 text-sm bg-gradient-to-r from-green-600 to-violet-500 hover:scale-105 transition duration-300 text-white rounded-full">
-        Contact Us
-    </button></a>
-</section>
+
+
+<div class="relative overflow-x-hidden">
+
+<section class="relative py-20 bg-gray-50 dark:bg-gray-900 overflow-x-hidden rounded-xl shadow-lg">
+
+
+  <!-- Background blur -->
+  <div class="absolute inset-0 flex justify-center">
+    <div class="w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[300px] -z-10"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-16" x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)">
+      <h2 
+        class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white transition-all duration-1000"
+        :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+        About Salinio Drug
+      </h2>
+      <p 
+        class="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-300 transition-all duration-1000 delay-200"
+        :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+        We’re passionate about providing trusted healthcare products and modern retail solutions that help our community stay healthy and thrive.
+      </p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Text Section -->
+      <div x-data="{ visible: false }" x-init="setTimeout(() => visible = true, 600)">
+        <h3 
+          class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000"
+          :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+          Caring for Communities, Building a Healthier Tomorrow
+        </h3>
+
+        <p 
+          class="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5 transition-all duration-1000 delay-100"
+          :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+          Founded in 2020, Salinio Drug and General Merchandise started as a small local pharmacy with a mission to make quality medicines and everyday essentials accessible to everyone.
+        </p>
+        <p 
+          class="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed transition-all duration-1000 delay-200"
+          :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
+          Through our eCommerce and Point-of-Sale (POS) systems, we make transactions faster, smarter, and more reliable for our customers and partners.
+        </p>
+
+        <!-- Info Blocks -->
+        <div class="mt-10 space-y-6">
+          <!-- Our People -->
+          <div class="flex items-start space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Our People</h4>
+              <p class="text-gray-600 dark:text-gray-300">A small but dedicated team focused on providing friendly service and genuine care to every customer.</p>
+            </div>
+          </div>
+
+          <!-- Our Community -->
+          <div class="flex items-start space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Our Community</h4>
+              <p class="text-gray-600 dark:text-gray-300">Proudly serving our local area and nearby communities with trusted products and dependable service.</p>
+            </div>
+          </div>
+
+          <!-- Innovation -->
+          <div class="flex items-start space-x-4">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Innovation Focus</h4>
+              <p class="text-gray-600 dark:text-gray-300">We continuously improve our systems to make healthcare and shopping easier and more accessible for everyone.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Section -->
+      <div class="relative" x-data="{ showImg: false }" x-init="setTimeout(() => showImg = true, 800)">
+        <div 
+          class="transition-all duration-1000 ease-out"
+          :class="showImg ? 'opacity-100 scale-100' : 'opacity-0 scale-95'">
+          <div class="relative overflow-hidden rounded-3xl shadow-2xl">
+            <img src="{{ url('uploads/aboutus-pharmacy.png')}}" 
+                 alt="Our pharmacy team" 
+                 class="object-cover w-full h-[400px] sm:h-[500px]" />
+            <div class="absolute bottom-6 left-6 right-6">
+              <div class="backdrop-blur-md p-5 sm:p-6 rounded-xl bg-white/80 dark:bg-gray-800/70 shadow-lg">
+                <div class="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">28+</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Years</div>
+                  </div>
+                  <div>
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">20+</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Team Members</div>
+                  </div>
+                  <div>
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">250+</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Happy Customers</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
-<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 md:px-0 py-10">
-    <div class="size-[520px] rounded-full absolute blur-[300px] -z-10 bg-[#FBFFE1]"></div>
+    </div>
+  </div>
 
+
+</div>
+
+
+
+
+
+
+
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 px-4 md:px-0 py-10 "> 
+    
+    <div class="size-[320px] rounded-full absolute blur-[300px] -z-10 "></div>
 
 
 
@@ -323,6 +448,8 @@ Salinio Drug Pharmacy is dedicated to making quality and affordable medicines ac
     </div>
 
 
+
+
     <div>
         <h1 class="text-3xl font-semibold">Our Latest features</h1>
         <p class="text-sm text-slate-500 mt-2">
@@ -363,6 +490,8 @@ Salinio Drug Pharmacy is dedicated to making quality and affordable medicines ac
 
 
 
+
+</section>
 
 
 

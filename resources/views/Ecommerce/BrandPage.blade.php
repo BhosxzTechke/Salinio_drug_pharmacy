@@ -25,7 +25,7 @@
 <!-- Brand Header -->
 <section class="bg-gradient-to-r from-blue-50 to-indigo-100 py-8 mb-8 rounded-xl shadow">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-6">
-        <img src="{{ asset($brand->logo ?? 'images/default-brand.png') }}" alt="{{ $brand->name }}" class="w-24 h-24 rounded-full shadow-lg border-4 border-white mr-6 mb-4 md:mb-0">
+        <img src="{{ url($brand->logo ?? 'images/default-brand.png') }}" alt="{{ $brand->name }}" class="w-24 h-24 rounded-full shadow-lg border-4 border-white mr-6 mb-4 md:mb-0">
         <div>
             <h1 class="text-3xl font-bold text-indigo-700 mb-2">{{ $brand->name ?? 'Brand Name' }}</h1>
             <p class="text-gray-600 text-lg">{{ $brand->description ?? 'Trusted pharmacy products for your health and wellness.' }}</p>
@@ -46,7 +46,7 @@
         @foreach ($inventory as $inventories)
         <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
             <div class="relative">
-                <img src="{{ asset($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-40 object-contain rounded-lg bg-gray-50 mb-4">
+                <img src="{{ url($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-40 object-contain rounded-lg bg-gray-50 mb-4">
                 @if($inventories->product->is_new)
                     <span class="absolute top-2 left-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded">New</span>
                 @endif

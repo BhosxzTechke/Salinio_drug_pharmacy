@@ -117,13 +117,13 @@
     <main class="md:col-span-3">
         <h1 class="text-2xl font-bold mb-4">{{ $category->name }}</h1>
 
-        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @forelse($inventory as $inventories)
-                <a href="{{ route('product.show', $inventories->product_id) }}"
-                   class="border p-4 rounded shadow hover:shadow-lg transition block">
-                    <img src="{{ asset($inventories->product->product_image) }}"
-                         alt="{{ $inventories->product->product_name }}"
-                         class="w-full h-40 object-cover rounded">
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @forelse($inventory as $inventories)
+            <a href="{{ route('product.show', $inventories->product_id) }}"
+                class="border p-4 rounded shadow hover:shadow-lg transition block">
+                <img src="{{ url($inventories->product->product_image) }}"
+                        alt="{{ $inventories->product->product_name }}"
+                        class="w-full h-40 object-cover rounded">
                     <h2 class="text-sm font-semibold mt-2 line-clamp-2">
                         {{ $inventories->product->product_name }}
                     </h2>

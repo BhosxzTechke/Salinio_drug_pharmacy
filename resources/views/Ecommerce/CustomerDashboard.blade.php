@@ -193,7 +193,7 @@ Your trusted online pharmacy for safe, affordable, and quality medicines.
       
       @foreach($bestSellers as $inventories)
         <a href="{{ route('product.show', $inventories->product_id) }}" class="bg-gray-50 rounded-lg shadow overflow-hidden hover:shadow-md transition block">
-          <img src="{{ asset($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-32 object-cover">
+          <img src="{{ url($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-32 object-cover">
           <div class="p-3">
             <h3 class="text-base font-semibold">{{ $inventories->product->product_name }}</h3>
             <p class="text-gray-600 text-xs mb-1">{{ $inventories->product->product_name }}</p>

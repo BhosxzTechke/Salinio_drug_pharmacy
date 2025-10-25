@@ -8,7 +8,7 @@
     <!-- Product Images -->
     <div class="flex flex-col items-center">
       <div class="w-full max-w-md">
-        <img src="{{ asset($inventory->product->product_image)}}" alt="{{ $inventory->product->product_name }}" class="rounded-lg shadow-lg w-full" />
+        <img src="{{ url($inventory->product->product_image)}}" alt="{{ $inventory->product->product_name }}" class="rounded-lg shadow-lg w-full" />
       </div>
       {{-- <div class="flex space-x-3 mt-4">
         <img src="https://via.placeholder.com/100" class="w-16 h-16 rounded-lg border cursor-pointer hover:border-violet-500" />

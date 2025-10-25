@@ -104,7 +104,7 @@
                     </button>
                   </div>
 
-                  <!-- Overlay for Prescription Required -->
+                  <!-- Overlay for Prescription Required IF 1 SIYA SA COLUMN DATA-->
                   @if($inventories->product->prescription_required)
                     <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
                       <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full mb-2">
@@ -130,6 +130,7 @@
                     {{ $inventories->product->description }}
                   </p>
 
+                  {{--  IF HINDI SIA PRESCRIPTION REQUIRED OR 0 THEN PEDE MAG ADD TO CART --}}
                   @if(!$inventories->product->prescription_required)
                     <button type="submit" 
                             class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1 w-full">
@@ -196,7 +197,7 @@ Your trusted online pharmacy for safe, affordable, and quality medicines.
       
       @foreach($bestSellers as $inventories)
         <a href="{{ route('product.show', $inventories->product_id) }}" class="bg-gray-50 rounded-lg shadow overflow-hidden hover:shadow-md transition block">
-          <img src="{{ asset($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-32 object-cover">
+          <img src="{{ url($inventories->product->product_image) }}" alt="{{ $inventories->product->product_name }}" class="w-full h-32 object-cover">
           <div class="p-3">
             <h3 class="text-base font-semibold">{{ $inventories->product->product_name }}</h3>
             <p class="text-gray-600 text-xs mb-1">{{ $inventories->product->product_name }}</p>
