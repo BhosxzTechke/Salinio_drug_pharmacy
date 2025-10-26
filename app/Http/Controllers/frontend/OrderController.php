@@ -525,15 +525,30 @@ foreach ($cartInstance->content() as $item) {
 
 
         $customer = Customer::find($request->customer_id);
-            Mail::send('emails.order-complete', [
+
+
+
+            $details = [
                 'title' => 'Order Completed Successfully',
                 'name' => $customer->name,
                 'from' => config('mail.from.address'),
-                'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed. Total: ₱" . number_format($order->total, 2),
-            ], function ($message) use ($customer) {
-                $message->to($customer->email)
-                        ->subject('Your Order Confirmation');
-            });
+                'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed successfully. 
+                        Total: ₱" . number_format($order->total, 2),
+            ];
+
+            // Mail::send('emails.order-complete', $details, function ($message) use ($customer) {
+            //     $message->to($customer->email)
+            //             ->subject('Your Order Confirmation');
+            // });
+
+
+                    Mail::send('emails.order-complete', $details, function ($message) use ($request) {
+                            $message->to('danmichaelantiquina9@gmail.com')
+                                    ->subject('New Contact Message from ' . $request->name);
+                        });
+
+
+
 
 
         return redirect()
