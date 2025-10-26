@@ -172,9 +172,9 @@
         <input type="hidden" name="order_status" value="pending">
         <input type="hidden" name="total_products" value="{{ Cart::instance('ecommerce')->count() }}">
         <input type="hidden" name="shipping_address_id" value="{{ $Customer->shipping_address_id ?? '' }}" required="">
+        <input type="hidden" name="pay" value="{{ $totalInclusive }}" required="">
 
-                    
-            
+
   
         <input type="hidden" name="shipping_address_id" 
            value="{{ session('shipping_address_id') ?? Auth::guard('customer')->user()->defaultAddress?->id ?? '' }}" required="">

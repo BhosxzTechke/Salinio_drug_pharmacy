@@ -29,7 +29,9 @@
 
     <!-- Action Dropdown -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-900 mb-4">
-      <div class="flex items-center justify-start flex-wrap space-y-4 md:space-y-0 py-4 px-4 border-b border-gray-200 dark:border-gray-700">
+     
+     
+      {{-- <div class="flex items-center justify-start flex-wrap space-y-4 md:space-y-0 py-4 px-4 border-b border-gray-200 dark:border-gray-700">
         <div>
           <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction"
             class="inline-flex items-center text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700">
@@ -52,7 +54,10 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
+
+
+
 
 
 
@@ -60,12 +65,14 @@
       <table id="userTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" class="p-4">
+
+
+            {{-- <th scope="col" class="p-4">
               <div class="flex items-center">
                 <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
                 <label for="checkbox-all-search" class="sr-only">checkbox</label>
               </div>
-            </th>
+            </th> --}}
             <th scope="col" class="px-6 py-3">Image</th>
             <th scope="col" class="px-6 py-3">Product Name</th>
             <th scope="col" class="px-6 py-3">Quantity</th>
@@ -82,15 +89,20 @@
                 
           
           <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+          
+{{--           
             <td class="w-4 p-4">
               <div class="flex items-center">
                 <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
               </div>
-            </td>
+            </td> --}}
+
+
             <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
            
-                <img class="w-10 h-10 rounded-full" src="{{ asset($item->product->product_image) }}" alt="Jese image">
-            
+              <img class="w-10 h-10 rounded-full" 
+                  src="{{ $item->product->product_image ? asset($item->product->product_image) : asset('images/default-product.png') }}" 
+                  alt="{{ $item->product->name ?? 'Product image' }}">            
   
             </th>
 
@@ -101,7 +113,7 @@
 
 
 
-            <td class="px-6 py-4"></td>
+            <td class="px-6 py-4">{{ $item->product->product_code ?? '' }}</td>
 
 
 

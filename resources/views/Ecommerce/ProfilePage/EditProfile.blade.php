@@ -64,7 +64,7 @@
         <p class="mb-2 text-sm text-gray-500">
           <span class="font-semibold">Click to upload</span> or drag & drop
         </p>
-        <p class="text-xs text-gray-400">PNG, JPG, JPEG (max 2MB)</p>
+        <p class="text-xs text-gray-400">PNG, JPG, JPEG (max 10MB)</p>
       </div>
       <input
         id="image"

@@ -264,7 +264,7 @@
 
 <div class="relative overflow-x-hidden">
 
-<section class="relative py-20 bg-gray-50 dark:bg-gray-900 overflow-x-hidden rounded-xl shadow-lg">
+<section class="relative py-20  overflow-x-hidden rounded-xl shadow-lg">
 
 
   <!-- Background blur -->
@@ -276,12 +276,12 @@
     <!-- Header -->
     <div class="text-center mb-16" x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)">
       <h2 
-        class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white transition-all duration-1000"
+        class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-800 transition-all duration-1000"
         :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
         About Salinio Drug
       </h2>
       <p 
-        class="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-300 transition-all duration-1000 delay-200"
+        class="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-bg-gray-50 transition-all duration-1000 delay-200"
         :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
         We’re passionate about providing trusted healthcare products and modern retail solutions that help our community stay healthy and thrive.
       </p>
@@ -292,21 +292,23 @@
       <!-- Text Section -->
       <div x-data="{ visible: false }" x-init="setTimeout(() => visible = true, 600)">
         <h3 
-          class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 transition-all duration-1000"
+          class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-600 mb-6 transition-all duration-1000"
           :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
           Caring for Communities, Building a Healthier Tomorrow
         </h3>
 
         <p 
-          class="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5 transition-all duration-1000 delay-100"
+          class="text-gray-600 dark:text-gray-700 text-base sm:text-lg leading-relaxed mb-5 transition-all duration-1000 delay-100"
           :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
           Founded in 2020, Salinio Drug and General Merchandise started as a small local pharmacy with a mission to make quality medicines and everyday essentials accessible to everyone.
         </p>
         <p 
-          class="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed transition-all duration-1000 delay-200"
+          class="text-gray-600 dark:text-gray-700 text-base sm:text-lg leading-relaxed transition-all duration-1000 delay-200"
           :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'">
           Through our eCommerce and Point-of-Sale (POS) systems, we make transactions faster, smarter, and more reliable for our customers and partners.
         </p>
+
+
 
         <!-- Info Blocks -->
         <div class="mt-10 space-y-6">
@@ -318,8 +320,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Our People</h4>
-              <p class="text-gray-600 dark:text-gray-300">A small but dedicated team focused on providing friendly service and genuine care to every customer.</p>
+              <h4 class="font-semibold text-gray-900 dark:text-gray-800 text-lg">Our People</h4>
+              <p class="text-gray-600 dark:text-gray-500">A small but dedicated team focused on providing friendly service and genuine care to every customer.</p>
             </div>
           </div>
 
@@ -331,8 +333,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Our Community</h4>
-              <p class="text-gray-600 dark:text-gray-300">Proudly serving our local area and nearby communities with trusted products and dependable service.</p>
+              <h4 class="font-semibold text-gray-900 dark:text-gray-800 text-lg">Our Community</h4>
+              <p class="text-gray-600 dark:text-gray-500">Proudly serving our local area and nearby communities with trusted products and dependable service.</p>
             </div>
           </div>
 
@@ -344,8 +346,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="font-semibold text-gray-900 dark:text-white text-lg">Innovation Focus</h4>
-              <p class="text-gray-600 dark:text-gray-300">We continuously improve our systems to make healthcare and shopping easier and more accessible for everyone.</p>
+              <h4 class="font-semibold text-gray-900 dark:text-gray-800 text-lg">Innovation Focus</h4>
+              <p class="text-gray-600 dark:text-gray-500">We continuously improve our systems to make healthcare and shopping easier and more accessible for everyone.</p>
             </div>
           </div>
         </div>
@@ -451,7 +453,7 @@
 
 
     <div>
-        <h1 class="text-3xl font-semibold">Our Latest features</h1>
+        <h1 class="text-3xl text-gray-800 font-semibold">Our Latest features</h1>
         <p class="text-sm text-slate-500 mt-2">
         Discover how Salinio Drug Pharmacy makes online healthcare shopping simple, fast, and reliable.
         </p>

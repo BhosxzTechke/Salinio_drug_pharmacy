@@ -341,6 +341,10 @@ public function EcommerceCheckout(Request $request)
             return back()->with($notification);
         }
 
+
+        
+
+
         $cartInstance = Cart::instance('ecommerce');
         $cartTotal = floatval(str_replace(',', '', $cartInstance->total()));
         $subTotal = floatval(str_replace(',', '', $cartInstance->subtotal()));
@@ -353,21 +357,26 @@ public function EcommerceCheckout(Request $request)
             $token = $provider->getAccessToken();
             $provider->setAccessToken($token);
 
+
+
             $paypalOrder = $provider->createOrder([
                 "intent" => "CAPTURE",
                 "application_context" => [
                     "return_url" => route("paypal.success"),
                     "cancel_url" => route("paypal.cancel"),
+                    "shipping_preference" => "NO_SHIPPING",
                 ],
                 "purchase_units" => [
                     [
                         "amount" => [
-                            "currency_code" => "USD",
+                            "currency_code" => "PHP",
                             "value" => number_format($cartTotal, 2, '.', ''),
                         ]
                     ]
                 ]
             ]);
+
+
 
             foreach ($paypalOrder['links'] as $link) {
                 if ($link['rel'] === 'approve') {
@@ -375,6 +384,7 @@ public function EcommerceCheckout(Request $request)
                     return redirect()->away($link['href']);
                 }
             }
+
 
             $notification = [
                 'message' => 'Unable to initiate PayPal payment. Please try again.',
@@ -433,12 +443,27 @@ private function processOrder(Request $request)
 DB::beginTransaction();
 
 try {
+
+    // If checkout data is in session (e.g., from PayPal redirect)
+$checkoutData = session('checkout_data', []);
+$shippingAddressId = $request->shipping_address_id ?? $checkoutData['shipping_address_id'] ?? null;
+
+if (!$shippingAddressId) {
+    throw new \Exception("Shipping address is required.");
+}
+
+
+
 $cartInstance = Cart::instance('ecommerce');
 $cartTotal = floatval(str_replace(',', '', $cartInstance->total()));
 $subTotal = floatval(str_replace(',', '', $cartInstance->subtotal()));
 $vat = floatval(str_replace(',', '', $cartInstance->tax()));
-$pay = $request->pay;
+$pay = $cartTotal;
 $due = $pay - $cartTotal;
+
+
+
+
 
 $order = Order::create([
         'customer_id' => $request->customer_id,
@@ -452,10 +477,11 @@ $order = Order::create([
         'invoice_no' => 'SdPrime' . mt_rand(10000000, 99999999),
         'total' => $cartTotal,
         'payment_status' => $request->payment_status ?? 'pending',
-        'pay' => $pay,
+        'pay' => $cartTotal,
         'due' => $due,
         'payment_method' => $request->payment_method,
-        'shipping_address_id' => $request->shipping_address_id,
+        'shipping_address_id' => $shippingAddressId, 
+        
         'created_at' => now(),
 ]);
 
@@ -527,14 +553,19 @@ foreach ($cartInstance->content() as $item) {
         $customer = Customer::find($request->customer_id);
 
 
+        $shippingAddress = Address::find($shippingAddressId);
 
-            $details = [
-                'title' => 'Order Completed Successfully',
-                'name' => $customer->name,
-                'from' => config('mail.from.address'),
-                'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed successfully. 
-                        Total: ₱" . number_format($order->total, 2),
-            ];
+                $details = [
+                    'title' => 'Order Completed Successfully',
+                    'name' => $customer->name,
+                    'shipping_address' => $shippingAddress ? $shippingAddress->full_address : 'N/A',
+                    'from' => config('mail.from.address'),
+                    'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed successfully. 
+                            Total: ₱" . number_format($order->total, 2),
+                ];
+
+
+
 
             // Mail::send('emails.order-complete', $details, function ($message) use ($customer) {
             //     $message->to($customer->email)
@@ -544,13 +575,13 @@ foreach ($cartInstance->content() as $item) {
 
                     Mail::send('emails.order-complete', $details, function ($message) use ($request) {
                             $message->to('danmichaelantiquina9@gmail.com')
-                                    ->subject('New Contact Message from ' . $request->name);
+                                    ->subject('Order Successfully from' . $request->name);
                         });
 
 
 
 
-
+ 
         return redirect()
             ->route('success.order', $order->id)
             ->with('success', 'Order completed successfully!');

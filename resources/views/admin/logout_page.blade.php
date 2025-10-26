@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Logout | UBold - Responsive Admin Dashboard Template</title>
+        <title>Logout </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -43,7 +43,7 @@
 
                                     <a href="{{ url('/') }}" class="logo logo-dark text-center" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                             <span class="logo-lg" style="font-size: 2rem; font-weight: bold; background: linear-gradient(90deg, #6b7280 0%, #b1233f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; letter-spacing: 2px;">
-                                                SD-Prime-Opss
+                                                Salinio Drug Pharmacy
                                             </span>
                                         </a>
                                         {{-- <a href="index.html" class="logo logo-dark text-center">
@@ -95,9 +95,6 @@
         <!-- end page -->
 
 
-        <footer class="footer footer-alt">
-            2025 - <script>document.write(new Date().getFullYear())</script> &copy; SP-Prime-Opss by <a href="" class="text-white-50">Antiks</a> 
-        </footer>
 
         <!-- Vendor js -->
         <script src="  {{ asset('backend/assets/js/vendor.min.js')}}"></script>

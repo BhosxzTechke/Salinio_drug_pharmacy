@@ -18,6 +18,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 use App\Models\Brand;
+use Illuminate\Support\Facades\Validator;
 
 class FrontendController extends Controller
 
@@ -190,41 +191,53 @@ class FrontendController extends Controller
         }
 
 
-    public function ProfileUpdate(Request $request){
+      public function ProfileUpdate(Request $request)
+{
+    $customerId = $request->input('id');
 
-     $CustomerID = $request->input('id');
+    try {
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:customers,email,' . $customerId,
+            'tel'   => 'required|unique:customers,phone,' . $customerId,
+            'image' => 'nullable|image|max:10240', // 10 MB
+        ]);
 
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         $data = [
-        'name' => $request->input('name'),
-        'email' => $request->input('email'),
-        'phone' => $request->input('tel'),
-        // 'address' => $request->input('address'),
-        // 'city' => $request->input('city'),
-        'added_by_staff' => '0',
-        'updated_at' => Carbon::now(),
-    ];
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('tel'),
+            'added_by_staff' => '0',
+            'updated_at' => Carbon::now(),
+        ];
 
-
-                // Handle image upload if exists
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                Image::make($image)->resize(300,300)->save('frontend/assets/customer_image/'.$name_gen);
-                $data['image'] = 'frontend/assets/customer_image/'.$name_gen;
-            }
-
-            Customer::findOrFail($CustomerID)->update($data);
-
-                $notification = [
-                    'message' => 'Customer Updated Successfully',
-                    'alert-type' => 'success'
-                ];
-
-            return redirect()->route('customer.profile')->with($notification); 
-
-      
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            Image::make($image)->resize(300, 300)->save('frontend/assets/customer_image/' . $name_gen);
+            $data['image'] = 'frontend/assets/customer_image/' . $name_gen;
         }
+
+        // Update customer
+        Customer::findOrFail($customerId)->update($data);
+
+        $notification = [
+            'message' => 'Customer Updated Successfully',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('customer.profile')->with($notification);
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'Something went wrong: ' . $e->getMessage())->withInput();
+    }
+}
 
  
 
