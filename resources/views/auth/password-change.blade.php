@@ -86,30 +86,65 @@
     </p>
     
 
-    {{-- New Password --}}
-    <div class="mb-3">
-        <label for="password" class="form-label">New Password</label>
-        <div class="input-group input-group-merge">
-            <input type="password" id="password" name="password" class="form-control @error('new_password') is-invalid @enderror" placeholder="Enter new password" required>
-            <div class="input-group-text" data-password="false">
-                <span class="password-eye"></span>
-            </div>
-        </div>
-        @error('new_password')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
+{{-- New Password --}}
+<div class="mb-3">
+    <label for="new_password" class="form-label fw-semibold">New Password</label>
+
+    <div class="input-group">
+        <input 
+            type="password" 
+            id="new_password" 
+            name="password" 
+            class="form-control @error('new_password') is-invalid @enderror" 
+            placeholder="Enter new password"
+            required
+        >
+
+        <!-- Toggle Button -->
+        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+            <i class="bi bi-eye" id="toggleIcon"></i>
+        </button>
     </div>
 
-    {{-- Confirm New Password --}}
-    <div class="mb-3">
-        <label for="password_confirmation" class="form-label">Confirm New Password</label>
-        <div class="input-group input-group-merge">
-            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Confirm new password" required>
-            <div class="input-group-text" data-password="false">
-                <span class="password-eye"></span>
-            </div>
-        </div>
+    @error('new_password')
+        <span class="text-danger d-block mt-1">{{ $message }}</span>
+    @enderror
+
+</div>
+
+
+
+
+
+{{-- New Password --}}
+<div class="mb-3">
+    <label for="new_password" class="form-label fw-semibold">Confirm New Password</label>
+
+    <div class="input-group">
+        <input 
+            type="password" 
+            id="password_confirmation" 
+            name="password_confirmation" 
+            class="form-control @error('password_confirmation') is-invalid @enderror" 
+            placeholder="Enter new password"
+            required
+        >
+
+        <!-- Toggle Button -->
+        <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirm">
+            <i class="bi bi-eye" id="toggleIconConfirm"></i>
+        </button>
     </div>
+
+    @error('password_confirmation')
+        <span class="text-danger d-block mt-1">{{ $message }}</span>
+    @enderror
+
+</div>
+
+
+
+
 
     <div class="text-center d-grid">
         <button class="btn btn-primary" type="submit">Update Password</button>
@@ -175,3 +210,40 @@
         </ul>
     </div>
 @endif --}}
+
+
+<!-- Toggle Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const passwordInput = document.getElementById('new_password');
+        const toggleButton = document.getElementById('togglePassword');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        toggleButton.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+
+            // Toggle icon
+            toggleIcon.classList.toggle('bi-eye');
+            toggleIcon.classList.toggle('bi-eye-slash');
+        });
+    });
+</script>   
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const passwordInputConfirm = document.getElementById('password_confirmation');
+        const toggleButtonConfirm = document.getElementById('togglePasswordConfirm');
+        const toggleIconConfirm = document.getElementById('toggleIconConfirm');
+
+        toggleButtonConfirm.addEventListener('click', function() {
+            const type = passwordInputConfirm.type === 'password' ? 'text' : 'password';
+            passwordInputConfirm.type = type;
+
+            // Toggle icon
+            toggleIconConfirm.classList.toggle('bi-eye');
+            toggleIconConfirm.classList.toggle('bi-eye-slash');
+        });
+    });
+</script>   

@@ -37,7 +37,13 @@
                      <h4>
                          
                          
-                        <a href="{{ route('employee.attendance.list')}}" class="btn btn-primary float-sm-right"> <i class="fas fa-list"></i>  Employee Attendance List</a>
+<div class="text-sm-end text-center mb-3">
+  <a href="{{ route('employee.attendance.list') }}" class="btn btn-primary btn-sm w-100 w-sm-auto">
+    <i class="fas fa-list"></i> Employee Attendance List
+  </a>
+</div>                  
+                  
+                  
                      </h4>
                   </ol>
                </div>
@@ -52,68 +58,108 @@
              
                
               
-               <div class="card-body">
-                  <form action="{{ route('employee.store.attendance') }}" method="post" id="myForm">
-                     @csrf
+<div class="card-body">
+  <form action="{{ route('employee.store.attendance') }}" method="POST" id="myForm">
+    @csrf
 
-                     <div class="form-group col-md-4">
-                        <label for="date" class="control-label">Attendance Date</label>
-                        <input type="date" name="date" id="date" value="{{ $Editattendance['0']['date'] }}" class="checkdate form-control form-control-sm singledatepicker" placeholder="Attendance Date" autocomplete="off">
-                     </div>
-                     <table class="table sm table-bordered table-striped dt-responsive" style="width: 100%">
-                        <thead>
-                           <tr>
-                              <th rowspan="2" class="text-center" style="vertical-align: middle">Sl.</th>
-                              <th rowspan="2" class="text-center" style="vertical-align: middle">Employee Name</th>
-                              <th colspan="3" class="text-center" style="vertical-align: middle">Attendance Status</th>
-                           </tr>
-                           <tr>
-                              <th class="text-center btn present_all" style="display: table-cell;background-color:#114190">Present</th>
-                              <th class="text-center btn leave_all" style="display: table-cell;background-color:#114190">Leave</th>
-                              <th class="text-center btn absent_all" style="display: table-cell;background-color:#114190">Absent</th>
-                           </tr>
-                        </thead>
+    <!-- Attendance Date -->
+    <div class="row mb-3">
+      <div class="col-md-4 col-sm-12">
+        <label for="date" class="form-label fw-bold">Attendance Date</label>
+        <input 
+          type="date" 
+          name="date" 
+          id="date" 
+          value="{{ $Editattendance[0]['date'] }}" 
+          class="form-control form-control-sm singledatepicker" 
+          placeholder="Attendance Date" 
+          autocomplete="off" 
+          required
+        >
+      </div>
+    </div>
 
-                        {{-- // 1 mike 
-                        // 2 hans
-                        //  $key is start with 0 index
-                         --}}
+    <!-- Responsive Table -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle mb-3">
+        <thead class="table-dark text-center">
+          <tr>
+            <th rowspan="2" style="vertical-align: middle;">Sl.</th>
+            <th rowspan="2" style="vertical-align: middle;">Employee Name</th>
+            <th colspan="3" style="vertical-align: middle;">Attendance Status</th>
+          </tr>
+          <tr>
+            <th class="text-center" style="background-color:#114190; color: #fff;">Present</th>
+            <th class="text-center" style="background-color:#114190; color: #fff;">Leave</th>
+            <th class="text-center" style="background-color:#114190; color: #fff;">Absent</th>
+          </tr>
+        </thead>
 
-                          {{-- first loop is 0 key and si employee have data value na galing sa DB  --}}
-                          {{-- "employee_id[1, 2, 3] ginagamit natin to when we want to get the multiple id at once --}}
-            <tbody>
-              @foreach ($Editattendance as $key => $item)
-              <tr id="div {{$item->id}}" class="text-center">
-                  <input type="hidden" name="employee_id[]" value="{{$item->employee_id}}" class="employee_id">
-                  <td>{{$key+1}}</td>
-                  <td>{{$item->Employee->name ?? '' }}</td>
-                  <td colspan="3">
-                    <div class="switch-toggle switch-3 switch-candy">
-                        <input class="present" id="present{{$key}}" name="attend_status{{$key}}" value="present" 
-                        type="radio" {{ $item->attend_status == 'present' ? 'checked' : '' }} checked="checked">
+        <tbody>
+          @foreach ($Editattendance as $key => $item)
+            <tr class="text-center">
+              <input type="hidden" name="employee_id[]" value="{{ $item->employee_id }}" class="employee_id">
 
-                        <label for="present{{$key}}">Present</label>
-                        <input class="leave" id="leave{{$key}}" name="attend_status{{$key}}" value="Leave" type="radio"
-                        {{ $item->attend_status == 'Leave' ? 'checked' : '' }}>
+              <td>{{ $key + 1 }}</td>
+              <td>{{ $item->Employee->name ?? '' }}</td>
 
-                        <label for="leave{{$key}}">Leave</label>
-                        <input class="absent" id="absent{{$key}}" name="attend_status{{$key}}" value="Absent" type="radio"
-                        {{ $item->attend_status == 'Absent' ? 'checked' : '' }}>
+              <td colspan="3">
+                <div class="d-flex justify-content-center flex-wrap gap-2">
+                  <!-- Present -->
+                  <div class="form-check form-check-inline">
+                    <input 
+                      class="form-check-input present" 
+                      type="radio" 
+                      name="attend_status{{ $key }}" 
+                      id="present{{ $key }}" 
+                      value="present" 
+                      {{ $item->attend_status == 'present' ? 'checked' : '' }}
+                    >
+                    <label class="form-check-label" for="present{{ $key }}">Present</label>
+                  </div>
 
-                        <label for="absent{{$key}}">Absent</label>
-                        <a></a>
-                    </div>
-                  </td>
-              </tr>
-              @endforeach
-            </tbody>
-{{--  THE LAST LOOP WE GOT THE 3 ID WITH  --}}
+                  <!-- Leave -->
+                  <div class="form-check form-check-inline">
+                    <input 
+                      class="form-check-input leave" 
+                      type="radio" 
+                      name="attend_status{{ $key }}" 
+                      id="leave{{ $key }}" 
+                      value="Leave" 
+                      {{ $item->attend_status == 'Leave' ? 'checked' : '' }}
+                    >
+                    <label class="form-check-label" for="leave{{ $key }}">Leave</label>
+                  </div>
 
+                  <!-- Absent -->
+                  <div class="form-check form-check-inline">
+                    <input 
+                      class="form-check-input absent" 
+                      type="radio" 
+                      name="attend_status{{ $key }}" 
+                      id="absent{{ $key }}" 
+                      value="Absent" 
+                      {{ $item->attend_status == 'Absent' ? 'checked' : '' }}
+                    >
+                    <label class="form-check-label" for="absent{{ $key }}">Absent</label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
 
- </table>
- <button type="submit" class="btn btn-info btn-sm"> Update </button>
-</form>
+    <!-- Update Button -->
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-info btn-sm px-4">
+        <i class="fas fa-save"></i> Update
+      </button>
+    </div>
+  </form>
 </div>
+
                <!-- end card body-->
                
             </div>

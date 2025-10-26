@@ -170,10 +170,6 @@ $(document).ready(function () {
                 minlength: 5,
                 maxlength: 400
             },
-            image: {
-                required: true,
-                extension: "jpg|jpeg|png|webp"
-            }
         },
         messages: {
             name: {
@@ -202,10 +198,6 @@ $(document).ready(function () {
                 minlength: "Address must be at least 5 characters",
                 maxlength: "Address can't be longer than 400 characters"
             },
-            image: {
-                required: "Please upload a Customer image",
-                extension: "Only JPG, JPEG, PNG, or WEBP formats are allowed"
-            }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

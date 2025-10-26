@@ -38,7 +38,7 @@
                                     <div class="auth-logo">
                                         <a href="{{ url('/') }}" class="logo logo-dark text-center" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                             <span class="logo-lg" style="font-size: 2rem; font-weight: bold; background: linear-gradient(90deg, #6b7280 0%, #b1233f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; letter-spacing: 2px;">
-                                                SD-Prime-Opss
+                                                Salinio Drug Pharmacy
                                             </span>
                                         </a>
                                     </div>
@@ -62,18 +62,26 @@
 
 
 
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <div class="input-group input-group-merge">
-                                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password">
-                                            <div class="input-group-text" data-password="false">
-                                         @error('password')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                                <span class="password-eye"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group input-group-merge">
+                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password">
+                            <div class="input-group-text" data-password="false">
+
+                                
+                            @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                                
+
+                                <span class="password-eye"></span>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
 
                                     <div class="mb-3">
                                         <div class="form-check">
@@ -115,9 +123,9 @@
         <!-- end page -->
 
 
-        <footer class="footer footer-alt">
-            2025 - <script>document.write(new Date().getFullYear())</script> &copy; SP-Prime-Opss by <a href="" class="text-white-50">Antiks</a> 
-        </footer>
+        {{-- <footer class="footer footer-alt">
+            2025 - <script>document.write(new Date().getFullYear())</script> &copy; Salinio Drug Pharmacy by <a href="" class="text-white-50">Antiks</a> 
+        </footer> --}}
 
 
         <!-- Vendor js -->

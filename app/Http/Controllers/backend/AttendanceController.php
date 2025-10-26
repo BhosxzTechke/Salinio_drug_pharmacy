@@ -20,18 +20,21 @@ class AttendanceController extends Controller
 
     public function AttendanceTable(){
 
-                $AttendanceData =  Attendance::select('date')->groupBy('date')->orderBy('id','desc')->get();
-                return view('Attendance.AllAttendance', compact('AttendanceData'));
+        $AttendanceData =  Attendance::select('date')->groupBy('date')->orderBy('id','desc')->get();
+        return view('Attendance.AllAttendance', compact('AttendanceData'));
 
 
     }
 
+
+    
+
 public function AddEmployeeAttendance()
 {
     // Get employees with role Cashier or Staff
-    $employees = User::role(['Cashier', 'Staff'])->get();
+    $user = User::role(['Cashier', 'Staff'])->get();
 
-    if ($employees->isEmpty()) {
+    if ($user->isEmpty()) {
         $notification = [
             'message' => 'No Cashier or Staff found. Please add employees first.',
             'alert-type' => 'warning',
@@ -40,8 +43,10 @@ public function AddEmployeeAttendance()
         return redirect()->back()->with($notification);
     }
 
-    return view('Attendance.AddAttendance', compact('employees'));
+    return view('Attendance.AddAttendance', compact('user'));
 }
+
+
 
     
 

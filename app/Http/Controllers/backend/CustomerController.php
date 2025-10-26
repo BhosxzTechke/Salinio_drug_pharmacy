@@ -38,7 +38,15 @@ public function StoreFormCustomer(Request $request)
         $request->validate([
             'name' => 'required|string|max:200',
             'email' => 'required|email|unique:customers,email|max:200',
-            'phone' => 'required|unique:customers,phone|regex:/^(09\d{9}|\+639\d{9})$/|max:14',
+
+            'phone' => [
+                'required',
+                'unique:customers,phone',
+                'regex:/^(\+?63|0)9\d{9}$/',
+            ],
+
+            // it allows 09123456789 or 639123456789 or +639123456789
+
             'address' => 'required|string|max:400',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // up to 10MB
             'password' => 'nullable|string|min:6|confirmed',

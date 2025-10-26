@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Employee;
+use App\Models\User;
 
 /**
  * @mixin IdeHelperAttendance
@@ -15,9 +15,9 @@ class Attendance extends Model
 
         protected $guarded = [];
         
-        public function Employee(){
+        public function User(){
 
-            return $this->belongsTo(Employee::class, 'employee_id', 'id');
+            return $this->belongsTo(User::class, 'employee_id', 'id');
 
         }
 

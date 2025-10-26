@@ -238,12 +238,24 @@ public function StoreProfile(Request $request)
 
             public function UpdatePassword(Request $request){
 
-            $request->validate([
-                'oldpassword' => 'required',
-                'newpassword' => 'required',
-                'confirm_password' => 'required|same:newpassword',
 
-            ]);
+                    $request->validate([
+        'oldpassword' => 'required',
+        'newpassword' => [
+            'required',
+            'string',
+            'min:8',
+            'regex:/[A-Z]/',      // at least one uppercase
+            'regex:/[a-z]/',      // at least one lowercase
+            'regex:/[0-9]/',      // at least one number
+            'regex:/[@$!%*#?&]/', // at least one special character
+        ],
+        'confirm_password' => 'required|same:newpassword',
+    ], [
+        'newpassword.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+        'confirm_password.same' => 'Confirm Password must match the New Password.',
+    ]);
+
 
             $hashedPassword = Auth::user()->password;
             if (Hash::check($request->oldpassword,$hashedPassword )) {
@@ -626,6 +638,7 @@ public function updateFirstTimeUser(Request $request)
             'password' => 'New password cannot be the same as your temporary password.',
         ]);
     }
+
 
     $user->password = Hash::make($request->password);
     $user->must_change_password = false;

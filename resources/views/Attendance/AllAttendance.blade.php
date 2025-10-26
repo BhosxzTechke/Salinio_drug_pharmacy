@@ -19,7 +19,7 @@
                                         </ol>
 
                                     </div>
-                                    <h4 class="page-title">All Attendance Employee</h4>
+                                    <h4 class="page-title">All Attendance Staff / Cashier</h4>
                                 </div>
                             </div>
                         </div>     
