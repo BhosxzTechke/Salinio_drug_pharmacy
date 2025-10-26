@@ -36,6 +36,9 @@ class ContactController extends Controller
                     ->subject('New Contact Message from ' . $request->name);
         });
 
+
+        
+
         return back()->with('success', 'Message sent successfully!');
     }
 

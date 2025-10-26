@@ -524,16 +524,16 @@ foreach ($cartInstance->content() as $item) {
 
 
 
-        // $customer = Customer::find($request->customer_id);
-        //     Mail::send('emails.order-complete', [
-        //         'title' => 'Order Completed Successfully',
-        //         'name' => $customer->name,
-        //         'from' => config('mail.from.address'),
-        //         'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed. Total: ₱" . number_format($order->total, 2),
-        //     ], function ($message) use ($customer) {
-        //         $message->to($customer->email)
-        //                 ->subject('Your Order Confirmation');
-        //     });
+        $customer = Customer::find($request->customer_id);
+            Mail::send('emails.order-complete', [
+                'title' => 'Order Completed Successfully',
+                'name' => $customer->name,
+                'from' => config('mail.from.address'),
+                'body' => "Hi {$customer->name}, your order #{$order->invoice_no} has been completed. Total: ₱" . number_format($order->total, 2),
+            ], function ($message) use ($customer) {
+                $message->to($customer->email)
+                        ->subject('Your Order Confirmation');
+            });
 
 
         return redirect()
