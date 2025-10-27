@@ -22,7 +22,6 @@ class Customer extends Authenticatable
         'phone',
         'address',
         'image',
-        'city',
         'password',
         'added_by_staff',
         'remember_token',
@@ -44,6 +43,8 @@ class Customer extends Authenticatable
 
     $this->notify(new CustomResetPassword($url));
 }
+
+
 
 
         public function addresses()

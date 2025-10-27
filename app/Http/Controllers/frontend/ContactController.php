@@ -35,11 +35,16 @@ class ContactController extends Controller
             $message->to('danmichaelantiquina9@gmail.com')
                     ->subject('New Contact Message from ' . $request->name);
         });
-
+            $notification = array(
+                'message' => 'Contact Admin Successfully',
+                'alert-type' => 'success'
+            );
 
         
 
-        return back()->with('success', 'Message sent successfully!');
+    return redirect()->back()->with($notification);
+
+
     }
 
 

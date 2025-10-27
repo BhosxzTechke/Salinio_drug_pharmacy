@@ -25,16 +25,25 @@ class CustomResetPassword extends Notification
         return ['mail'];
     }
 
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('Reset Your Password')
-            ->view('emails.custom-reset', [
-                'url' => $this->url,
-                'appName' => config('app.name'),
-                'customer' => $notifiable,
-            ]);
-    }
+
+        public function mailer()
+        {
+            return 'mailtrap';
+        }
+
+        public function toMail($notifiable)
+        {
+
+                return (new MailMessage)
+                    ->mailer('mailtrap') // explicitly use Mailtrap
+                    ->from(env('MAILTRAP_FROM_ADDRESS'), env('MAILTRAP_FROM_NAME'))
+                    ->subject('Reset Your Password')
+                    ->view('emails.custom-reset', [
+                        'url' => $this->url,
+                        'appName' => config('app.name'),
+                        'customer' => $notifiable,
+                    ]);
+        }
 
     public function toArray($notifiable)
     {

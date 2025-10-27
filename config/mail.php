@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'resend'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,21 +32,21 @@ return [
     |            "postmark", "log", "array", "failover"
     |
     */
+                    'mailers' => [
+                        'resend' => [
+                            'transport' => 'resend',
+                        ],
 
-            'mailers' => [
-                'resend' => [
-                    'transport' => 'resend',
-                ],
-
-                'smtp' => [
-                    'transport' => 'smtp',
-                    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-                    'port' => env('MAIL_PORT', 587),
-                    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-                    'username' => env('MAIL_USERNAME'),
-                    'password' => env('MAIL_PASSWORD'),
-                    'timeout' => null,
-                ],
+                        'mailtrap' => [
+                            'transport' => 'smtp',
+                            'host' => env('MAILTRAP_HOST', 'sandbox.smtp.mailtrap.io'),
+                            'port' => env('MAILTRAP_PORT', 2525),
+                            'encryption' => env('MAIL_ENCRYPTION', null),
+                            'username' => env('MAILTRAP_USERNAME'),
+                            'password' => env('MAILTRAP_PASSWORD'),
+                            'timeout' => null,
+                            'auth_mode' => null,
+                        ],
 
         'ses' => [
             'transport' => 'ses',
