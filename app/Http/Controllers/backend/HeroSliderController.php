@@ -106,48 +106,73 @@ public function StoreHeroSlider(Request $request)
 
 
 
-    public function UpdateHeroSlider(Request $request) {
+ public function UpdateHeroSlider(Request $request)
+{
+    $sliderID = $request->id;
+    $slider = HeroSlider::findOrFail($sliderID);
 
-        $sliderID = $request->id;
+    $request->validate([
+        'position' => 'nullable|integer|min:0|max:' . HeroSlider::count(),
+        'title' => 'nullable|string|max:255',
+        'subtitle' => 'nullable|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10248',
+        'link' => 'nullable|url|max:255',
+        'is_active' => 'nullable|boolean',
+    ]);
 
-        $request->validate([
-            'position' => 'nullable|integer|min:0|max:'.\App\Models\HeroSlider::count(),
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'link' => 'nullable|url|max:255',
-            'position' => 'nullable|integer',
-            'is_active' => 'nullable|boolean',
-        ]);
+    $data = [
+        'title' => $request->title,
+        'subtitle' => $request->subtitle,
+        'link' => $request->link,
+        'is_active' => $request->is_active ?? 0,
+    ];
 
-        $data = [
-            'title' => $request->title,
-            'subtitle' => $request->subtitle,
-            'link' => $request->link,
-            'position' => $request->position ?? 0,
-            'is_active' => $request->is_active ?? 'inactive',
-        ];
 
-        // Handle image upload if exists
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-            $path = public_path('backend/assets/heroslider/'.$name_gen);
-            Image::make($image)->resize(300,300)->save($path);
-            $data['image'] = 'backend/assets/heroslider/'.$name_gen;
-        }
+    
+    $totalSlides = HeroSlider::count();
+    $position = $request->position;
 
-        HeroSlider::findOrFail($sliderID)->update($data);
-
-        $notification = array(
-            'message' => 'Hero Slider updated successfully.',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('heroslider.show')->with($notification);
-
+    if (is_null($position) || $position > $totalSlides) {
+        $position = $totalSlides;
     }
 
+    // Only shift positions if changed
+    if ($position !== $slider->position) {
+        HeroSlider::where('position', '>=', $position)
+            ->where('id', '!=', $sliderID)
+            ->increment('position');
+        $data['position'] = $position;
+    }
+
+    if ($request->hasFile('image')) {
+        // Optional: Delete old image from Cloudinary if it exists
+        if ($slider->image && str_contains($slider->image, 'res.cloudinary.com')) {
+            try {
+                $publicId = basename(parse_url($slider->image, PHP_URL_PATH));
+                $publicId = pathinfo($publicId, PATHINFO_FILENAME);
+                Cloudinary::destroy('heroslider/' . $publicId);
+            } catch (\Exception $e) {
+                // You can log the error if needed
+            }
+        }
+
+        $uploadedFileUrl = Cloudinary::upload(
+            $request->file('image')->getRealPath(),
+            ['folder' => 'heroslider']
+        )->getSecurePath();
+
+        $data['image'] = $uploadedFileUrl;
+    }
+
+    $slider->update($data);
+
+    $notification = [
+        'message' => 'Hero Slider updated successfully.',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->route('heroslider.show')->with($notification);
+}
 
 
 
