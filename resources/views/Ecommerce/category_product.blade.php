@@ -9,7 +9,7 @@
 
             <!-- Price Range -->
             <div>
-                <h2 class="font-semibold mb-2">Price</h2>
+                <h2 class="font-semibold mb-2 text-gray-900">Price</h2>
                 <div class="flex space-x-2">
                     <input type="number" name="price_min" placeholder="Min"
                         value="{{ request('price_min') }}" class="w-1/2 border p-2 rounded">
@@ -20,24 +20,24 @@
 
             <!-- Prescription -->
             <div>
-                <h2 class="font-semibold mb-2">Prescription</h2>
+                <h2 class="font-semibold mb-2 text-gray-900">Prescription</h2>
                 <label class="flex items-center space-x-2">
                     <input type="checkbox" name="prescription_required" value="1"
                         {{ request('prescription_required') == 1 ? 'checked' : '' }}>
-                    <span>Prescription Required</span>
+                    <span class="text-gray-700">Prescription Required</span>
                 </label>
 
             </div>
 
             <!-- Categories -->
             <div>
-                <h2 class="font-semibold mb-2">Categories</h2>
+                <h2 class="font-semibold mb-2 text-gray-900">Categories</h2>
                 <div class="max-h-40 overflow-y-auto space-y-1">
                     @foreach($allCategories as $cat)
                         <label class="flex items-center space-x-2">
                             <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
                                 {{ collect(request('categories'))->contains($cat->id) ? 'checked' : '' }}>
-                            <span>{{ $cat->category_name }}</span>
+                            <span class="text-gray-700">{{ $cat->category_name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -45,13 +45,13 @@
 
             <!-- Brands -->
             <div>
-                <h2 class="font-semibold mb-2">Brands</h2>
+                <h2 class="font-semibold mb-2 text-gray-900">Brands</h2>
                 <div class="max-h-40 overflow-y-auto space-y-1">
                     @foreach($brands as $brand)
                         <label class="flex items-center space-x-2">
                             <input type="checkbox" name="brands[]" value="{{ $brand->id }}"
                                 {{ collect(request('brands'))->contains($brand->id) ? 'checked' : '' }}>
-                            <span>{{ $brand->name }}</span>
+                            <span class="text-gray-700">{{ $brand->name }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -59,47 +59,50 @@
 
             <!-- Health Concern -->
             <div>
-                <h2 class="font-semibold mb-2">Health Concern</h2>
+                <h2 class="font-semibold mb-2 text-gray-900">Health Concern</h2>
                 <div class="max-h-40 overflow-y-auto space-y-1">
                     @if(!empty($healthConcerns))
                         @foreach($healthConcerns as $value => $label)
                             <label class="flex items-center space-x-2">
                                 <input type="checkbox" name="health_concerns[]" value="{{ $value }}"
                                     {{ collect(request('health_concerns'))->contains($value) ? 'checked' : '' }}>
-                                <span>{{ $label ?: 'All' }}</span>
+                                <span class="text-gray-700">{{ $label ?: 'All' }}</span>
                             </label>
                         @endforeach
                     @else
-                        <p class="text-gray-400 text-sm">No health concerns available</p>
+                        <p class="text-gray-700 text-sm">No health concerns available</p>
                     @endif
                 </div>
             </div>
 
+                    <!-- Age Group Filter -->
+<div>
+    <h2 class="font-semibold mb-2 text-gray-900">Age Group</h2>
+    <div class="max-h-40 overflow-y-auto space-y-1">
+        @foreach($age_group as $value => $label)
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" name="age_group[]" value="{{ $value }}"
+                    {{ collect(request('age_group'))->contains($value) ? 'checked' : '' }}>
+                <span class="text-gray-700">{{ $label ?: 'All' }}</span>
+            </label>
+        @endforeach
+    </div>
+</div>
 
 
-            <!-- Health Concern -->
-            <div>
-                <h2 class="font-semibold mb-2">Age group</h2>
-                <div class="max-h-40 overflow-y-auto space-y-1">
-                    @if(!empty($age_group))
-                        @foreach($age_group as $value => $label)
-                            <label class="flex items-center space-x-2">
-                                <input type="checkbox" name="age_group[]" value="{{ $value }}"
-                                    {{ collect(request('age_group'))->contains($value) ? 'checked' : '' }}>
-                                    
-                                <span>{{ $label ?: 'All' }}</span>
-                            </label>
-                        @endforeach
-                    @else
-                        <p class="text-gray-400 text-sm">No Age Group available</p>
-                    @endif
-                </div>
-            </div>
+            <div class="mt-4">
+    <h2 class="font-semibold mb-2 text-gray-900">Target Gender</h2>
+    <div class="space-y-1">
+        @foreach($target_gender as $value => $label)
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" name="target_gender[]" value="{{ $value }}"
+                    {{ collect(request('target_gender'))->contains($value) ? 'checked' : '' }}>
+                <span class="text-gray-700">{{ $label ?: 'All' }}</span>
+            </label>
+        @endforeach
+    </div>
+</div>
 
-
-
-
-            
 
             <!-- Apply Button -->
             <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
@@ -145,6 +148,9 @@
 @endsection
 
 @section('scripts')
+
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('filterForm');

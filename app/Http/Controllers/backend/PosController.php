@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Customer;
+use App\Models\Brand;
 use App\Models\Order;
 use App\Models\Orderdetails;
 use App\Models\Inventory;
@@ -64,6 +65,8 @@ public function viewPos()
 
     $AllCategory = Category::all();
 
+     $AllBrand = Brand::all();
+
     // 5. Check if an active discount exists
     $discounts = DB::table('discounts')->where('active', 1)->get();
 
@@ -76,7 +79,8 @@ public function viewPos()
         'totalVat',
         'AllCategory',
         'vatRate',
-        'discounts'
+        'discounts',
+        'AllBrand'
     ));
 }
 

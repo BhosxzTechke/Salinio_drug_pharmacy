@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\HeroSlider;
 use Image;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
 class HeroSliderController extends Controller
 {
     //
+
+
+
+
 
     public function HeroSlider() {
 
@@ -27,58 +32,68 @@ class HeroSliderController extends Controller
 
     }
 
-    public function StoreHeroSlider(Request $request) {
 
-        $request->validate([
-            'position' => 'nullable|integer|min:0|max:'.\App\Models\HeroSlider::count(),
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'link' => 'nullable|url|max:255',
-            'position' => 'nullable|integer',
-            'is_active' => 'nullable|boolean',
-        ]);
 
-        // Handle image upload
-        $save_url = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-            $path = public_path('backend/assets/heroslider/'.$name_gen);
-            Image::make($image)->resize(300,300)->save($path);
-            $save_url = 'backend/assets/heroslider/'.$name_gen;
-        }
 
-      // Determine position
+
+
+public function StoreHeroSlider(Request $request)
+{
+    $request->validate([
+        'position' => 'nullable|integer|min:0|max:' . \App\Models\HeroSlider::count(),
+        'title' => 'nullable|string|max:255',
+        'subtitle' => 'nullable|string|max:255',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10248',
+        'link' => 'nullable|url|max:255',
+        'is_active' => 'nullable|boolean',
+    ]);
+
+    // Handle Cloudinary upload
+    $save_url = null;
+    if ($request->hasFile('image')) {
+        $uploadedFileUrl = Cloudinary::upload(
+            $request->file('image')->getRealPath(),
+            ['folder' => 'heroslider']
+        )->getSecurePath();
+
+        $save_url = $uploadedFileUrl;
+    }
+
+    // Determine position
     $totalSlides = HeroSlider::count();
     $position = $request->position;
 
     if (is_null($position) || $position > $totalSlides) {
-        $position = $totalSlides; // Add to the end if empty or too high
+        $position = $totalSlides;
     }
 
     // Shift positions if needed
     HeroSlider::where('position', '>=', $position)->increment('position');
 
-        // Insert into database
+    // Insert into database
+    HeroSlider::create([
+        'title' => $request->title,
+        'subtitle' => $request->subtitle,
+        'link' => $request->link,
+        'position' => $position ?? 0,
+        'is_active' => $request->is_active ?? 'inactive',
+        'image' => $save_url, // Cloudinary URL here
+    ]);
 
-        HeroSlider::create([
-            'title' => $request->title,
-            'subtitle' => $request->subtitle,
-            'link' => $request->link,
-            'position' => $position ?? 0,
-            'is_active' => $request->is_active ?? 'inactive',
-            'image' => $save_url,
-        ]);
+    $notification = [
+        'message' => 'Hero Slider created successfully.',
+        'alert-type' => 'success'
+    ];
 
-        $notification = array(
-            'message' => 'Hero Slider created successfully.',
-            'alert-type' => 'success'
-        );
+    return redirect()->route('heroslider.show')->with($notification);
+}
 
-        return redirect()->route('heroslider.show')->with($notification);
 
-    }
+
+
+
+
+
 
     public function EditHeroSlider($id) {
 

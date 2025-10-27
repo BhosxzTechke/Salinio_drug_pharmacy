@@ -180,29 +180,39 @@ Create Invoice for Customer</button>
 
 <div class="container-fluid">
     <!-- Search + Filter Row -->
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" id="productSearch" class="form-control" placeholder="🔎 Search products...">
-        </div>
-        <div class="col-md-6">
-            <select id="categoryFilter" class="form-select">
-                <option value="">All Categories</option>
-                @foreach($AllCategory as $category)
-                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                @endforeach
-            </select>
-        </div>
+<!-- Search + Filter Row -->
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input type="text" id="productSearch" class="form-control" placeholder="🔎 Search products...">
     </div>
+    <div class="col-md-4">
+        <select id="categoryFilter" class="form-select">
+            <option value="">All Categories</option>
+            @foreach($AllCategory as $category)
+                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-4">
+        <select id="brandFilter" class="form-select">
+            <option value="">All Brands</option>
+            @foreach($AllBrand as $brand)
+                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
 
 
 
     <!-- Product Grid -->
-    <div class="row g-2" id="productGrid">
+    <div class="row g-2" id="product-card">
         @foreach($PosData as $key => $item)
             <div class="col-6 col-sm-4 col-md-3 col-lg-2 product-card" 
                  data-name="{{ strtolower($item->product->product_name) }}" 
-                 data-category="{{ $item->product->category_id }}">
+                 data-category="{{ $item->product->category_id }}"
+                 data-brand="{{ $item->product->brand_id }}">
                 <div class="card shadow-sm h-100 text-center p-2" style="border-radius: 12px;">
                     <img src="{{ asset($item->product->product_image) }}" 
                          class="mx-auto d-block" 
@@ -397,32 +407,42 @@ Create Invoice for Customer</button>
 
 
 
-{{-- product js search filtering --}}
+        <!-- Search & Filter Script -->
         <script>
-            const searchInput = document.getElementById('productSearch');
-            const categoryFilter = document.getElementById('categoryFilter');
-            const productCards = document.querySelectorAll('.product-card');
+            document.addEventListener('DOMContentLoaded', () => {
+                const searchInput = document.getElementById('productSearch');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const brandFilter = document.getElementById('brandFilter');
+                const productCards = document.querySelectorAll('.product-card');
 
                 function filterProducts() {
-                    const searchText = searchInput.value.toLowerCase();
+                    const searchText = searchInput.value.toLowerCase().trim();
                     const selectedCategory = categoryFilter.value;
+                    const selectedBrand = brandFilter.value;
 
                     productCards.forEach(card => {
-                        const name = card.dataset.name;
+                        const name = card.dataset.name.toLowerCase();
                         const category = card.dataset.category;
+                        const brand = card.dataset.brand;
 
-                        const matchesSearch = name.includes(searchText);
+                        const matchesSearch = !searchText || name.includes(searchText);
                         const matchesCategory = !selectedCategory || category === selectedCategory;
+                        const matchesBrand = !selectedBrand || brand === selectedBrand;
 
-                        card.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+                        // Show/hide based on all filters
+                        card.style.display = (matchesSearch && matchesCategory && matchesBrand) ? '' : 'none';
                     });
                 }
 
-            searchInput.addEventListener('keyup', filterProducts);
-            categoryFilter.addEventListener('change', filterProducts);
-</script>
+                // Attach listeners
+                searchInput.addEventListener('keyup', filterProducts);
+                categoryFilter.addEventListener('change', filterProducts);
+                brandFilter.addEventListener('change', filterProducts);
+            });
+        </script>
 
- 
+
+
 
 
 

@@ -11,7 +11,7 @@
           @foreach ($HeroSlider as $index => $item)
           <div class="w-full flex-shrink-0 relative">
             <img
-              src="{{ asset($item->image) }}"
+              src="{{ $item->image }}"
               class="w-full h-56 sm:h-72 md:h-96 lg:h-[500px] object-cover"
               alt="slide image"
             />

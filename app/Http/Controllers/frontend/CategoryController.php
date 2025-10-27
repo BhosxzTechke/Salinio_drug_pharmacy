@@ -63,12 +63,14 @@ public function CategoryProduct(Request $request, $slug)
         $inventoryQuery->where('selling_price', '<=', $request->price_max);
     }
 
-    // Prescription filters (Rx / OTC)
-    if ($request->has('prescription_required')) {
-        $productIds = Product::whereIn('id', $productIds)
-            ->pluck('id');
-        $inventoryQuery->whereIn('product_id', $productIds);
-    }
+// Prescription filter (Rx / OTC)
+if ($request->filled('prescription_required')) {
+    $productIds = Product::whereIn('id', $productIds)
+        ->where('prescription_required', true)
+        ->pluck('id');
+
+    $inventoryQuery->whereIn('product_id', $productIds);
+}
 
 
 
@@ -100,33 +102,78 @@ public function CategoryProduct(Request $request, $slug)
     }
 
 
-        // Health concern filter
+    //     // Health concern filter
+    // if ($request->filled('age_group')) {
+    //     $age_group = Product::whereIn('age_group', $request->age_group)->pluck('id');
+    //     $inventoryQuery->whereIn('product_id', $age_group);
+    // }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | AGE GROUP FILTER
+    |--------------------------------------------------------------------------
+    */
     if ($request->filled('age_group')) {
-        $age_group = Product::whereIn('age_group', $request->age_group)->pluck('id');
-        $inventoryQuery->whereIn('product_id', $age_group);
+        $selectedAgeGroups = array_filter($request->input('age_group', [])); // remove empty "All"
+
+        if (!empty($selectedAgeGroups)) {
+            $inventoryQuery->whereHas('product', function ($q) use ($selectedAgeGroups) {
+                $q->whereIn('age_group', $selectedAgeGroups);
+            });
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TARGET GENDER FILTER
+    |--------------------------------------------------------------------------
+    */
+    if ($request->filled('target_gender')) {
+        $selectedGenders = array_filter($request->input('target_gender', []));
+
+        if (!empty($selectedGenders)) {
+            $inventoryQuery->whereHas('product', function ($q) use ($selectedGenders) {
+                $q->whereIn('target_gender', $selectedGenders);
+            });
+        }
     }
 
 
 
-    // 4️⃣ Get paginated inventory
+
+
     $inventory = $inventoryQuery->latest()->paginate(12);
 
-    // 5️⃣ Shared data for sidebar
     $allCategories = Category::all();
     $brands = Brand::all();
+
+
     $healthConcerns = collect(['' => 'All'])->merge(
         Product::whereNotNull('health_concern')
             ->distinct()
             ->pluck('health_concern', 'health_concern')
     );
 
-    // 6️⃣ If AJAX request → return only the product grid partial
+    $age_group = Product::whereNotNull('age_group')
+        ->distinct()
+        ->pluck('age_group', 'age_group');
+
+    $target_gender = Product::whereNotNull('target_gender')
+        ->distinct()
+        ->pluck('target_gender', 'target_gender');
+
+
+
+
+
+
+
     if ($request->ajax()) {
         return response()->view('Ecommerce.Partials.product_grid', compact('inventory'))->render();
     }
 
-    // 7️⃣ Otherwise → return full page
-    return view('Ecommerce.category_product', compact('category', 'inventory', 'allCategories', 'brands', 'healthConcerns'));
+    return view('Ecommerce.category_product', compact('category', 'inventory', 'allCategories', 'brands', 'healthConcerns', 'age_group', 'target_gender'));
 }
 
 
