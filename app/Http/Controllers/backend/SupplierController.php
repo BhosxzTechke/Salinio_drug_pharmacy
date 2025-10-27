@@ -42,6 +42,7 @@ public function StoreFormSupplier(Request $request)
                 'required',
                 'string',
                 'max:200',
+                'regex:/^[a-zA-Z0-9&.\- ]+$/|max:100',
                 Rule::unique('suppliers')->where(function ($query) use ($request) {
                     return $query->where('address', $request->address);
                 }),
@@ -55,6 +56,7 @@ public function StoreFormSupplier(Request $request)
             ],
             'address' => 'required|string|max:400',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
+
         ], [
             'name.unique' => 'A supplier with the same name and address already exists.',
             'phone.regex' => 'Phone number must start with 09, +639, or 639 and contain 9 digits after.',

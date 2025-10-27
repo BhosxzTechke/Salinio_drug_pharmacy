@@ -38,7 +38,7 @@ return [
                         ],
 
                         'mailtrap' => [
-                            'transport' => 'smtp',
+                            'transport' => 'mailtrap',
                             'host' => env('MAILTRAP_HOST', 'sandbox.smtp.mailtrap.io'),
                             'port' => env('MAILTRAP_PORT', 2525),
                             'encryption' => env('MAIL_ENCRYPTION', null),
@@ -47,6 +47,8 @@ return [
                             'timeout' => null,
                             'auth_mode' => null,
                         ],
+
+                        
 
         'ses' => [
             'transport' => 'ses',
