@@ -24,6 +24,8 @@
                 <a href="#" class="px-4 py-2 bg-green-500 hover:bg-green-900 rounded-lg text-white text-sm md:text-base ml-11">Learn More</a>
               </div>
             </div>
+
+            
           </div>
           @endforeach
         </div>

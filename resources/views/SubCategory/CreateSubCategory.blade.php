@@ -57,28 +57,21 @@
                             </div>
                         </div>
 
+                <div class="col-md-9">
+                    <div class="form-group mb-3">
+                        <label for="category_id" class="form-label">Category Name <span class="text-danger">*</span></label>
+                        <select name="category_id" class="form-control @error('category_id') is-invalid @enderror" id="category_id">
+                            <option selected disabled>Select Category</option>
+                            @foreach ($catego as $data)
+                                <option value="{{ $data->id }}">{{ $data->category_name }}</option>
+                            @endforeach
+                        </select>
 
-
-                            <div class="col-md-9">
-                                <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Category Name <span class="text-danger">*</span></label>
-                                <select name="category_id" class="form-control @error('category') is-invalid @enderror" id="example-select">
-                                            <option selected disabled >Select Category </option>
-                                            @foreach ($categories as $data)
-
-                                            <option value="{{ $data->id }}">{{ $data->category_name }}</option>
-
-                                    @endforeach
-                                        </select>
-
-                                        
-                                @error('category')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                                
-                                </div>
+                        @error('category_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
-
+                </div>
 
 
                     </div> <!-- end row -->

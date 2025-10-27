@@ -79,7 +79,6 @@ public function StoreProduct(Request $request)
         'prescription_required' => 'nullable|boolean',
         'product_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', // 20MB max
 
-        
     ]);
 
 

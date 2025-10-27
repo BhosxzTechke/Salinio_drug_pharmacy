@@ -38,15 +38,23 @@ return [
                         ],
 
                         'mailtrap' => [
-                            'transport' => 'smtp',
-                            'host' => env('MAILTRAP_HOST', 'sandbox.smtp.mailtrap.io'),
-                            'port' => env('MAILTRAP_PORT', 2525),
-                            'encryption' => env('MAIL_ENCRYPTION', null),
-                            'username' => env('MAILTRAP_USERNAME'),
-                            'password' => env('MAILTRAP_PASSWORD'),
-                            'timeout' => null,
-                            'auth_mode' => null,
-                        ],
+                                        'transport' => 'mailtrap',
+                                        'host' => env('MAILTRAP_HOST', 'sandbox.api.mailtrap.io'),
+                                        'api_key' => env('MAILTRAP_API_KEY'),
+                                        'inbox_id' => env('MAILTRAP_INBOX_ID'),
+                                    ],
+
+                        // 'mailtrap' => [
+                        //     'transport' => 'smtp',
+                        //     'host' => env('MAILTRAP_HOST', 'sandbox.smtp.mailtrap.io'),
+                        //     'port' => env('MAILTRAP_PORT', 2525),
+                        //     'encryption' => env('MAIL_ENCRYPTION', null),
+                        //     'username' => env('MAILTRAP_USERNAME'),
+                        //     'password' => env('MAILTRAP_PASSWORD'),
+                        //     'timeout' => null,
+                        //     'auth_mode' => null,
+                        // ],
+
 
         'ses' => [
             'transport' => 'ses',

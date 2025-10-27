@@ -23,9 +23,9 @@ class SubCategoryController extends Controller
 
     public function SubCategoryCreate(){
         
-        $categories = Category::orderBy('category_name','ASC')->get();
+        $catego = Category::all();
 
-        return view('SubCategory.CreateSubCategory', compact('categories'));
+        return view('SubCategory.CreateSubCategory', compact('catego'));
 
     }
 
