@@ -849,7 +849,7 @@ use Illuminate\Http\Request;
         
                 ////////////////////////////// PICK UP ORDER
             // Pending Orders TABLE
-            Route::get('/Pending/Pickup', 'PendingPickup')->name('pending.pickup');
+            Route::get('/Pending/Pickup', 'PendingPickup')->name('pending.pickup')->middleware('permission:view-pending-pickup-orders');
 
 
             // Pending Orders TABLE
@@ -857,7 +857,7 @@ use Illuminate\Http\Request;
 
 
                        // Pending Orders TABLE
-            Route::get('/Complete/Pickup', 'CompletePickup')->name('complete.pickup');
+            Route::get('/Complete/Pickup', 'CompletePickup')->name('complete.pickup')->middleware('permission:view-complete-pickup-orders');
 
 
 
@@ -928,7 +928,7 @@ use Illuminate\Http\Request;
 
 
             //Add Permissions
-            Route::get('/create/permission', 'AddPermission')->name('add.permission');
+            Route::get('/create/permission', 'AddPermission')->name('add.permission')->middleware('permission:view-all-permissions');
             
             //Store Permissions
             Route::post('/store/permission', 'StorePermission')->name('permission.store');
@@ -1006,6 +1006,7 @@ use Illuminate\Http\Request;
 
 
 
+            Route::middleware(['auth', 'web'])->group(function () {
 
 
 
@@ -1037,6 +1038,9 @@ use Illuminate\Http\Request;
         });
 
 
+        
+        });
+
 
         /////////////// Change Business Name 
 
@@ -1064,23 +1068,27 @@ use Illuminate\Http\Request;
     
         Route::controller(AuditController::class)->group(function () {
 
-            Route::get('/audit-trail', 'AuditTrail')->name('audit.trail');
+            Route::get('/audit-trail', 'AuditTrail')->name('audit.trail')->middleware('permission:view-all-trail');
 
-            Route::get('/audit-log', 'AuditLog')->name('audit.log');
+            Route::get('/audit-log', 'AuditLog')->name('audit.log')->middleware('permission:view-audit-trail-log');
 
             
         });
 
 
+
+            Route::middleware(['auth', 'web'])->group(function () {
+
+
             Route::controller(ReportController::class)->group(function () {
 
-            Route::get('/Reports-Daily', 'dailyReport')->name('daily.reports');
+            Route::get('/Reports-Daily', 'dailyReport')->name('daily.reports')->middleware('permission:view-daily-reports');
 
 
-            Route::get('/Reports-Weekly', 'weeklyReport')->name('weekly.reports');
+            Route::get('/Reports-Weekly', 'weeklyReport')->name('weekly.reports')->middleware('permission:view-weekly-sales-report');
 
             
-            Route::get('/Reports-Monthly', 'monthlyReport')->name('monthly.reports');
+            Route::get('/Reports-Monthly', 'monthlyReport')->name('monthly.reports')->middleware('permission:view-monthly-sales-report');;
 
             Route::get('/Top-Selling-Products', 'TopSelling')->name('top.sellings');
 
@@ -1088,6 +1096,7 @@ use Illuminate\Http\Request;
             
         });
 
+    });
 
         
 
@@ -1105,6 +1114,7 @@ use Illuminate\Http\Request;
 
 
 
+    Route::middleware(['auth', 'web'])->group(function () {
 
 
 
@@ -1127,6 +1137,7 @@ use Illuminate\Http\Request;
             Route::get('/HeroSlider/Delete/{id}', 'DeleteHeroSlider')->name('delete.heroslider');
         });
 
+    });
 
 
 

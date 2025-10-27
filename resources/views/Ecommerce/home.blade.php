@@ -23,7 +23,7 @@
               <div class="text-white max-w-lg px-4 sm:px-6 lg:px-8">
                 <h2 class="text-2xl md:text-4xl ml-11 font-bold mb-3 ">{{ $item->title ?? 'Big Savings on Your Essentials'}}</h2>
                 <p class="mb-4 text-sm md:text-base ml-11">{{ $item->subtitle ?? 'Get exclusive discounts on top pharmacy and wellness products.' }}</p>
-                <a href="#" class="px-4 py-2 bg-green-500 hover:bg-green-900 rounded-lg text-white text-sm md:text-base ml-11">Learn More</a>
+                <a href="{{ $item->link ?? '' }}" target="_blank" class="px-4 py-2 bg-green-500 hover:bg-green-900 rounded-lg text-white text-sm md:text-base ml-11">Learn More</a>
               </div>
             </div>
           </div>
@@ -122,9 +122,10 @@
                   <h2 class="text-gray-800 text-base sm:text-lg font-semibold line-clamp-1">
                     {{ $inventories->product->product_name }}
                   </h2>
-                  <p class="text-gray-600 text-xs sm:text-sm line-clamp-2 mb-3">
+                  <br>
+                  {{-- <p class="text-gray-600 text-xs sm:text-sm line-clamp-2 mb-3">
                     {{ $inventories->product->description }}
-                  </p>
+                  </p> --}}
 
                   {{--  IF HINDI SIA PRESCRIPTION REQUIRED OR 0 THEN PEDE MAG ADD TO CART --}}
                   @if(!$inventories->product->prescription_required)
