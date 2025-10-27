@@ -260,11 +260,11 @@
 
 
 
-        
+
         {{-- Product Image --}}
         <div class="col-md-6">
             <div class="form-group mb-3">
-                <label for="image">Product Image</label>
+                <label for="image">Product Image <span class="text-danger">*</span></label>
                 <input type="file" name="product_image"
                        id="image" class="form-control @error('product_image') is-invalid @enderror">
                 @error('product_image')

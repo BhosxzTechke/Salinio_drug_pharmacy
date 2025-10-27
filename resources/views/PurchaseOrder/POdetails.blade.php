@@ -109,12 +109,6 @@
         </div>
 
 
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-                <label for="reference_number">Reference number</label>
-                <input type="number" value="{{ $Delivery->reference_number ?? '' }}" name="reference_number" class="form-control" id="reference_number">
-            </div>
-        </div>
 
 
 
@@ -182,7 +176,8 @@
         value="{{ optional($Delivery?->delivery_items->get($key))->expiry_date ?? '' }}"
         name="items[{{ $key }}][expiry_date]"
         class="form-control expiry-date"
-        min="{{ date('Y-m-d') }}">
+        min="{{ date('Y-m-d') }}"
+        required>
     </td>
 
 
@@ -261,6 +256,15 @@
 </div> <!-- container -->
 
 </div> <!-- content -->
+
+
+
+
+
+
+
+
+
 
 
             <script type="text/javascript">

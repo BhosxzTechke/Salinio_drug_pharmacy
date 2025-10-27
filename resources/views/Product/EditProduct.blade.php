@@ -43,159 +43,194 @@
     @csrf
     @method('PUT')
 
-      <input type="hidden" name="id" value="{{ $product->id }}">
-      <input type="hidden" name="old_image" value="{{ $product->product_image }}">
-    
+    <input type="hidden" name="id" value="{{ $product->id }}">
+    <input type="hidden" name="old_image" value="{{ $product->product_image }}">
 
-<h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Edit Product</h5>
-<div class="row">
+    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Edit Product</h5>
+    <div class="row">
 
-    {{-- Product Name --}}
-    <div class="col-md-6 mb-3">
-        <label for="product_name">Product Name <span class="text-danger">*</span></label>
-        <input type="text" name="product_name" class="form-control"
-               value="{{ old('product_name', $product->product_name) }}">
-    </div>
+        {{-- Product Name --}}
+        <div class="col-md-6 mb-3">
+            <label for="product_name">Product Name <span class="text-danger">*</span></label>
+            <input type="text" name="product_name" class="form-control @error('product_name') is-invalid @enderror"
+                   value="{{ old('product_name', $product->product_name) }}">
+            @error('product_name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Product Code (optional) --}}
-    <div class="col-md-6 mb-3">
-        <label for="product_code">Product Code</label>
-        <input type="text" name="product_code" class="form-control"
-               value="{{ old('product_code', $product->product_code) }} " readonly=""> 
-    </div>
+        {{-- Product Code (readonly) --}}
+        <div class="col-md-6 mb-3">
+            <label for="product_code">Product Code</label>
+            <input type="text" name="product_code" class="form-control"
+                   value="{{ old('product_code', $product->product_code) }}" readonly>
+        </div>
 
-    {{-- Category --}}
-    <div class="col-md-6 mb-3">
-        <label for="category_id">Category <span class="text-danger">*</span></label>
-        <select name="category_id" id="category_id" class="form-control">
-            <option selected disabled>Select Category</option>
-            @foreach($categories as $cat)
-                <option value="{{ $cat->id }}" {{ $product->category_id == $cat->id ? 'selected' : '' }}>
-                    {{ $cat->category_name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Category --}}
+        <div class="col-md-6 mb-3">
+            <label for="category_id">Category <span class="text-danger">*</span></label>
+            <select name="category_id" id="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                <option selected disabled>Select Category</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->category_name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Subcategory --}}
-    <div class="col-md-6 mb-3">
-        <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
-        <select name="subcategory_id" id="subcategory_id" class="form-control">
-            <option selected disabled>Select Subcategory</option>
-            @foreach($subcategories as $sub)
-                <option value="{{ $sub->id }}" {{ $product->subcategory_id == $sub->id ? 'selected' : '' }}>
-                    {{ $sub->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Subcategory --}}
+        <div class="col-md-6 mb-3">
+            <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
+            <select name="subcategory_id" id="subcategory_id" class="form-control @error('subcategory_id') is-invalid @enderror">
+                <option selected disabled>Select Subcategory</option>
+                @foreach($subcategories as $sub)
+                    <option value="{{ $sub->id }}" {{ old('subcategory_id', $product->subcategory_id) == $sub->id ? 'selected' : '' }}>
+                        {{ $sub->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('subcategory_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Brand --}}
-    <div class="col-md-6 mb-3">
-        <label for="brand_id">Brand <span class="text-danger">*</span></label>
-        <select name="brand_id" class="form-control">
-            @foreach($brands as $brand)
-                <option value="{{ $brand->id }}" {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
-                    {{ $brand->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Brand --}}
+        <div class="col-md-6 mb-3">
+            <label for="brand_id">Brand <span class="text-danger">*</span></label>
+            <select name="brand_id" class="form-control @error('brand_id') is-invalid @enderror">
+                @foreach($brands as $brand)
+                    <option value="{{ $brand->id }}" {{ old('brand_id', $product->brand_id) == $brand->id ? 'selected' : '' }}>
+                        {{ $brand->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('brand_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Dosage Form --}}
-    <div class="col-md-6 mb-3">
-        <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
-        <select name="dosage_form" class="form-control">
-            @php $dosageOptions = ['Tablet','Capsule','Syrup','Cream','Ointment']; @endphp
-            @foreach($dosageOptions as $option)
-                <option value="{{ $option }}" {{ $product->dosage_form == $option ? 'selected' : '' }}>
-                    {{ $option }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Dosage Form --}}
+        <div class="col-md-6 mb-3">
+            <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
+            <select name="dosage_form" class="form-control @error('dosage_form') is-invalid @enderror">
+                @php $dosageOptions = ['Tablet','Capsule','Syrup','Cream','Ointment']; @endphp
+                @foreach($dosageOptions as $option)
+                    <option value="{{ $option }}" {{ old('dosage_form', $product->dosage_form) == $option ? 'selected' : '' }}>
+                        {{ $option }}
+                    </option>
+                @endforeach
+            </select>
+            @error('dosage_form')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Target Gender --}}
-    <div class="col-md-6 mb-3">
-        <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
-        <select name="target_gender" class="form-control">
-            @php $genderOptions = ['Unisex','Male','Female']; @endphp
-            @foreach($genderOptions as $option)
-                <option value="{{ $option }}" {{ $product->target_gender == $option ? 'selected' : '' }}>
-                    {{ $option }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Target Gender --}}
+        <div class="col-md-6 mb-3">
+            <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
+            <select name="target_gender" class="form-control @error('target_gender') is-invalid @enderror">
+                @php $genderOptions = ['Unisex','Male','Female']; @endphp
+                @foreach($genderOptions as $option)
+                    <option value="{{ $option }}" {{ old('target_gender', $product->target_gender) == $option ? 'selected' : '' }}>
+                        {{ $option }}
+                    </option>
+                @endforeach
+            </select>
+            @error('target_gender')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Age Group --}}
-    <div class="col-md-6 mb-3">
-        <label for="age_group">Age Group <span class="text-danger">*</span></label>
-        <select name="age_group" class="form-control">
-            @php $ageOptions = ['All','Kids','Adults','Seniors']; @endphp
-            @foreach($ageOptions as $option)
-                <option value="{{ $option }}" {{ $product->age_group == $option ? 'selected' : '' }}>
-                    {{ $option }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Age Group --}}
+        <div class="col-md-6 mb-3">
+            <label for="age_group">Age Group <span class="text-danger">*</span></label>
+            <select name="age_group" class="form-control @error('age_group') is-invalid @enderror">
+                @php $ageOptions = ['All','Kids','Adults','Seniors']; @endphp
+                @foreach($ageOptions as $option)
+                    <option value="{{ $option }}" {{ old('age_group', $product->age_group) == $option ? 'selected' : '' }}>
+                        {{ $option }}
+                    </option>
+                @endforeach
+            </select>
+            @error('age_group')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Health Concern (optional) --}}
-    <div class="col-md-6 mb-3">
-        <label for="health_concern">Health Concern</label>
-        <input type="text" name="health_concern" class="form-control"
-               value="{{ old('health_concern', $product->health_concern) }}">
-    </div>
+        {{-- Health Concern --}}
+        <div class="col-md-6 mb-3">
+            <label for="health_concern">Health Concern</label>
+            <input type="text" name="health_concern" class="form-control @error('health_concern') is-invalid @enderror"
+                   value="{{ old('health_concern', $product->health_concern) }}">
+            @error('health_concern')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Selling Price --}}
-    <div class="col-md-6 mb-3">
-        <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
-        <input type="text" name="selling_price" class="form-control"
-               value="{{ old('selling_price', $product->selling_price) }}">
-    </div>
+        {{-- Selling Price --}}
+        <div class="col-md-6 mb-3">
+            <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
+            <input type="text" name="selling_price" class="form-control @error('selling_price') is-invalid @enderror"
+                   value="{{ old('selling_price', $product->selling_price) }}">
+            @error('selling_price')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Prescription Required --}}
-    <div class="col-md-6 mb-3">
-        <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
-        <select name="prescription_required" class="form-control">
-            <option value="0" {{ $product->prescription_required == 0 ? 'selected' : '' }}>No</option>
-            <option value="1" {{ $product->prescription_required == 1 ? 'selected' : '' }}>Yes</option>
-        </select>
-    </div>
+        {{-- Prescription Required --}}
+        <div class="col-md-6 mb-3">
+            <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
+            <select name="prescription_required" class="form-control @error('prescription_required') is-invalid @enderror">
+                <option value="0" {{ old('prescription_required', $product->prescription_required) == 0 ? 'selected' : '' }}>No</option>
+                <option value="1" {{ old('prescription_required', $product->prescription_required) == 1 ? 'selected' : '' }}>Yes</option>
+            </select>
+            @error('prescription_required')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Description --}}
-    <div class="col-md-12 mb-3">
-        <label for="description">Description <span class="text-danger">*</span></label>
-        <textarea name="description" class="form-control" rows="3">{{ old('description', $product->description) }}</textarea>
-    </div>
+        {{-- Description --}}
+        <div class="col-md-12 mb-3">
+            <label for="description">Description <span class="text-danger">*</span></label>
+            <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description', $product->description) }}</textarea>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    {{-- Expiration Switch (optional) --}}
-    <div class="form-check form-switch mb-3">
-        <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" 
-               value="1" {{ $product->has_expiration == 1  ? 'checked' : '' }}>
-        <label class="form-check-label" for="has_expiration">Has Expiration</label>
-    </div>
+        {{-- Expiration Switch --}}
+        <div class="form-check form-switch mb-3">
+            <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration"
+                   value="1" {{ old('has_expiration', $product->has_expiration) == 1 ? 'checked' : '' }}>
+            <label class="form-check-label" for="has_expiration">Has Expiration</label>
+        </div>
 
-    {{-- Product Image (optional) --}}
-    <div class="col-md-6 mb-3">
-        <label for="product_image">Product Image</label>
-        <input type="file" name="product_image" class="form-control">
-    </div>
-    <div class="col-md-6 mb-3">
-        <label>Current Image</label>
-        <img src="{{ $product->product_image ? asset($product->product_image) : url('uploads/noimage.png') }}"
-             class="rounded-circle avatar-lg img-thumbnail" alt="product-image">
-    </div>
+        {{-- Product Image --}}
+        <div class="col-md-6 mb-3">
+            <label for="product_image">Product Image <span class="text-danger">*</span></label>
+            <input type="file" name="product_image" class="form-control @error('product_image') is-invalid @enderror">
+            @error('product_image')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-</div> <!-- end row -->
+        {{-- Current Image --}}
+        <div class="col-md-6 mb-3">
+            <label>Current Image</label>
+            <img src="{{ $product->product_image ? asset($product->product_image) : url('uploads/noimage.png') }}"
+                 class="rounded-circle avatar-lg img-thumbnail" alt="product-image">
+        </div>
 
+    </div> <!-- end row -->
 
     <div class="text-end">
         <button type="submit" class="btn btn-success">Update Product</button>
     </div>
 </form>
-
 
 
                                             </div>

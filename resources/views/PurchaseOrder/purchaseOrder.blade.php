@@ -37,7 +37,7 @@
 
 
 
-                <form method="POST" id="Myform" action="{{ route('save.purchaseOrder') }}" enctype="multipart/form-data" >
+                <form method="POST" id="MyForm" action="{{ route('save.purchaseOrder') }}" enctype="multipart/form-data" >
                     @csrf
 
 
@@ -60,7 +60,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="expire_date">Expected Delivery Date</label>
-                        <input type="date" name="expected_delivery_date" class="form-control @error('expect_date') is-invalid @enderror" id="expect_date" min="{{ date('Y-m-d') }}">
+                        <input type="date" name="expected_delivery_date" class="form-control @error('expect_date') is-invalid @enderror" id="expect_date" min="{{ date('Y-m-d') }}" required="">
                 
                         @error('expect_date')
                             <span class="text-danger"> {{ $message }} </span>
@@ -90,16 +90,16 @@
                             </div>
 
                             
-                            {{--  MODAL --}}
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                            <ol class="breadcrumb m-0">
-                                
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#product-modal">Product Entry</button>
+            {{--  MODAL --}}
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+            <ol class="breadcrumb m-0">
+                
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#product-modal">Product Entry</button>
 
-                            </ol>
-                                </div>
-                            </div>
+            </ol>
+                </div>
+            </div>
 
 
                     <table id="main-product-table" class="table dt-responsive nowrap w-100">
@@ -133,6 +133,11 @@
             </div>
             
         </form>
+
+
+
+
+
     </div>
     <!-- end settings content-->
 
@@ -257,6 +262,48 @@ $('#product-modal').on('shown.bs.modal', function () {
 
 
 </script> --}}
+
+
+
+
+
+
+<script>
+$(document).ready(function () {
+    $('#MyForm').validate({
+        rules: {
+            supplier_id: {
+                required: true,
+            },
+
+        },
+        messages: {
+            supplier_id: {
+                required: "Please enter a Supplier name",
+
+            },
+
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+});
+</script>
+
+
+
+
+
+
 
 <script>
 function refreshMainTable() {

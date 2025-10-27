@@ -62,11 +62,19 @@ public function StoreProduct(Request $request)
             'required',
             'string',
             'max:100',
-            Rule::unique('products')->where(function ($query) use ($request) {
-                return $query->where('brand_id', $request->brand_id)
-                            ->where('dosage_form', $request->dosage_form);
-            }),
+                Rule::unique('products')->where(function ($query) use ($request) {
+                    $query->where('brand_id', $request->brand_id);
+                    if ($request->filled('dosage_form')) {
+                        $query->where('dosage_form', $request->dosage_form);
+                    } else {
+                        $query->whereNull('dosage_form');
+                    }
+                })
+                ->ignore($request->id),
         ],
+
+
+
         'category_id' => 'required|integer|exists:categories,id',
         'subcategory_id' => 'required|integer|exists:subcategories,id',
         'brand_id' => 'required|integer|exists:brands,id',
@@ -77,9 +85,16 @@ public function StoreProduct(Request $request)
         'health_concern' => 'nullable|string|max:100',
         'selling_price' => 'required|numeric|min:0',
         'prescription_required' => 'nullable|boolean',
-        'product_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', // 20MB max
+        'product_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:20480', // 20MB max
 
-    ]);
+    ], [
+            'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
+            'product_name.required' => 'Please enter the product name.',
+            'description.required' => 'Please enter a description (minimum 10 characters).',
+            'product_image.image' => 'Uploaded file must be an image.',
+            'product_image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
+            'product_image.max' => 'Image must not exceed 20MB.',
+        ]);
 
 
     try {
@@ -242,9 +257,14 @@ public function UpdateProduct(Request $request)
                 'string',
                 'max:100',
                 Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('brand_id', $request->brand_id)
-                                 ->where('dosage_form', $request->dosage_form);
-                })->ignore($request->id),
+                    $query->where('brand_id', $request->brand_id);
+                    if ($request->filled('dosage_form')) {
+                        $query->where('dosage_form', $request->dosage_form);
+                    } else {
+                        $query->whereNull('dosage_form');
+                    }
+                })
+                ->ignore($request->id),
             ],
             'product_code'          => 'required|string|max:50',
             'category_id'           => 'required|integer|exists:categories,id',
@@ -254,10 +274,10 @@ public function UpdateProduct(Request $request)
             'dosage_form'           => 'required|string|max:50',
             'target_gender'         => 'required|string|max:50',
             'age_group'             => 'required|string|max:50',
-            'health_concern'        => 'required|string|max:100',
+            'health_concern'        => 'nullable|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:20480',
         ], [
             'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
             'product_name.required' => 'Please enter the product name.',
@@ -267,6 +287,9 @@ public function UpdateProduct(Request $request)
             'product_image.max' => 'Image must not exceed 20MB.',
         ]);
 
+
+
+        
         $product = Product::findOrFail($request->input('id'));
         $oldData = $product->toArray();
 

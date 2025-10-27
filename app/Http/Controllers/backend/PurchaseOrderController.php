@@ -190,7 +190,6 @@ public function SaveOrderdeliveries(Request $request)
     $validator = Validator::make($request->all(), [
         'purchase_order_id' => 'required|exists:purchase_orders,id',
         'delivery_date' => 'nullable|date',
-        'reference_number' => 'nullable|string|max:255',
         'items' => 'required|array|min:1',
         'items.*.product_id' => 'required|exists:products,id',
         'items.*.quantity_received' => 'required|numeric|min:1',
@@ -213,7 +212,6 @@ public function SaveOrderdeliveries(Request $request)
         $delivery = Delivery::create([
             'purchase_order_id' => $request->input('purchase_order_id'),
             'delivery_date' => $request->input('delivery_date') ?? now(),
-            'reference_number' => $request->input('reference_number'),
             'remarks' => $request->input('remarks'),
         ]);
 

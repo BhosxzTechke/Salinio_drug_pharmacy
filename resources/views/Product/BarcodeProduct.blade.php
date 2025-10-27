@@ -60,7 +60,7 @@
 
               <div class="col-md-6">
         <div class="form-group mb-3">
-            <label for="firstname" class="form-label">Product BarCode    </label><a href="javascript:window.print()">
+            <label for="firstname" class="form-label">Product BarCode    </label>
            <h3> {!! $generator->getBarcode($product->product_code,$generator::TYPE_CODE_128)  !!} </h3> </a>
 
            </div>

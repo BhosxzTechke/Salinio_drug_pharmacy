@@ -39,7 +39,7 @@
                                     <tr>
                                         <th>SL</th>
                                         <th>Delivery Date</th>
-                                        <th>Reference Number</th>
+                                        <th>Supplier</th>
                                         <th>Remarks</th>
                                         <th>Status</th>
                                     </tr>
@@ -54,7 +54,7 @@
                 <tr>
                     <td>{{ $sl++ }}</td>
                     <td>{{ $data->delivery_date }}</td>
-                    <td>{{ $data->reference_number ?? '' }}</td>
+                    <td>{{ $data->purchaseOrder->supplier->name ?? '' }}</td>
                     <td>{{ $data->remarks }}</td>
                     <td>  <span class="badge badge-pill bg-info">{{ $data->purchaseOrder->status }}</span></td>
 
