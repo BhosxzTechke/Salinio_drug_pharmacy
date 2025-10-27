@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath gd zip sodium \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Increase upload & memory limits (for Cloudinary or file upload)
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size=50M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/uploads.ini
@@ -37,33 +38,31 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy package files first for caching
+# Copy package and composer files first for caching
 COPY package*.json ./
+COPY composer*.json ./
 
 # Install npm dependencies
 RUN npm install
 
-# Copy the rest of the application
+# Copy the rest of the app
 COPY . .
 
-# Compile assets (Tailwind, Mix, Bootstrap, etc.)
+# Build production assets
 RUN npm run production
 
-# Install PHP dependencies (Laravel and others)
+# Install PHP dependencies (Laravel)
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
-# Clear and cache Laravel config/routes/views/permissions
-RUN php artisan config:clear || true \
- && php artisan cache:clear || true \
- && php artisan route:clear || true \
- && php artisan view:clear || true \
- && php artisan permission:cache-reset || true
-
-# Fix permissions for Laravel storage & cache
+# Fix permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
 
-# Expose port 8080 (for Railway / Render)
+# Expose port 8080 (used by Railway)
 EXPOSE 8080
 
-# Start Laravel server and scheduler
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080 & php artisan schedule:work"]
+# Run database migration & start the app
+# Clear and rebuild cache *after* Railway injects env vars
+CMD php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan migrate --force && \
+    php artisan serve --host=0.0.0.0 --port=8080
