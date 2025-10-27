@@ -37,17 +37,29 @@ public function StoreFormSupplier(Request $request)
 {
     try {
 
+
+
         $validated = $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'max:200',
-                'regex:/^[a-zA-Z0-9&.\- ]+$/|max:100',
-                Rule::unique('suppliers')->where(function ($query) use ($request) {
-                    return $query->where('address', $request->address);
-                }),
-            ],
-            'email' => 'email|max:200|unique:suppliers,email',
+                        'name' => [
+                            'required',
+                            'string',
+                            'max:200', // or 100, pick one
+                            'regex:/^[a-zA-Z0-9&.\- ]+$/', 
+                            Rule::unique('suppliers')->where(function ($query) use ($request) {
+                                return $query->where('address', $request->address);
+                            }),
+                        ],
+
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:200',
+                        'unique:suppliers,email',
+                        'regex:/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/'
+                    ],
+                    ////// remove some others and put only regex for email validation
+
+
             'phone' => [
                 'required',
                 'string',
@@ -154,7 +166,15 @@ public function UpdateSupplier(Request $request)
                                 ->where('id', '!=', $supplier_id);
                 }),
             ],
-            'email' => 'required|email|max:200|unique:suppliers,email,' . $supplier_id,
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:200',
+                        Rule::unique('suppliers', 'email')->ignore($supplier_id),
+                    ],
+
+                    
+
             'phone' => [
                 'required',
                 'string',

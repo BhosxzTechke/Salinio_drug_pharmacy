@@ -77,8 +77,11 @@ public function StoreProduct(Request $request)
         'health_concern' => 'nullable|string|max:100',
         'selling_price' => 'required|numeric|min:0',
         'prescription_required' => 'nullable|boolean',
-        'product_image' => 'required|image|mimes:jpg,jpeg,png,webp',
+        'product_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480', // 20MB max
+
+        
     ]);
+
 
     try {
         // Auto-generate product code
@@ -255,14 +258,14 @@ public function UpdateProduct(Request $request)
             'health_concern'        => 'required|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10248',
+            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
         ], [
             'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
             'product_name.required' => 'Please enter the product name.',
             'description.required' => 'Please enter a description (minimum 10 characters).',
             'product_image.image' => 'Uploaded file must be an image.',
             'product_image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
-            'product_image.max' => 'Image must not exceed 2MB.',
+            'product_image.max' => 'Image must not exceed 20MB.',
         ]);
 
         $product = Product::findOrFail($request->input('id'));

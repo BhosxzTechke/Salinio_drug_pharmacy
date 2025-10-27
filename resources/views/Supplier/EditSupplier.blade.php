@@ -109,7 +109,7 @@
                 <div class="col-md-12">
                     <div class="form-group mb-3">
                         <label for="example-fileinput" class="form-label"></label>
-                        <img id="showImage"
+                        <img id="showImages"
                             src="{{ isset($supplier) && $supplier->image ? $supplier->image : asset('uploads/noimage.png') }}"
                             class="rounded-circle avatar-lg img-thumbnail"
                             alt="Supplier Image">
@@ -144,7 +144,7 @@
 
             <script>
                 const imageInput = document.getElementById('image');
-                const showImage = document.getElementById('showImage');
+                const showImage = document.getElementById('showImages');
 
                 imageInput.addEventListener('change', function(e) {
                     const file = e.target.files[0];

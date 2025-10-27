@@ -100,7 +100,7 @@
 
         <div class="col-md-12">
             <div class="mb-3">
-                <img id="showImage"
+                <img id="showImages"
                     src="{{ isset($CustomerID) && $CustomerID->image ? $CustomerID->image : asset('uploads/noimage.png') }}"
                     class="rounded-circle avatar-lg img-thumbnail"
                     alt="Customer Image">
@@ -132,7 +132,7 @@
 
 <script>
     const imageInput = document.getElementById('image');
-    const showImage = document.getElementById('showImage');
+    const showImage = document.getElementById('showImages');
 
     imageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];

@@ -33,16 +33,21 @@ class SubCategoryController extends Controller
 public function SubCategoryStore(Request $request)
 {
     try {
-        // Validate request
-        $request->validate([
-            'name' => 'required|unique:subcategories,name',
-            'category_id' => 'required|exists:categories,id',
-        ], [
-            'name.required' => 'Please input Sub Category Name',
-            'name.unique' => 'Sub Category Name already used',
-            'category_id.required' => 'Please select a Category Name',
-            'category_id.exists' => 'Selected Category does not exist',
-        ]);
+            // Validate request
+            $request->validate([
+                'name' => [
+                    'required',
+                    'unique:subcategories,name',
+                    'regex:/^[A-Za-z0-9 _-]+$/'
+                ],
+                'category_id' => 'required|exists:categories,id',
+            ], [
+                'name.required' => 'Please input Sub Category Name',
+                'name.unique' => 'Sub Category Name already used',
+                'name.regex' => 'SubCategory name can only contain letters, numbers, spaces, hyphens, and underscores',
+                'category_id.required' => 'Please select a Category Name',
+                'category_id.exists' => 'Selected Category does not exist',
+            ]);
 
         // Insert into database
         Subcategory::create([
@@ -89,11 +94,16 @@ public function SubCategoryUpdate(Request $request)
     try {
         // Validate request
         $request->validate([
-            'name' => 'required|unique:subcategories,name,' . $subcatId,
+            'name' => [
+                'required',
+                'unique:subcategories,name,' . $subcatId,
+                'regex:/^[A-Za-z0-9 _-]+$/'
+            ],
             'category_id' => 'required|exists:categories,id',
         ], [
             'name.required' => 'Please input Sub Category Name',
             'name.unique' => 'Sub Category Name already used',
+            'name.regex' => 'SubCategory name can only contain letters, numbers, spaces, hyphens, and underscores',
             'category_id.required' => 'Please select a Category Name',
             'category_id.exists' => 'Selected Category does not exist',
         ]);

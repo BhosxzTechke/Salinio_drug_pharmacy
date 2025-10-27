@@ -201,8 +201,7 @@
                               <li class="dropdown notification-list topbar-dropdown">
                                   <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                     
-                                            <img id="showImage"
-                                                src="{{ 
+                                            <img src="{{ 
                                                     !empty($user->photo)
                                                         ? (Str::startsWith($user->photo, ['http://', 'https://'])
                                                             ? $user->photo

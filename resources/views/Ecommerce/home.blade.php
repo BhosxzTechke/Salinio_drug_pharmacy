@@ -18,16 +18,12 @@
             />
 
             <!-- Overlay -->
+            <!-- Overlay -->
             <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center">
               <div class="text-white max-w-lg px-4 sm:px-6 lg:px-8">
-                <h2 class="text-2xl md:text-4xl font-bold mb-3">Stay Healthy Without Breaking the Bank</h2>
-                <p class="mb-4 text-sm md:text-base">Explore top pharmacy essentials and enjoy big savings on wellness products.</p>
-              <a href="{{ $item->link }}" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      class="px-4 py-2 bg-green-500 hover:bg-green-700 rounded-lg text-white text-sm md:text-base">
-                        Learn more
-          </a>
+                <h2 class="text-2xl md:text-4xl ml-11 font-bold mb-3 ">{{ $item->title ?? 'Big Savings on Your Essentials'}}</h2>
+                <p class="mb-4 text-sm md:text-base ml-11">{{ $item->subtitle ?? 'Get exclusive discounts on top pharmacy and wellness products.' }}</p>
+                <a href="#" class="px-4 py-2 bg-green-500 hover:bg-green-900 rounded-lg text-white text-sm md:text-base ml-11">Learn More</a>
               </div>
             </div>
           </div>

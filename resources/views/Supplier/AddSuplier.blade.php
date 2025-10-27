@@ -138,7 +138,7 @@
         <div class="col-md-12">
             <div class="mb-3 text-center">
                 <img 
-                    id="showImage" 
+                    id="showImages" 
                     src="{{ url('uploads/noimage.png') }}" 
                     class="rounded-circle avatar-lg img-thumbnail" 
                     alt="supplier-image"
@@ -180,7 +180,7 @@
                     $('#image').change(function(e){
                     var reader = new FileReader();
                     reader.onload =  function(e){
-                        $('#showImage').attr('src',e.target.result);
+                        $('#showImages').attr('src',e.target.result);
                     }
                     reader.readAsDataURL(e.target.files['0']);
                     });

@@ -113,6 +113,9 @@
                                 </div>
                             </div>
 
+
+
+
                             {{-- Customer Image --}}
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
@@ -128,13 +131,15 @@
                             {{-- Image Preview --}}
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <img id="showImage"
+                                    <img id="showImages"
                                         src="{{ url('uploads/noimage.png') }}"
                                         class="rounded-circle avatar-lg img-thumbnail"
                                         alt="profile-image">
                                 </div>
                             </div>
                         </div> <!-- end row -->
+
+
 
                         <div class="text-end">
                             <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2">
@@ -166,7 +171,7 @@
                 $('#image').change(function(e){
                 var reader = new FileReader();
                 reader.onload =  function(e){
-                    $('#showImage').attr('src',e.target.result);
+                    $('#showImages').attr('src',e.target.result);
                 }
                 reader.readAsDataURL(e.target.files['0']);
                 });

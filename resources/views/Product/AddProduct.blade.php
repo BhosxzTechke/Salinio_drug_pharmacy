@@ -258,6 +258,9 @@
             </div>
         </div>
 
+
+
+        
         {{-- Product Image --}}
         <div class="col-md-6">
             <div class="form-group mb-3">
@@ -269,6 +272,10 @@
                 @enderror
             </div>
         </div>
+
+
+
+
 
         {{-- Preview --}}
         <div class="col-md-6">
@@ -325,6 +332,15 @@
                     });
 
                 </script>
+
+
+
+
+
+
+
+
+
                             
 <script type="text/javascript">
 $(document).ready(function () {

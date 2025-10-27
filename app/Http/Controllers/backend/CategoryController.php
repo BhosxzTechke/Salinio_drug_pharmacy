@@ -28,12 +28,21 @@ class CategoryController extends Controller
 
             try {
                 
-                $request->validate([
-                    'category' => 'required|string|max:100|unique:categories,category_name',
-                ], [
-                    'category.required' => 'Please input a category name',
-                    'category.unique' => 'This category already exists',
-                ]);
+                    $request->validate([
+                        'category' => [
+                            'required',
+                            'string',
+                            'max:100',
+                            'unique:categories,category_name',
+                            // Allow letters, numbers, spaces, hyphen and underscore only
+                            'regex:/^[A-Za-z0-9 _-]+$/'
+                        ],
+                    ], [
+                        'category.required' => 'Please input a category name',
+                        'category.unique' => 'This category already exists',
+                        'category.regex' => 'Category name can only contain letters, numbers, spaces, hyphens, and underscores',
+                    ]);
+                    
 
                 Category::create([
                     'category_name' =>  $request->input('category'),
@@ -74,7 +83,7 @@ class CategoryController extends Controller
 
 
 
-            
+
 
                 public function CategoryDelete($id)
                 {
@@ -126,12 +135,21 @@ class CategoryController extends Controller
             try {
                 $catID = $request->input('id');
 
-                $request->validate([
-                    'category' => 'required|string|max:100|unique:categories,category_name,' . $catID,
-                ], [
-                    'category.required' => 'Please input a category name',
-                    'category.unique' => 'This category name is already used',
-                ]);
+                    $request->validate([
+                        'category' => [
+                            'required',
+                            'string',
+                            'max:100',
+                            // Exclude current category ID from unique check
+                            'unique:categories,category_name,' . $catID,
+                            // Allow letters, numbers, spaces, hyphen, and underscore only
+                            'regex:/^[A-Za-z0-9 _-]+$/'
+                        ],
+                    ], [
+                        'category.required' => 'Please input a category name',
+                        'category.unique' => 'This category name is already used',
+                        'category.regex' => 'Category name can only contain letters, numbers, spaces, hyphens, and underscores',
+                    ]);
 
                 Category::findOrFail($catID)->update([
                     'category_name' => $request->input('category'),
