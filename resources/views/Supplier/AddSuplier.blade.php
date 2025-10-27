@@ -83,8 +83,19 @@
     <div class="col-md-12">
         <div class="mb-3">
             <label for="example-fileinput" class="form-label"></label>
-            <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-        </div>
+                    <img 
+                        id="showImage" 
+                        src="{{ !empty($profileData->photo)
+                            ? (Str::startsWith($profileData->photo, ['http://', 'https://'])
+                                ? $profileData->photo
+                                : asset('uploads/profile_image/' . $profileData->photo))
+                            : asset('uploads/noimage.png')
+                        }}" 
+                        class="rounded-circle avatar-lg img-thumbnail" 
+                        alt="profile-image">  
+                    
+                    
+                    </div>
     </div> <!-- end col -->
 </div> <!-- end row -->
 

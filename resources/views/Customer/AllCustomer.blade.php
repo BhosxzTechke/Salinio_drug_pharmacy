@@ -26,6 +26,31 @@
                         </div>     
                         <!-- end page title --> 
 
+
+
+
+                            <form method="GET" class="row g-2 mb-3">
+                                <div class="col-md-3">
+                                    <select name="source" class="form-control">
+                                        <option value="">-- Filter by Source --</option>
+                                        <option value="pos" {{ request('source') == 'pos' ? 'selected' : '' }}>POS / Admin</option>
+                                        <option value="ecommerce" {{ request('source') == 'ecommerce' ? 'selected' : '' }}>E-commerce</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <a href="{{ route('all.customer') }}" class="btn btn-secondary w-100">Reset</a>
+                                </div>
+                            </form>
+
+
+
+
+
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
@@ -40,6 +65,7 @@
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Phone </th>
+                                                    <th>Source</th>
                                                     <th>Action</th>
                                                 </tr>
 
@@ -52,20 +78,44 @@
                                             @foreach ($CustomerData as $data)
                                                 <tr>
                                                     <td>{{ $sl++ }}</td>
-                                                    <td><img src="{{ asset($data->image) }}" style="height: 3rem" ></td>
+                                                    <td><img src="{{ $data->image }}" style="height: 3rem" ></td>
                                                     <td>{{ $data->name }}</td>
                                                     <td>{{ $data->email }}</td>
                                                     <td>{{ $data->phone }}</td>
-                                                <td>
-                                                    @if(Auth::user()->can('edit-customer')) 
-                                                        <a href="{{ route('edit.customer', $data->id) }}" class="btn btn-success rounded-pill waves-effect waves-light"><i class="fa-solid fa-square-pen"></i> Edit</a>
-                                                    @endif
+                                                        <td>
+                                                            @if($data->added_by_staff == 1)
+                                                                <span class="badge bg-info">POS / Admin</span>
+                                                            @else
+                                                                <span class="badge bg-success">E-commerce</span>
+                                                            @endif
+                        </td>
+                                                        <td>
+                                                            @if($data->added_by_staff == 1)
 
-                                                    @if(Auth::user()->can('delete-customer'))
-                                                        <a href="{{ route('delete.customer',$data->id) }}" class="btn btn-danger rounded-pill waves-effect waves-light" id="delete"  title="Delete Data"><i class="fa-solid fa-trash"></i> Delete</a>
-                                                        @endif
 
-                                                    </td>
+                                                                @if(Auth::user()->can('edit-customer')) 
+                                                                    <a href="{{ route('edit.customer', $data->id) }}" 
+                                                                    class="btn btn-success rounded-pill waves-effect waves-light">
+                                                                    <i class="fa-solid fa-square-pen"></i> Edit
+                                                                    </a>
+                                                                @endif
+
+
+
+                                                                @if(Auth::user()->can('delete-customer'))
+                                                                    <a href="{{ route('delete.customer', $data->id) }}" 
+                                                                    class="btn btn-danger rounded-pill waves-effect waves-light" 
+                                                                    id="delete" title="Delete Data">
+                                                                    <i class="fa-solid fa-trash"></i> Delete
+                                                                    </a>
+                                                                @endif
+                                                            @else
+
+                                                                <button class="btn btn-secondary rounded-pill waves-effect waves-light" disabled>
+                                                                    <i class="fa-solid fa-lock"></i> View Only
+                                                                </button>
+                                                            @endif
+                                                        </td>
                                                 </tr>
                                                     @endforeach
 
@@ -87,6 +137,10 @@
                     </div> <!-- container -->
 
                 </div> <!-- content -->
+
+
+
+
 
                 {{-- <!-- Footer Start -->
                 <footer class="footer">

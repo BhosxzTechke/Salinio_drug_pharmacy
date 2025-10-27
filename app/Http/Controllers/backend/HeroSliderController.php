@@ -128,7 +128,7 @@ public function StoreHeroSlider(Request $request)
     ];
 
 
-    
+
     $totalSlides = HeroSlider::count();
     $position = $request->position;
 
@@ -175,26 +175,33 @@ public function StoreHeroSlider(Request $request)
 }
 
 
+public function DeleteHeroSlider($id)
+{
+    $slider = HeroSlider::findOrFail($id);
 
-    public function DeleteHeroSlider($id) {
+    if ($slider->image && str_contains($slider->image, 'res.cloudinary.com')) {
+        try {
+            // Extract the public ID from the Cloudinary URL
+            $publicId = basename(parse_url($slider->image, PHP_URL_PATH));
+            $publicId = pathinfo($publicId, PATHINFO_FILENAME);
 
-        $slider = HeroSlider::findOrFail($id);
-        $img = $slider->image;
-        if ($img) {
-            unlink($img);
+            // Delete from Cloudinary folder 'heroslider'
+            Cloudinary::destroy('heroslider/' . $publicId);
+        } catch (\Exception $e) {
+            // Optional: log the error
+            \Log::error('Cloudinary delete failed: ' . $e->getMessage());
         }
-
-        $slider->delete();
-
-        $notification = array(
-            'message' => 'Hero Slider deleted successfully.',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->route('heroslider.show')->with($notification);
-
     }
-        
+
+    $slider->delete();
+
+    $notification = [
+        'message' => 'Hero Slider deleted successfully.',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->route('heroslider.show')->with($notification);
+}
 
 
 }

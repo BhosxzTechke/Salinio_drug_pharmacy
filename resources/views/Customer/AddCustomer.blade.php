@@ -99,8 +99,13 @@
         <div class="mb-3">
             <label for="example-fileinput" class="form-label"></label>
             <img id="showImage" src="{{ url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+       
+       
+       
         </div>
     </div>
+
+    
 </div> <!-- end row -->
 
 

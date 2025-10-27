@@ -47,7 +47,6 @@ class CustomerRegisteredController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'city' => null, // Set city to null
             'added_by_staff' => '0',
         ]);
 

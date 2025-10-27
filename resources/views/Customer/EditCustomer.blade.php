@@ -17,11 +17,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Customer</li>
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">EDIT CUSTOMER</h4>
                                 </div>
                             </div>
                         </div>     
@@ -90,20 +90,23 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="mb-3">
-        <label for="example-fileinput" class="form-label">Customer Image</label>
-        <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
-        @error('image')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-
-    <div class="col-md-12">
         <div class="mb-3">
-            <label for="example-fileinput" class="form-label"></label>
-            <img id="showImage" src="{{ (!empty($CustomerID->image)) ? url($CustomerID->image) : url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+            <label for="image" class="form-label">Customer Image</label>
+            <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
+            @error('image')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
-    </div> <!-- end col -->
+
+        <div class="col-md-12">
+            <div class="mb-3">
+                <img id="showImage"
+                    src="{{ isset($CustomerID) && $CustomerID->image ? $CustomerID->image : asset('uploads/noimage.png') }}"
+                    class="rounded-circle avatar-lg img-thumbnail"
+                    alt="Customer Image">
+            </div>
+        </div>
+
 </div> <!-- end row -->
     
 
@@ -127,20 +130,22 @@
                 </div> <!-- content -->
 
 
-        <script type="text/javascript">
-        
-        $(document).ready(function(){
-            $('#image').change(function(e){
-            var reader = new FileReader();
-            reader.onload =  function(e){
-                $('#showImage').attr('src',e.target.result);
-            }
-            reader.readAsDataURL(e.target.files['0']);
-            });
-        });
+<script>
+    const imageInput = document.getElementById('image');
+    const showImage = document.getElementById('showImage');
 
-        </script>
-                
+    imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                showImage.src = e.target.result; // Update the image dynamically
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+   
 
 
 

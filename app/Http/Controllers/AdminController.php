@@ -17,7 +17,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\RunBackup;
 use Illuminate\Support\Str;
 use App\Models\Orderdetails;
-use App\Models\Order;
+use App\Models\Order;   
+use Illuminate\Support\Facades\Log;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
+
+
 class AdminController extends Controller
 {
     //
@@ -137,84 +142,97 @@ class AdminController extends Controller
 
 
 
-    
+                ////////////// change profile information and image ///////////////
 
-    
-
-public function StoreProfile(Request $request)
+    public function StoreProfile(Request $request)
 {
-    $user = Auth::user(); // Get the currently authenticated user
+    try {
+        $user = Auth::user(); // Get the currently authenticated user
 
         $rules = [];
         $messages = [];
 
         if ($request->filled('name') && $request->name !== $user->name) {
-            $rules['name'] = 'required';
+            $rules['name'] = 'required|string|max:255';
             $messages['name.required'] = 'Name is required.';
         }
 
         if ($request->filled('email') && $request->email !== $user->email) {
-            $rules['email'] = 'required|email|unique:users,email,' . $user->id;
+            $rules['email'] = 'required|email|max:255|unique:users,email,' . $user->id;
             $messages['email.required'] = 'Email is required.';
             $messages['email.email'] = 'Please enter a valid email.';
-            $messages['email.unique'] = 'Email is already taken.';
+            $messages['email.unique'] = 'This email is already taken.';
         }
 
         if ($request->filled('phone') && $request->phone !== $user->phone) {
-            $rules['phone'] = 'required|numeric';
+            $rules['phone'] = [
+                'required',
+                'regex:/^(09|\+639|639)\d{9}$/',
+                'unique:users,phone,' . $user->id,
+            ];
             $messages['phone.required'] = 'Phone number is required.';
-            $messages['phone.numeric'] = 'Phone number must be a number.';
+            $messages['phone.regex'] = 'Phone must start with 09, +639, or 639 and have 9 digits.';
+            $messages['phone.unique'] = 'This phone number is already used.';
         }
 
-
-    if ($request->hasFile('photo')) {
-        $rules['photo'] = 'image|mimes:jpeg,png,jpg|max:2048';
-        $messages['photo.image'] = 'Photo must be an image.';
-        $messages['photo.mimes'] = 'Only jpeg, png, and jpg formats are allowed.';
-        $messages['photo.max'] = 'Image size should not exceed 2MB.';
-    }
-
-    $request->validate($rules, $messages);
-
-    // Update only changed fields
-            if ($request->filled('name') && $request->name !== $user->name) {
-                $user->name = $request->name;
-            }
-
-            if ($request->filled('email') && $request->email !== $user->email) {
-                $user->email = $request->email;
-            }
-
-            if ($request->filled('phone') && $request->phone !== $user->phone) {
-                $user->phone = $request->phone;
-            }
-
-
-    // Handle image update
-    if ($request->hasFile('photo')) {
-        // Delete old image if it exists
-        if ($user->photo && file_exists(public_path('uploads/profile_image/' . $user->photo))) {
-            unlink(public_path('uploads/profile_image/' . $user->photo));
+        if ($request->hasFile('photo')) {
+            $rules['photo'] = 'image|mimes:jpeg,png,jpg|max:10248'; // 10MB max
+            $messages['photo.image'] = 'Photo must be an image.';
+            $messages['photo.mimes'] = 'Only JPG, JPEG, and PNG formats are allowed.';
+            $messages['photo.max'] = 'Photo must not exceed 10MB.';
         }
-        
 
-        $file = $request->file('photo');
-        $filename = date('YmdHi') . $file->getClientOriginalName();
-        $file->move(public_path('uploads/profile_image'), $filename);
-        $user->photo = $filename;
+        $request->validate($rules, $messages);
+
+        if ($request->filled('name') && $request->name !== $user->name) {
+            $user->name = $request->name;
+        }
+
+        if ($request->filled('email') && $request->email !== $user->email) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('phone') && $request->phone !== $user->phone) {
+            $user->phone = $request->phone;
+        }
+
+        if ($request->hasFile('photo')) {
+            try {
+
+
+                if ($user->photo && str_contains($user->photo, 'cloudinary.com')) {
+                    $publicId = pathinfo($user->photo, PATHINFO_FILENAME);
+                    Cloudinary::destroy('profile/' . $publicId);
+                }
+
+                $uploadedFileUrl = Cloudinary::upload(
+                    $request->file('photo')->getRealPath(),
+                    ['folder' => 'profile']
+                )->getSecurePath();
+
+                $user->photo = $uploadedFileUrl;
+            } catch (\Exception $ex) {
+                Log::warning('Cloudinary upload failed: ' . $ex->getMessage());
+            }
+        }
+
+        $user->save();
+
+        return redirect()->back()->with([
+            'message' => 'Profile updated successfully.',
+            'alert-type' => 'success',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return back()->withErrors($e->validator)->withInput();
+    } catch (\Exception $e) {
+        Log::error('Profile update failed: ' . $e->getMessage());
+
+        return redirect()->back()->with([
+            'message' => 'Something went wrong while updating the profile.',
+            'alert-type' => 'error',
+        ])->withInput();
     }
-
-    $user->save(); // Save only changed fields
-
-    $notification = [
-        'message' => 'Profile updated successfully.',
-        'alert-type' => 'success',
-    ];
-
-    return redirect()->back()->with($notification);
 }
-
-
 
 
 
@@ -233,7 +251,7 @@ public function StoreProfile(Request $request)
 
     }
 
-            // change password
+            //              change password          //////////////
 
 
             public function UpdatePassword(Request $request){

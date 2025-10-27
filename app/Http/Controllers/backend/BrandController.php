@@ -5,7 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
-
+use Image;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class BrandController extends Controller
 {
@@ -30,19 +31,22 @@ public function StoreBrand(Request $request)
         $request->validate([
             'name' => 'required|string|max:100|unique:brands,name',
             'description' => 'nullable|string|max:500',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048', // max 2MB
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:10248', // max 10MB
         ], [
             'name.required' => 'Please input brand name',
             'name.unique' => 'Brand name already used',
         ]);
 
+        $save_url = null;
 
-        $brand_image = $request->file('image'); 
-        $name_gen = hexdec(uniqid()) . '.' . $brand_image->getClientOriginalExtension();
-        $brand_image->move(public_path('uploads/brand_image/'), $name_gen);
-        $save_url = 'uploads/brand_image/' . $name_gen;
+        if ($request->hasFile('image')) {
+            $save_url = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'brands'] // optional folder
+            )->getSecurePath();
+        }
 
-        Brand::insert([
+        Brand::create([
             'name' => $request->name,
             'description' => $request->description,
             'logo' => $save_url,
@@ -65,12 +69,18 @@ public function StoreBrand(Request $request)
     }
 }
 
+
+
+
     public function EditBrand($id){ 
         
         
         $brand = Brand::findOrFail($id); 
             
     return view('Brand.EditBrand',compact('brand')); }
+
+
+
 
 
 
@@ -84,49 +94,46 @@ public function UpdateBrand(Request $request)
             'description' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
         ], [
-            
             'image.max' => 'The image must not be more than 10MB.',
             'image.mimes' => 'Only JPG, JPEG, PNG, and WEBP formats are allowed.',  
             'name.required' => 'Please input brand name',
             'name.unique' => 'Brand name already used',
-                
-
         ]);
 
         $brand = Brand::findOrFail($brand_id);
 
-        if ($request->hasFile('image')) {
-            $brand_image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $brand_image->getClientOriginalExtension();
-            $brand_image->move(public_path('uploads/brand_image/'), $name_gen);
-            $save_url = 'uploads/brand_image/' . $name_gen;
+        $data = [
+            'name' => $request->name,
+            'description' => $request->description,
+        ];
 
-            if ($brand->logo && file_exists(public_path($brand->logo))) {
-                unlink(public_path($brand->logo));
+        if ($request->hasFile('image')) {
+            // Delete old image from Cloudinary if exists
+            if ($brand->logo && str_contains($brand->logo, 'res.cloudinary.com')) {
+                try {
+                    $publicId = basename(parse_url($brand->logo, PHP_URL_PATH));
+                    $publicId = pathinfo($publicId, PATHINFO_FILENAME);
+                    Cloudinary::destroy('brands/' . $publicId);
+                } catch (\Exception $e) {
+                    \Log::error('Cloudinary delete failed: ' . $e->getMessage());
+                }
             }
 
-            $brand->update([
-                'name' => $request->name,
-                'description' => $request->description,
-                'logo' => $save_url,
-            ]);
+            // Upload new image
+            $uploadedFileUrl = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'brands']
+            )->getSecurePath();
 
-            $notification = [
-                'message' => 'Brand updated successfully with image',
-                'alert-type' => 'success'
-            ];
-        } else {
-
-            $brand->update([
-                'name' => $request->name,
-                'description' => $request->description,
-            ]);
-
-            $notification = [
-                'message' => 'Brand updated successfully without image',
-                'alert-type' => 'success'
-            ];
+            $data['logo'] = $uploadedFileUrl;
         }
+
+        $brand->update($data);
+
+        $notification = [
+            'message' => 'Brand updated successfully' . ($request->hasFile('image') ? ' with image' : ' without image'),
+            'alert-type' => 'success'
+        ];
 
         return redirect()->route('brand.list')->with($notification);
 
@@ -140,35 +147,41 @@ public function UpdateBrand(Request $request)
 }
 
 
-    public function DeleteBrand($id){
 
-        $brand = Brand::findOrFail($id);
-        $old_image = $brand->logo;
 
-        if ($brand->products()->count() > 0) {
-            return redirect()->back()->with([
-                'message' => 'Cannot delete: Brand has associated products',
-                'alert-type' => 'error',
-            ]);
+
+
+ public function DeleteBrand($id)
+{
+    $brand = Brand::findOrFail($id);
+    $old_image = $brand->logo;
+
+    if ($brand->products()->count() > 0) {
+        return redirect()->back()->with([
+            'message' => 'Cannot delete: Brand has associated products',
+            'alert-type' => 'error',
+        ]);
+    }
+
+    if ($old_image && str_contains($old_image, 'res.cloudinary.com')) {
+        try {
+            $publicId = basename(parse_url($old_image, PHP_URL_PATH));
+            $publicId = pathinfo($publicId, PATHINFO_FILENAME);
+            Cloudinary::destroy('brands/' . $publicId);
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary delete failed: ' . $e->getMessage());
         }
+    }
 
+    $brand->delete();
 
+    $notification = [
+        'message' => 'Brand Deleted Successfully',
+        'alert-type' => 'success'
+    ];
 
-        if (file_exists($old_image)) {
-            unlink($old_image);
-        }
-
-        Brand::findOrFail($id)->delete();
-
-        $notification = array(
-            'message' => 'Brand Deleted Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
-
-    } // end method
-
+    return redirect()->back()->with($notification);
+}
     
 
 }

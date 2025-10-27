@@ -17,11 +17,11 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                            <li class="breadcrumb-item active">Profile</li>
+                                            <li class="breadcrumb-item active">Slider</li>
                                         </ol>
                                     </div>
                                     
-                                    <h4 class="page-title">Profile</h4>
+                                    <h4 class="page-title">Change Image Slider</h4>
                                 </div>
                             </div>
                         </div>     
@@ -109,17 +109,16 @@
             @enderror
         </div>
 
-<div class="col-md-12 mb-3 d-flex align-items-start">
-    <div class="me-3">
-        <img id="showImage" 
-             src="{{ !empty($editData->image) ? asset($editData->image) : asset('uploads/noimage.png') }}" 
-             class="img-fluid rounded shadow-lg" 
-             style="max-width: 300px; height: auto;" 
-             alt="Hero Image Preview">
-    </div>
-    <div class="flex-grow-1">
-        <!-- You can add text, form fields, or instructions here next to the image -->
-    </div>
+            <div class="col-md-12 mb-3 d-flex align-items-start">
+                <div class="me-3">
+                    <img id="showImage" 
+                        src="{{ !empty($editData->image) ? $editData->image : asset('uploads/noimage.png') }}" 
+                        class="img-fluid rounded shadow-lg" 
+                        style="max-width: 300px; height: auto;" 
+                        alt="Hero Image Preview">
+                </div>
+
+
 </div>
 
 

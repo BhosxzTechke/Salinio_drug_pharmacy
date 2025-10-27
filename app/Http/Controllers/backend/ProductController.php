@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Validators\ValidationException as ExcelValidationException
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
 class ProductController extends Controller
@@ -58,6 +58,7 @@ class ProductController extends Controller
 public function StoreProduct(Request $request)
 {
     try {
+        // Validate input
         $validated = $request->validate([
             'product_name'          => [
                 'required',
@@ -78,20 +79,8 @@ public function StoreProduct(Request $request)
             'health_concern'        => 'nullable|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // optional, 2MB max
-        ], [
-            'product_name.required' => 'Please enter the product name.',
-            'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
-            'category_id.required' => 'Please select a category.',
-            'subcategory_id.required' => 'Please select a subcategory.',
-            'brand_id.required' => 'Please select a brand.',
-            'description.required' => 'Please enter a description (at least 10 characters).',
-            'selling_price.required' => 'Please enter the selling price.',
-            'product_image.image' => 'Uploaded file must be an image.',
-            'product_image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
-            'product_image.max' => 'Image must not exceed 2MB.',
+            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
 
         // Auto-generate product code
         $pcode = IdGenerator::generate([
@@ -101,22 +90,24 @@ public function StoreProduct(Request $request)
             'prefix' => 'PC'
         ]);
 
-        // Handle image upload
+        // Upload image to Cloudinary
+        $cloudinary_url = null;
         if ($request->hasFile('product_image')) {
-            $image = $request->file('product_image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $path = 'uploads/product_image/' . $name_gen;
+            $uploadedFileUrl = Cloudinary::upload($request->file('product_image')->getRealPath(), [
+                'folder' => 'products',
+                'transformation' => [
+                    'width' => 300, 'height' => 300, 'crop' => 'fill'
+                ],
+            ])->getSecurePath();
 
-            Image::make($image)->resize(300, 300)->save(public_path($path));
-        } else {
-            return back()->withErrors(['product_image' => 'Product image is required']);
+            $cloudinary_url = $uploadedFileUrl;
         }
 
-        // Insert into database
-        Product::insert([
+        // Create product
+        Product::create([
             'product_name'          => $validated['product_name'],
             'product_code'          => $pcode,
-            'product_image'         => $path,
+            'product_image'         => $cloudinary_url,
             'category_id'           => $validated['category_id'],
             'subcategory_id'        => $validated['subcategory_id'],
             'brand_id'              => $validated['brand_id'],
@@ -128,17 +119,17 @@ public function StoreProduct(Request $request)
             'health_concern'        => $validated['health_concern'],
             'selling_price'         => $validated['selling_price'],
             'prescription_required' => $validated['prescription_required'] ?? 0,
-            'created_at'            => Carbon::now(),
-            'updated_at'            => Carbon::now(),
         ]);
 
         return redirect()->route('product.list')->with([
-            'message' => 'Product Inserted Successfully',
+            'message' => 'Product inserted successfully with Cloudinary image',
             'alert-type' => 'success'
         ]);
 
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return back()->withErrors($e->validator)->withInput();
+
     } catch (\Exception $e) {
-        // Log error for debugging
         Log::error('Product Insert Error: ' . $e->getMessage());
 
         return back()->with([
@@ -179,8 +170,8 @@ public function DeleteProduct($id)
         $product = Product::findOrFail($id);
         $oldData = $product->toArray();
 
+        // Check if product exists in inventory
         $inventoryExists = \App\Models\Inventory::where('product_id', $id)->exists();
-
         if ($inventoryExists) {
             return redirect()->back()->with([
                 'message' => 'Cannot delete: Product exists in inventory records.',
@@ -188,14 +179,21 @@ public function DeleteProduct($id)
             ]);
         }
 
-        $imagePath = public_path($product->product_image);
-        if (File::exists($imagePath)) {
-            File::delete($imagePath);
+        // Delete Cloudinary image if exists
+        if ($product->product_image) {
+            try {
+                // Extract public ID from URL
+                $publicId = pathinfo($product->product_image, PATHINFO_FILENAME);
+                Cloudinary::destroy('products/' . $publicId);
+            } catch (\Exception $ex) {
+                Log::warning('Failed to delete Cloudinary image: ' . $ex->getMessage());
+            }
         }
 
         // Delete product
         $product->delete();
 
+        // Log activity
         activity()
             ->performedOn($product)
             ->causedBy(auth()->user())
@@ -218,9 +216,15 @@ public function DeleteProduct($id)
 }
 
 
+
+
+
+
+
 public function UpdateProduct(Request $request)
 {
     try {
+        // Validation
         $request->validate([
             'id' => 'required|exists:products,id',
             'product_name'  => [
@@ -229,7 +233,7 @@ public function UpdateProduct(Request $request)
                 'max:100',
                 Rule::unique('products')->where(function ($query) use ($request) {
                     return $query->where('brand_id', $request->brand_id)
-                                ->where('dosage_form', $request->dosage_form);
+                                 ->where('dosage_form', $request->dosage_form);
                 })->ignore($request->id),
             ],
             'product_code'          => 'required|string|max:50',
@@ -253,8 +257,6 @@ public function UpdateProduct(Request $request)
             'product_image.max' => 'Image must not exceed 2MB.',
         ]);
 
-
-
         $product = Product::findOrFail($request->input('id'));
         $oldData = $product->toArray();
 
@@ -273,17 +275,29 @@ public function UpdateProduct(Request $request)
             'health_concern'        => $request->input('health_concern'),
             'selling_price'         => $request->input('selling_price'),
             'prescription_required' => $request->input('prescription_required') ?? 0,
-            'updated_at'            => Carbon::now(),
         ];
 
-        // Handle image update (if new image uploaded)
+        // Handle Cloudinary image update
         if ($request->hasFile('product_image')) {
-            $image = $request->file('product_image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $save_url = 'uploads/product_image/' . $name_gen;
-            Image::make($image)->resize(300, 300)->save(public_path($save_url));
+            // Delete old Cloudinary image if exists
+            if ($product->product_image) {
+                try {
+                    $publicId = pathinfo($product->product_image, PATHINFO_FILENAME);
+                    Cloudinary::destroy('products/' . $publicId);
+                } catch (\Exception $ex) {
+                    Log::warning("Failed to delete old Cloudinary image: " . $ex->getMessage());
+                }
+            }
 
-            $data['product_image'] = $save_url;
+            // Upload new image to Cloudinary
+            $uploadedFileUrl = Cloudinary::upload($request->file('product_image')->getRealPath(), [
+                'folder' => 'products',
+                'transformation' => [
+                    'width' => 300, 'height' => 300, 'crop' => 'fill'
+                ],
+            ])->getSecurePath();
+
+            $data['product_image'] = $uploadedFileUrl;
         }
 
         // Update product
@@ -305,8 +319,10 @@ public function UpdateProduct(Request $request)
             'alert-type' => 'success'
         ]);
 
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return back()->withErrors($e->validator)->withInput();
+
     } catch (\Exception $e) {
-        // Log error
         Log::error('Product update failed: ' . $e->getMessage());
 
         return back()->with([
@@ -315,7 +331,6 @@ public function UpdateProduct(Request $request)
         ])->withInput();
     }
 }
-
 
         
         public function BarcodeProduct($id){

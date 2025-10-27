@@ -10,18 +10,33 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Arr;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log; 
+use Illuminate\Validation\Rule;
 
 
 class CustomerController extends Controller
 {
     //
 
-    public function CustomerTable() {
+public function CustomerTable(Request $request)
+{
+    $query = Customer::query();
 
-        $CustomerData = Customer::latest()->get();
-          return view('Customer.AllCustomer', compact('CustomerData'));
-
+    // Filtering logic
+    if ($request->has('source') && $request->source !== '') {
+        if ($request->source == 'pos') {
+            $query->where('added_by_staff', 1);
+        } elseif ($request->source == 'ecommerce') {
+            $query->where('added_by_staff', 0);
+        }
     }
+
+    $CustomerData = $query->latest()->get();
+
+    return view('Customer.AllCustomer', compact('CustomerData'));
+}
+
 
 
     
@@ -34,19 +49,16 @@ class CustomerController extends Controller
 public function StoreFormCustomer(Request $request)
 {
     try {
-
         $request->validate([
             'name' => 'required|string|max:200',
             'email' => 'required|email|unique:customers,email|max:200',
-
             'phone' => [
                 'required',
                 'unique:customers,phone',
-                'regex:/^(\+?63|0)9\d{9}$/',
+                'regex:/^(\+?63|0)9\d{9}$/', // 09123456789 or 639123456789 or +639123456789
             ],
 
-            // it allows 09123456789 or 639123456789 or +639123456789
-
+            
             'address' => 'required|string|max:400',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // up to 10MB
             'password' => 'nullable|string|min:6|confirmed',
@@ -56,16 +68,14 @@ public function StoreFormCustomer(Request $request)
             'image.mimes' => 'Only JPG, JPEG, and PNG formats are allowed.',
         ]);
 
-
         $save_url = null;
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-            Image::make($image)->resize(300,300)->save('uploads/customer_image/'.$name_gen);
-            $save_url = 'uploads/customer_image/'.$name_gen;
+            $uploadedFileUrl = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'customers']
+            )->getSecurePath();
+            $save_url = $uploadedFileUrl;
         }
-
-
 
         $customer = Customer::create([
             'name' => $request->input('name'),
@@ -121,37 +131,48 @@ public function StoreFormCustomer(Request $request)
 
 
 
-        public function DeleteCustomer($id) {
-            
-            $customerID = Customer::findOrFail($id); // 2
+public function DeleteCustomer($id)
+{
+    $customer = Customer::findOrFail($id);
 
-        if ($customerID->image && file_exists($customerID->image)) {
-            unlink($customerID->image);
+    // Store old data for activity log
+    $oldData = $customer->toArray();
+
+    // Delete image from Cloudinary if it exists
+    if ($customer->image) {
+        try {
+            $publicId = pathinfo($customer->image, PATHINFO_FILENAME);
+            Cloudinary::destroy('customers/' . $publicId);
+        } catch (\Exception $e) {
+            \Log::warning('Could not delete customer image from Cloudinary: ' . $e->getMessage());
         }
-                // Store old data before deleting
-           $oldData = $customerID->toArray();
-
-
-            $customerID->delete();
-
-            activity()
-                ->performedOn($customerID)
-                ->causedBy(auth()->user())
-                ->withProperties([
-                    'old' => $oldData,
-                ])
-                ->log('Deleted a customer record.');
-
-
-
-            $notification = array(
-                'message' => 'Succesfully Deleted',
-                'alert-type' => 'success'
-            );
-
-        return redirect()->back()->with($notification);
-
     }
+
+    // Delete the customer record
+    $customer->delete();
+
+    // Log activity
+    activity()
+        ->performedOn($customer)
+        ->causedBy(auth()->user())
+        ->withProperties([
+            'old' => $oldData,
+        ])
+        ->log('Deleted a customer record.');
+
+    $notification = [
+        'message' => 'Successfully Deleted',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->back()->with($notification);
+}
+
+
+
+
+
+
 
 
     public function EditFormCustomer($id) {
@@ -163,8 +184,7 @@ public function StoreFormCustomer(Request $request)
 
     }
 
-
-
+   
 
 public function UpdateFormCustomer(Request $request)
 {
@@ -174,7 +194,12 @@ public function UpdateFormCustomer(Request $request)
         $request->validate([
             'name' => 'required|string|max:200',
             'email' => 'required|email|unique:customers,email,' . $CustomerID,
-            'phone' => 'required|regex:/^(09\d{9}|\+639\d{9})$/|unique:customers,phone,' . $CustomerID . '|max:14',
+            'phone' => [
+                'required',
+                'regex:/^(\+?63|0)9\d{9}$/',
+                'max:14',
+                Rule::unique('customers', 'phone')->ignore($CustomerID),
+            ],
             'address' => 'required|string|max:400',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // 10MB
         ], [
@@ -186,7 +211,6 @@ public function UpdateFormCustomer(Request $request)
 
         $customer = Customer::findOrFail($CustomerID);
         $oldData = $customer->toArray();
-
         $data = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -196,14 +220,27 @@ public function UpdateFormCustomer(Request $request)
         ];
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            Image::make($image)->resize(300, 300)->save('uploads/customer_image/' . $name_gen);
-            $data['image'] = 'uploads/customer_image/' . $name_gen;
+
+            // Delete old image from Cloudinary if exists
+            if ($customer->image) {
+                try {
+                    $publicId = pathinfo($customer->image, PATHINFO_FILENAME);
+                    Cloudinary::destroy('customers/' . $publicId);
+                } catch (\Exception $e) {
+                    Log::warning('Old customer image could not be deleted from Cloudinary: ' . $e->getMessage());
+                }
+            }
+
+            // Upload new image
+            $uploadedFileUrl = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                ['folder' => 'customers']
+            )->getSecurePath();
+
+            $data['image'] = $uploadedFileUrl;
         }
 
         $customer->update($data);
-
         $newData = $customer->fresh()->toArray();
 
         activity('customer')
@@ -226,7 +263,7 @@ public function UpdateFormCustomer(Request $request)
         return back()->withErrors($e->validator)->withInput();
 
     } catch (\Exception $e) {
-        \Log::error('Error updating customer: ' . $e->getMessage());
+        Log::error('Error updating customer: ' . $e->getMessage());
 
         $notification = [
             'message' => 'Something went wrong while updating the customer.',
@@ -236,8 +273,6 @@ public function UpdateFormCustomer(Request $request)
         return redirect()->back()->with($notification)->withInput();
     }
 }
-
-
 
     
 

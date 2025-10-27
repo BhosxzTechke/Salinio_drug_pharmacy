@@ -76,7 +76,7 @@
 
                 
             </div>
-
+{{-- 
             <!-- Wishlist -->
             <div class="dropdown dropdown-end">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
 
 

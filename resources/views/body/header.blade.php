@@ -200,7 +200,18 @@
                                     {{-- Profile View  --}}
                               <li class="dropdown notification-list topbar-dropdown">
                                   <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                      <img src="{{ !empty($user->photo) ? url('uploads/profile_image/' . $user->photo) : url('uploads/noimage.png') }}" alt="user-image" class="rounded-circle">
+                                    
+                                            <img id="showImage"
+                                                src="{{ 
+                                                    !empty($user->photo)
+                                                        ? (Str::startsWith($user->photo, ['http://', 'https://'])
+                                                            ? $user->photo
+                                                            : asset('uploads/profile_image/' . $user->photo))
+                                                        : asset('uploads/noimage.png')
+                                                }}"
+                                                class="rounded-circle avatar-lg img-thumbnail"
+                                                alt="profile-image">
+                                    
                                       <span class="pro-user-name ms-1">
                                            <i class="mdi mdi-chevron-down"></i> 
                                       </span>

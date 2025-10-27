@@ -33,8 +33,18 @@
                             <div class="col-lg-4 col-xl-4">
                                 <div class="card text-center">
                                     <div class="card-body">
-                                        <img src="{{ (!empty($profileData->photo)) ? url('uploads/profile_image/'.$profileData->photo) : url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail"
-                                        alt="profile-image">
+                                        <img
+                                            src="{{ 
+                                                !empty($profileData->photo)
+                                                    ? (Str::startsWith($profileData->photo, ['http://', 'https://'])
+                                                        ? $profileData->photo
+                                                        : asset('uploads/profile_image/' . $profileData->photo))
+                                                    : asset('uploads/noimage.png')
+                                            }}"
+                                            class="rounded-circle avatar-lg img-thumbnail"
+                                            alt="profile-image">
+
+
 
 
                                         <h4 class="mb-0">{{ $profileData->name }}</h4>
@@ -119,18 +129,28 @@
                                                             </div>
                                                         </div> <!-- end col -->
 
-
                                                         <div class="mb-3">
-                                                        <label for="example-fileinput" class="form-label">Default file input</label>
-                                                        <input type="file" name="photo" id="image" class="form-control">
-                                                              </div>
+                                                            <label for="example-fileinput" class="form-label">Profile Photo</label>
+                                                            <input type="file" name="photo" id="image" class="form-control">
+                                                        </div>
 
+                                                        <div class="col-md-12">
+                                                            <div class="mb-3 text-center">
+                                                                <label for="example-fileinput" class="form-label"></label>
 
-                                                          <div class="col-md-12">
-                                                        <div class="mb-3">
-                                                                <label for="example-fileinput" class="form-label"> </label>
-                                                                <img id="showImage" src="{{ (!empty($profileData->photo)) ? url('uploads/profile_image/'.$profileData->photo) : url('uploads/noimage.png') }}" class="rounded-circle avatar-lg img-thumbnail"
-                                                                        alt="profile-image">
+                                                                <img id="showImage"
+                                                                    src="{{ 
+                                                                        !empty($profileData->photo)
+                                                                            ? (Str::startsWith($profileData->photo, ['http://', 'https://'])
+                                                                                ? $profileData->photo
+                                                                                : asset('uploads/profile_image/' . $profileData->photo))
+                                                                            : asset('uploads/noimage.png')
+                                                                    }}"
+                                                                    class="rounded-circle avatar-lg img-thumbnail"
+                                                                    alt="profile-image">
+                                                            </div>
+                                                        </div>
+                                                                        
                                                             </div>
                                                         </div> <!-- end col -->
 

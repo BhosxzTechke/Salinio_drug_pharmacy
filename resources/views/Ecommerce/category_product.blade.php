@@ -124,7 +124,7 @@
         @forelse($inventory as $inventories)
             <a href="{{ route('product.show', $inventories->product_id) }}"
                 class="border p-4 rounded shadow hover:shadow-lg transition block">
-                <img src="{{ url($inventories->product->product_image) }}"
+                <img src="{{ $inventories->product->product_image }}"
                         alt="{{ $inventories->product->product_name }}"
                         class="w-full h-40 object-cover rounded">
                     <h2 class="text-sm font-semibold mt-2 line-clamp-2">

@@ -9,46 +9,46 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <script src="{{ mix('js/app.js') }}" defer></script>
 
-<link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-  <!-- Page-specific CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <!-- Page-specific CSS -->
 
-   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
 
-</head>
-
-
-
-<body >
+    </head>
 
 
 
-
-
-<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-  
+    <body >
 
 
 
 
 
-
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4">
-
-        <h2 class="flex flex-wrap mr-10"> Secure Check</h2>
-  <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Salino Drug</span>
-  </a>
+    <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    
 
 
 
 
-  </div>
-</nav>
+
+
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4">
+
+            <h2 class="flex flex-wrap mr-10"> Secure Check</h2>
+    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Salino Drug</span>
+    </a>
+
+
+
+
+    </div>
+    </nav>
 
 
 
@@ -180,7 +180,11 @@
            value="{{ session('shipping_address_id') ?? Auth::guard('customer')->user()->defaultAddress?->id ?? '' }}" required="">
 
 
-            </div>
+
+
+
+
+        </div>
 
             <p class="text-sm font-medium uppercase mt-6">Payment Method</p>
             <select name="payment_method" class="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
@@ -225,6 +229,13 @@
             </svg>
             Place Order
           </button>
+
+
+
+
+
+
+
 
 
            <a href="{{ route(('cart.show'))}}"
@@ -307,7 +318,19 @@
 
 
 
-
+<script>
+document.getElementById('myForm').addEventListener('submit', function(e) {
+    const addressId = document.getElementById('shipping_address_id').value;
+    
+    // If addressId is null, empty string, or undefined, prevent submission
+    if (!addressId) {
+        e.preventDefault();
+        alert('You must select or add a delivery address before placing the order.');
+        // Optional: highlight the address display
+        document.getElementById('addressDisplay').classList.add('text-red-600', 'font-bold');
+    }
+});
+</script>
 
 
 <script>

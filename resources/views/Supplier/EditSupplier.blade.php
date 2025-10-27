@@ -94,22 +94,30 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="form-group mb-3">
-        <label for="example-fileinput" class="form-label">Supplier Image</label>
-        <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
-        @error('image')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
+                <div class="form-group mb-3">
+                    <label for="image" class="form-label">Supplier Image</label>
+                    <input 
+                        type="file" 
+                        name="image" 
+                        id="image" 
+                        class="form-control @error('image') is-invalid @enderror">
+                    @error('image')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
 
-    <div class="col-md-12">
-        <div class="form-group mb-3">
-            <label for="example-fileinput" class="form-label"></label>
-            <img id="showImage" 
-                 src="{{ (!empty($supplier->image)) ? url($supplier->image) : url('uploads/noimage.png') }}" 
-                 class="rounded-circle avatar-lg img-thumbnail" 
-                 alt="profile-image">
-        </div>
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="example-fileinput" class="form-label"></label>
+                        <img id="showImage"
+                            src="{{ isset($supplier) && $supplier->image ? $supplier->image : asset('uploads/noimage.png') }}"
+                            class="rounded-circle avatar-lg img-thumbnail"
+                            alt="Supplier Image">
+
+                    </div>
+                </div>
+
+
     </div> <!-- end col -->
 </div> <!-- end row -->
 
@@ -134,21 +142,21 @@
 
 </div> <!-- content -->
 
+            <script>
+                const imageInput = document.getElementById('image');
+                const showImage = document.getElementById('showImage');
 
-                  <script type="text/javascript">
-                    
-                    $(document).ready(function(){
-                      $('#image').change(function(e){
-                        var reader = new FileReader();
-                        reader.onload =  function(e){
-                          $('#showImage').attr('src',e.target.result);
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            showImage.src = e.target.result; // Shows the newly selected image
                         }
-                        reader.readAsDataURL(e.target.files['0']);
-                      });
-                    });
-
-                  </script>
-                            
+                        reader.readAsDataURL(file);
+                    }
+                });
+            </script>
 
 
 
