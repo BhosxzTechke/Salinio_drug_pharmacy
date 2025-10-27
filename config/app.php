@@ -163,7 +163,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        
+            
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+
         
         // Additional Service Providers
         // Intervention Image

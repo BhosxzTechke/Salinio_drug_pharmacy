@@ -23,7 +23,7 @@ class HeroSliderController extends Controller
 
         return view('HeroSlider.AllHeroSlider', compact('ImageData'));
 
-    }
+    }   
 
 
     public function AddHeroSlider() {
