@@ -42,213 +42,245 @@
 <form id="myForm" method="POST" action="{{ route('store.product') }}" enctype="multipart/form-data">
     @csrf
 
-<h5 class="mb-4 text-uppercase">
-    <i class="mdi mdi-account-circle me-1"></i> Product Info
-</h5>
-
-<div class="row">
-
-    {{-- Product Name --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="product_name">Product Name <span class="text-danger">*</span></label>
-            <input type="text" name="product_name"
-                   class="form-control @error('product_name') is-invalid @enderror"
-                   id="product_name" placeholder="Enter Product name">
-            @error('product_name')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-    </div>
-
-    {{-- Category --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="category_id">Category <span class="text-danger">*</span></label>
-            <select name="category_id"
-                    class="form-control @error('category_id') is-invalid @enderror"
-                    id="category_id">
-                <option selected disabled>Select Category</option>
-                @foreach ($cat as $data)
-                    <option value="{{ $data->id }}">{{ $data->category_name }}</option>
+    {{-- 🔹 Global Error Messages --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops! Something went wrong.</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
                 @endforeach
-            </select>
-            @error('category_id')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+            </ul>
         </div>
-    </div>
+    @endif
 
-    {{-- Subcategory --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
-            <select name="subcategory_id"
-                    class="form-control @error('subcategory_id') is-invalid @enderror"
-                    id="subcategory_id">
-                <option selected disabled>Select Subcategory</option>
-                @foreach ($sub as $data)
-                    <option value="{{ $data->id }}">{{ $data->subcategory_name }}</option>
-                @endforeach
-            </select>
-            @error('subcategory_id')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+    <h5 class="mb-4 text-uppercase">
+        <i class="mdi mdi-account-circle me-1"></i> Product Info
+    </h5>
+
+    <div class="row">
+
+        {{-- Product Name --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="product_name">Product Name <span class="text-danger">*</span></label>
+                <input type="text" name="product_name"
+                       value="{{ old('product_name') }}"
+                       class="form-control @error('product_name') is-invalid @enderror"
+                       id="product_name" placeholder="Enter Product name">
+                @error('product_name')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Brand --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="brand_id">Brand <span class="text-danger">*</span></label>
-            <select name="brand_id"
-                    class="form-control @error('brand_id') is-invalid @enderror"
-                    id="brand_id">
-                <option selected disabled>Select Brand</option>
-                @foreach ($brand as $data)
-                    <option value="{{ $data->id }}">{{ $data->name }}</option>
-                @endforeach
-            </select>
-            @error('brand_id')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Category --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="category_id">Category <span class="text-danger">*</span></label>
+                <select name="category_id"
+                        class="form-control @error('category_id') is-invalid @enderror"
+                        id="category_id">
+                    <option selected disabled>Select Category</option>
+                    @foreach ($cat as $data)
+                        <option value="{{ $data->id }}" {{ old('category_id') == $data->id ? 'selected' : '' }}>
+                            {{ $data->category_name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Dosage Form --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
-            <select name="dosage_form"
-                    class="form-control @error('dosage_form') is-invalid @enderror"
-                    id="dosage_form">
-                <option selected disabled>Select Dosage</option>
-                <option value="Tablet">Tablet</option>
-                <option value="Capsule">Capsule</option>
-                <option value="Syrup">Syrup</option>
-                <option value="Cream">Cream</option>
-                <option value="Ointment">Ointment</option>
-            </select>
-            @error('dosage_form')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Subcategory --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="subcategory_id">Subcategory <span class="text-danger">*</span></label>
+                <select name="subcategory_id"
+                        class="form-control @error('subcategory_id') is-invalid @enderror"
+                        id="subcategory_id">
+                    <option selected disabled>Select Subcategory</option>
+                    @foreach ($sub as $data)
+                        <option value="{{ $data->id }}" {{ old('subcategory_id') == $data->id ? 'selected' : '' }}>
+                            {{ $data->subcategory_name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('subcategory_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Target Gender --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
-            <select name="target_gender"
-                    class="form-control @error('target_gender') is-invalid @enderror"
-                    id="target_gender">
-                <option selected disabled>Select Gender</option>
-                <option value="Unisex">Unisex</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-            @error('target_gender')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Brand --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="brand_id">Brand <span class="text-danger">*</span></label>
+                <select name="brand_id"
+                        class="form-control @error('brand_id') is-invalid @enderror"
+                        id="brand_id">
+                    <option selected disabled>Select Brand</option>
+                    @foreach ($brand as $data)
+                        <option value="{{ $data->id }}" {{ old('brand_id') == $data->id ? 'selected' : '' }}>
+                            {{ $data->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('brand_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Age Group --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="age_group">Age Group <span class="text-danger">*</span></label>
-            <select name="age_group"
-                    class="form-control @error('age_group') is-invalid @enderror"
-                    id="age_group">
-                <option selected disabled>Select Age Group</option>
-                <option value="All">All</option>
-                <option value="Kids">Kids</option>
-                <option value="Adults">Adults</option>
-                <option value="Seniors">Seniors</option>
-            </select>
-            @error('age_group')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Dosage Form --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="dosage_form">Dosage Form <span class="text-danger">*</span></label>
+                <select name="dosage_form"
+                        class="form-control @error('dosage_form') is-invalid @enderror"
+                        id="dosage_form">
+                    <option selected disabled>Select Dosage</option>
+                    @foreach (['Tablet', 'Capsule', 'Syrup', 'Cream', 'Ointment'] as $dosage)
+                        <option value="{{ $dosage }}" {{ old('dosage_form') == $dosage ? 'selected' : '' }}>
+                            {{ $dosage }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('dosage_form')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Health Concern (optional) --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="health_concern">Health Concern</label>
-            <input type="text" name="health_concern" class="form-control" id="health_concern">
+        {{-- Target Gender --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="target_gender">Target Gender <span class="text-danger">*</span></label>
+                <select name="target_gender"
+                        class="form-control @error('target_gender') is-invalid @enderror"
+                        id="target_gender">
+                    <option selected disabled>Select Gender</option>
+                    @foreach (['Unisex', 'Male', 'Female'] as $gender)
+                        <option value="{{ $gender }}" {{ old('target_gender') == $gender ? 'selected' : '' }}>
+                            {{ $gender }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('target_gender')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Selling Price --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
-            <input type="text" name="selling_price"
-                   class="form-control @error('selling_price') is-invalid @enderror"
-                   id="selling_price" min="1">
-            @error('selling_price')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Age Group --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="age_group">Age Group <span class="text-danger">*</span></label>
+                <select name="age_group"
+                        class="form-control @error('age_group') is-invalid @enderror"
+                        id="age_group">
+                    <option selected disabled>Select Age Group</option>
+                    @foreach (['All', 'Kids', 'Adults', 'Seniors'] as $group)
+                        <option value="{{ $group }}" {{ old('age_group') == $group ? 'selected' : '' }}>
+                            {{ $group }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('age_group')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Prescription Required --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
-            <select name="prescription_required"
-                    class="form-control @error('prescription_required') is-invalid @enderror"
-                    id="prescription_required">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-            </select>
-            @error('prescription_required')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Health Concern --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="health_concern">Health Concern</label>
+                <input type="text" name="health_concern"
+                       value="{{ old('health_concern') }}"
+                       class="form-control @error('health_concern') is-invalid @enderror"
+                       id="health_concern">
+                @error('health_concern')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Expiration Switch --}}
-    <div class="form-check form-switch mb-3">
-        <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration" value="1" checked>
-        <label class="form-check-label" for="has_expiration">Has Expiration</label>
-    </div>
-
-    {{-- Description --}}
-    <div class="col-md-12">
-        <div class="form-group mb-3">
-            <label for="description">Description <span class="text-danger">*</span></label>
-            <textarea name="description"
-                      class="form-control @error('description') is-invalid @enderror"
-                      rows="3" id="description"></textarea>
-            @error('description')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
+        {{-- Selling Price --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
+                <input type="text" name="selling_price"
+                       value="{{ old('selling_price') }}"
+                       class="form-control @error('selling_price') is-invalid @enderror"
+                       id="selling_price" min="1">
+                @error('selling_price')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Product Image (optional) --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="image">Product Image</label>
-            <input type="file" name="product_image" id="image" class="form-control">
+        {{-- Prescription Required --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="prescription_required">Prescription Required <span class="text-danger">*</span></label>
+                <select name="prescription_required"
+                        class="form-control @error('prescription_required') is-invalid @enderror"
+                        id="prescription_required">
+                    <option value="0" {{ old('prescription_required') == '0' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ old('prescription_required') == '1' ? 'selected' : '' }}>Yes</option>
+                </select>
+                @error('prescription_required')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    </div>
 
-    {{-- Preview --}}
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label>Preview</label>
-            <img id="showImage" src="{{ url('uploads/noimage.png') }}"
-                 class="rounded-circle avatar-lg img-thumbnail"
-                 alt="profile-image">
+        {{-- Expiration Switch --}}
+        <div class="form-check form-switch mb-3">
+            <input type="checkbox" class="form-check-input" id="has_expiration" name="has_expiration"
+                   value="1" {{ old('has_expiration', true) ? 'checked' : '' }}>
+            <label class="form-check-label" for="has_expiration">Has Expiration</label>
         </div>
-    </div>
 
-</div> <!-- end row -->
+        {{-- Description --}}
+        <div class="col-md-12">
+            <div class="form-group mb-3">
+                <label for="description">Description <span class="text-danger">*</span></label>
+                <textarea name="description"
+                          class="form-control @error('description') is-invalid @enderror"
+                          rows="3" id="description">{{ old('description') }}</textarea>
+                @error('description')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
 
+        {{-- Product Image --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="image">Product Image</label>
+                <input type="file" name="product_image"
+                       id="image" class="form-control @error('product_image') is-invalid @enderror">
+                @error('product_image')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
 
+        {{-- Preview --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label>Preview</label>
+                <img id="showImage" src="{{ url('uploads/noimage.png') }}"
+                     class="rounded-circle avatar-lg img-thumbnail"
+                     alt="profile-image">
+            </div>
+        </div>
+
+    </div> <!-- end row -->
 
     <div class="text-end">
         <button type="submit" class="btn btn-success waves-effect waves-light mt-2">

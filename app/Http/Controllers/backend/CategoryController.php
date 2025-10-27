@@ -66,6 +66,16 @@ class CategoryController extends Controller
             }
 
 
+
+
+
+
+
+
+
+
+            
+
                 public function CategoryDelete($id)
                 {
                     try {

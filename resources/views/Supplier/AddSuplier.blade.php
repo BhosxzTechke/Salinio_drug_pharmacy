@@ -38,76 +38,127 @@
 
 
 
-                        <form method="POST" id="SupplierForm" action="{{ route('store.supplier')}}" enctype="multipart/form-data" >
-                        @csrf
 
 
-<h5 class="mb-4 text-uppercase">
-    <i class="mdi mdi-account-circle me-1"></i> Supplier Info
-</h5>
+<form method="POST" id="SupplierForm" action="{{ route('store.supplier') }}" enctype="multipart/form-data">
+    @csrf
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="name" class="">Supplier Name <span class="text-danger">*</span></label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Enter Supplier name">
+    <h5 class="mb-4 text-uppercase">
+        <i class="mdi mdi-account-circle me-1"></i> Supplier Info
+    </h5>
+
+    <div class="row">
+        {{-- Supplier Name --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="name">Supplier Name <span class="text-danger">*</span></label>
+                <input 
+                    type="text" 
+                    name="name" 
+                    id="name" 
+                    class="form-control @error('name') is-invalid @enderror"
+                    placeholder="Enter Supplier name"
+                    value="{{ old('name') }}"
+                >
+                @error('name')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
+
+        {{-- Supplier Email --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="email">Supplier Email <span class="text-danger">*</span></label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="email" 
+                    class="form-control @error('email') is-invalid @enderror"
+                    placeholder="Enter Supplier email"
+                    value="{{ old('email') }}"
+                >
+                @error('email')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Supplier Address --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="address">Supplier Address <span class="text-danger">*</span></label>
+                <input 
+                    type="text" 
+                    name="address" 
+                    id="address" 
+                    class="form-control @error('address') is-invalid @enderror"
+                    placeholder="Enter Supplier address"
+                    value="{{ old('address') }}"
+                >
+                @error('address')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Supplier Phone --}}
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="phone">Supplier Phone <span class="text-danger">*</span></label>
+                <input 
+                    type="text" 
+                    name="phone" 
+                    id="phone" 
+                    class="form-control @error('phone') is-invalid @enderror"
+                    placeholder="Enter Supplier phone"
+                    value="{{ old('phone') }}"
+                >
+                @error('phone')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Supplier Image --}}
+        <div class="form-group mb-3">
+            <label for="image" class="form-label">Supplier Image</label>
+            <input 
+                type="file" 
+                name="image" 
+                id="image" 
+                class="form-control @error('image') is-invalid @enderror"
+            >
+            @error('image')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        {{-- Preview --}}
+        <div class="col-md-12">
+            <div class="mb-3 text-center">
+                <img 
+                    id="showImage" 
+                    src="{{ url('uploads/noimage.png') }}" 
+                    class="rounded-circle avatar-lg img-thumbnail" 
+                    alt="supplier-image"
+                >
+            </div>
+        </div>
+    </div> <!-- end row -->
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success waves-effect waves-light mt-2">
+            <i class="mdi mdi-content-save"></i> Save Supplier
+        </button>
     </div>
-
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="email" class="">Supplier Email <span class="text-danger">*</span></label>
-            <input type="email" name="email" class="form-control" id="email" placeholder="Enter Supplier Email">
-        </div>
-    </div> <!-- end col -->
-
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="address" class="">Supplier Address <span class="text-danger">*</span></label>
-            <input type="text" name="address" class="form-control" id="address" placeholder="Enter Supplier Address">
-        </div>
-    </div> <!-- end col -->
-
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="phone" class="">Supplier Phone <span class="text-danger">*</span></label>
-            <input type="number" name="phone" class="form-control" id="phone" placeholder="Enter Supplier Phone">
-        </div>
-    </div> <!-- end col -->
-
-    <div class="form-group mb-3">
-        <label for="example-fileinput" class="form-label">Supplier Image</label>
-        <input type="file" name="image" id="image" class="form-control">
-    </div>
+</form>
 
 
 
 
-    <div class="col-md-12">
-        <div class="mb-3">
-            <label for="example-fileinput" class="form-label"></label>
-                    <img 
-                        id="showImage" 
-                        src="{{ !empty($profileData->photo)
-                            ? (Str::startsWith($profileData->photo, ['http://', 'https://'])
-                                ? $profileData->photo
-                                : asset('uploads/profile_image/' . $profileData->photo))
-                            : asset('uploads/noimage.png')
-                        }}" 
-                        class="rounded-circle avatar-lg img-thumbnail" 
-                        alt="profile-image">  
-                    
-                    
-                    </div>
-    </div> <!-- end col -->
-</div> <!-- end row -->
 
 
-                            <div class="text-end">
-                                <button type="submit" name="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save Changes</button>
-                            </div>
-                            
-                        </form>
                     </div>
                     <!-- end settings content-->
 

@@ -46,47 +46,52 @@ public function CustomerTable(Request $request)
 
     }
 
+
+
+
 public function StoreFormCustomer(Request $request)
 {
-    try {
-        $request->validate([
-            'name' => 'required|string|max:200',
-            'email' => 'required|email|unique:customers,email|max:200',
-            'phone' => [
-                'required',
-                'unique:customers,phone',
-                'regex:/^(\+?63|0)9\d{9}$/', // 09123456789 or 639123456789 or +639123456789
-            ],
+    $validated = $request->validate([
+        'name' => 'required|string|max:200',
+        'email' => 'required|email|unique:customers,email|max:200',
+        'phone' => [
+            'required',
+            'unique:customers,phone',
+            'regex:/^(\+?63|0)9\d{9}$/', // Valid PH numbers
+        ],
+        'address' => 'required|string|max:400',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // 10MB
+        'password' => 'nullable|string|min:6|confirmed',
+    ], [
+        'email.unique' => 'This email is already registered.',
+        'phone.regex' => 'The phone number must be valid (e.g., 09123456789 or +639123456789).',
+        'image.max' => 'The image must not exceed 10MB.',
+        'image.mimes' => 'Only JPG, JPEG, and PNG formats are allowed.',
+    ]);
 
-            
-            'address' => 'required|string|max:400',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // up to 10MB
-            'password' => 'nullable|string|min:6|confirmed',
-        ], [
-            'email.unique' => 'This email is already registered.',
-            'image.max' => 'The image must not be more than 10MB.',
-            'image.mimes' => 'Only JPG, JPEG, and PNG formats are allowed.',
-        ]);
+    try {
+
 
         $save_url = null;
         if ($request->hasFile('image')) {
-            $uploadedFileUrl = Cloudinary::upload(
+            $save_url = Cloudinary::upload(
                 $request->file('image')->getRealPath(),
                 ['folder' => 'customers']
             )->getSecurePath();
-            $save_url = $uploadedFileUrl;
         }
 
         $customer = Customer::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
             'image' => $save_url,
-            'password' => $request->filled('password') ? Hash::make($request->input('password')) : null,
-            'added_by_staff' => 1,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'password' => isset($validated['password'])
+                ? Hash::make($validated['password'])
+                : null,
+            'added_by_staff' => '1', // Since added from backend
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         $newData = $customer->fresh()->toArray();
@@ -101,28 +106,20 @@ public function StoreFormCustomer(Request $request)
             ])
             ->log('Added new Customer');
 
-        $notification = [
-            'message' => 'Customer Inserted Successfully',
+        return redirect()->route('all.customer')->with([
+            'message' => 'Customer inserted successfully.',
             'alert-type' => 'success'
-        ];
-
-        return redirect()->route('all.customer')->with($notification);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return back()->withErrors($e->validator)->withInput();
+        ]);
 
     } catch (\Exception $e) {
-        \Log::error('Error saving customer: ' . $e->getMessage());
+        Log::error('Error saving customer: ' . $e->getMessage());
 
-        $notification = [
+        return back()->with([
             'message' => 'Something went wrong while saving the customer.',
             'alert-type' => 'error'
-        ];
-
-        return redirect()->back()->with($notification)->withInput();
+        ])->withInput();
     }
 }
-
 
 
 
@@ -185,49 +182,59 @@ public function DeleteCustomer($id)
     }
 
    
-
 public function UpdateFormCustomer(Request $request)
 {
+    $customerId = $request->input('id');
+
+
+    
+    $validated = $request->validate([
+        'name'   => 'required|string|max:200',
+        'email'  => [
+            'required',
+            'email',
+            'max:200',
+            Rule::unique('customers', 'email')->ignore($customerId),
+        ],
+        'phone'  => [
+            'required',
+            'regex:/^(\+?63|0)9\d{9}$/',
+            Rule::unique('customers', 'phone')->ignore($customerId),
+        ],
+        'address' => 'required|string|max:400',
+        'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+    ], [
+        'email.unique' => 'This email is already registered.',
+        'phone.unique' => 'This phone number is already registered.',
+        'phone.regex'  => 'The phone number must be valid (e.g., 09123456789 or +639123456789).',
+        'image.max'    => 'The image must not exceed 10MB.',
+        'image.mimes'  => 'Only JPG, JPEG, and PNG formats are allowed.',
+    ]);
+
     try {
-        $CustomerID = $request->input('id');
-
-        $request->validate([
-            'name' => 'required|string|max:200',
-            'email' => 'required|email|unique:customers,email,' . $CustomerID,
-            'phone' => [
-                'required',
-                'regex:/^(\+?63|0)9\d{9}$/',
-                'max:14',
-                Rule::unique('customers', 'phone')->ignore($CustomerID),
-            ],
-            'address' => 'required|string|max:400',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // 10MB
-        ], [
-            'email.unique' => 'This email is already registered.',
-            'phone.unique' => 'This phone number is already registered.',
-            'image.max' => 'The image must not be more than 10MB.',
-            'image.mimes' => 'Only JPG, JPEG, and PNG formats are allowed.',
-        ]);
-
-        $customer = Customer::findOrFail($CustomerID);
+        $customer = Customer::findOrFail($customerId);
         $oldData = $customer->toArray();
+
         $data = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-            'updated_at' => Carbon::now(),
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'],
+            'address'    => $validated['address'],
+            'updated_at' => now(),
         ];
 
         if ($request->hasFile('image')) {
-
-            // Delete old image from Cloudinary if exists
+            // Try to delete old Cloudinary image
             if ($customer->image) {
                 try {
-                    $publicId = pathinfo($customer->image, PATHINFO_FILENAME);
+                    // Extract the Cloudinary public ID correctly
+                    $publicId = collect(explode('/', parse_url($customer->image, PHP_URL_PATH)))
+                        ->last(); // filename.ext
+                    $publicId = pathinfo($publicId, PATHINFO_FILENAME);
+
                     Cloudinary::destroy('customers/' . $publicId);
                 } catch (\Exception $e) {
-                    Log::warning('Old customer image could not be deleted from Cloudinary: ' . $e->getMessage());
+                    Log::warning('Could not delete old customer image: ' . $e->getMessage());
                 }
             }
 
@@ -245,36 +252,27 @@ public function UpdateFormCustomer(Request $request)
 
         activity('customer')
             ->performedOn($customer)
-            ->causedBy($request->user())
+            ->causedBy(auth()->user())
             ->withProperties([
                 'old' => Arr::only($oldData, ['name', 'email', 'phone']),
                 'new' => Arr::only($newData, ['name', 'email', 'phone']),
             ])
             ->log('Updated customer information.');
 
-        $notification = [
-            'message' => 'Customer Updated Successfully',
+        return redirect()->route('all.customer')->with([
+            'message' => 'Customer updated successfully.',
             'alert-type' => 'success'
-        ];
-
-        return redirect()->route('all.customer')->with($notification);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return back()->withErrors($e->validator)->withInput();
+        ]);
 
     } catch (\Exception $e) {
         Log::error('Error updating customer: ' . $e->getMessage());
 
-        $notification = [
+        return back()->with([
             'message' => 'Something went wrong while updating the customer.',
             'alert-type' => 'error'
-        ];
-
-        return redirect()->back()->with($notification)->withInput();
+        ])->withInput();
     }
 }
-
-    
 
 
 

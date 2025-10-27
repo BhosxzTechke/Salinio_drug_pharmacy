@@ -54,34 +54,33 @@ class ProductController extends Controller
     }
 
 
-
 public function StoreProduct(Request $request)
 {
-    try {
-        // Validate input
-        $validated = $request->validate([
-            'product_name'          => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('products')->where(function ($query) use ($request) {
-                    return $query->where('brand_id', $request->brand_id)
-                                 ->where('dosage_form', $request->dosage_form);
-                }),
-            ],
-            'category_id'           => 'required|integer|exists:categories,id',
-            'subcategory_id'        => 'required|integer|exists:subcategories,id',
-            'brand_id'              => 'required|integer|exists:brands,id',
-            'description'           => 'required|string|min:10',
-            'dosage_form'           => 'nullable|string|max:50',
-            'target_gender'         => 'required|string|max:50',
-            'age_group'             => 'required|string|max:50',
-            'health_concern'        => 'nullable|string|max:100',
-            'selling_price'         => 'required|numeric|min:0',
-            'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:10248',
-        ]);
+    // Validate input
+    $validated = $request->validate([
+        'product_name' => [
+            'required',
+            'string',
+            'max:100',
+            Rule::unique('products')->where(function ($query) use ($request) {
+                return $query->where('brand_id', $request->brand_id)
+                            ->where('dosage_form', $request->dosage_form);
+            }),
+        ],
+        'category_id' => 'required|integer|exists:categories,id',
+        'subcategory_id' => 'required|integer|exists:subcategories,id',
+        'brand_id' => 'required|integer|exists:brands,id',
+        'description' => 'required|string|min:10',
+        'dosage_form' => 'nullable|string|max:50',
+        'target_gender' => 'required|string|max:50',
+        'age_group' => 'required|string|max:50',
+        'health_concern' => 'nullable|string|max:100',
+        'selling_price' => 'required|numeric|min:0',
+        'prescription_required' => 'nullable|boolean',
+        'product_image' => 'required|image|mimes:jpg,jpeg,png,webp',
+    ]);
 
+    try {
         // Auto-generate product code
         $pcode = IdGenerator::generate([
             'table' => 'products',
@@ -93,31 +92,34 @@ public function StoreProduct(Request $request)
         // Upload image to Cloudinary
         $cloudinary_url = null;
         if ($request->hasFile('product_image')) {
-            $uploadedFileUrl = Cloudinary::upload($request->file('product_image')->getRealPath(), [
-                'folder' => 'products',
-                'transformation' => [
-                    'width' => 300, 'height' => 300, 'crop' => 'fill'
-                ],
-            ])->getSecurePath();
+            $uploadedFileUrl = Cloudinary::upload(
+                $request->file('product_image')->getRealPath(),
+                [
+                    'folder' => 'products',
+                    'transformation' => [
+                        'width' => 300, 'height' => 300, 'crop' => 'fill'
+                    ],
+                ]
+            )->getSecurePath();
 
             $cloudinary_url = $uploadedFileUrl;
         }
 
         // Create product
         Product::create([
-            'product_name'          => $validated['product_name'],
-            'product_code'          => $pcode,
-            'product_image'         => $cloudinary_url,
-            'category_id'           => $validated['category_id'],
-            'subcategory_id'        => $validated['subcategory_id'],
-            'brand_id'              => $validated['brand_id'],
-            'description'           => $validated['description'],
-            'has_expiration'        => $request->has('has_expiration'),
-            'dosage_form'           => $validated['dosage_form'],
-            'target_gender'         => $validated['target_gender'],
-            'age_group'             => $validated['age_group'],
-            'health_concern'        => $validated['health_concern'],
-            'selling_price'         => $validated['selling_price'],
+            'product_name' => $validated['product_name'],
+            'product_code' => $pcode,
+            'product_image' => $cloudinary_url,
+            'category_id' => $validated['category_id'],
+            'subcategory_id' => $validated['subcategory_id'],
+            'brand_id' => $validated['brand_id'],
+            'description' => $validated['description'],
+            'has_expiration' => $request->has('has_expiration'),
+            'dosage_form' => $validated['dosage_form'],
+            'target_gender' => $validated['target_gender'],
+            'age_group' => $validated['age_group'],
+            'health_concern' => $validated['health_concern'],
+            'selling_price' => $validated['selling_price'],
             'prescription_required' => $validated['prescription_required'] ?? 0,
         ]);
 
@@ -125,9 +127,6 @@ public function StoreProduct(Request $request)
             'message' => 'Product inserted successfully with Cloudinary image',
             'alert-type' => 'success'
         ]);
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return back()->withErrors($e->validator)->withInput();
 
     } catch (\Exception $e) {
         Log::error('Product Insert Error: ' . $e->getMessage());
@@ -138,6 +137,15 @@ public function StoreProduct(Request $request)
         ])->withInput();
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 

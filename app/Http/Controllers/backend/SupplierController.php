@@ -36,7 +36,8 @@ class SupplierController extends Controller
 public function StoreFormSupplier(Request $request)
 {
     try {
-        $request->validate([
+
+        $validated = $request->validate([
             'name' => [
                 'required',
                 'string',
@@ -45,82 +46,73 @@ public function StoreFormSupplier(Request $request)
                     return $query->where('address', $request->address);
                 }),
             ],
-            'email' => 'required|email|unique:suppliers,email|max:200',
+            'email' => 'email|max:200|unique:suppliers,email',
             'phone' => [
                 'required',
                 'string',
-                'max:200',
-                'unique:suppliers,phone',
                 'regex:/^(09|\+639|639)\d{9}$/',
+                Rule::unique('suppliers', 'phone'),
             ],
             'address' => 'required|string|max:400',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240', // 10MB
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10240',
         ], [
             'name.unique' => 'A supplier with the same name and address already exists.',
             'phone.regex' => 'Phone number must start with 09, +639, or 639 and contain 9 digits after.',
             'image.image' => 'Uploaded file must be an image.',
-            'image.mimes' => 'Image must be a JPG, JPEG, PNG, or WEBP file.',
+            'image.mimes' => 'Image must be JPG, JPEG, PNG, or WEBP.',
             'image.max' => 'Image must not be larger than 10MB.',
         ]);
 
-
-
         $imageUrl = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->getRealPath();
-
-            $uploaded = Cloudinary::upload($imagePath, [
-                'folder' => 'suppliers',
-                'transformation' => [
-                    'width' => 300,
-                    'height' => 300,
-                    'crop' => 'limit',
-                ],
-            ]);
-
+            $uploaded = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'suppliers',
+                    'transformation' => [
+                        'width' => 300,
+                        'height' => 300,
+                        'crop' => 'limit',
+                    ],
+                ]
+            );
             $imageUrl = $uploaded->getSecurePath();
         }
 
         $supplier = Supplier::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'image' => $imageUrl,
-            'created_at' => Carbon::now(),
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'],
+            'address'    => $validated['address'],
+            'image'      => $imageUrl,
+            'created_at' => now(),
         ]);
-
-
 
         activity('supplier')
             ->causedBy(auth()->user())
             ->performedOn($supplier)
             ->withProperties(Arr::only($supplier->toArray(), ['name', 'email', 'phone']))
-            ->log('Added new Supplier');
-
-
+            ->log('Added new supplier.');
 
         return redirect()->route('all.supplier')->with([
-            'message' => 'Supplier saved successfully',
+            'message' => 'Supplier saved successfully.',
             'alert-type' => 'success',
         ]);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
-        // Validation errors
+        // Return with validation errors
         return back()->withErrors($e->validator)->withInput();
 
     } catch (\Exception $e) {
+        // Catch all other errors
         Log::error('Error saving supplier: ' . $e->getMessage());
 
-        return redirect()->back()->with([
+        return back()->with([
             'message' => 'Something went wrong while saving the supplier.',
             'alert-type' => 'error',
         ])->withInput();
     }
 }
-
-
-
 
 
 
@@ -132,6 +124,11 @@ public function StoreFormSupplier(Request $request)
         return view('Supplier.EditSupplier',compact('supplier'));
 
     } // End Method 
+
+
+
+
+
 
 
 
@@ -247,6 +244,15 @@ public function UpdateSupplier(Request $request)
         ])->withInput();
     }
 }
+
+
+
+
+
+
+
+
+
 
 
    public function DeleteFormSupplier($id)
