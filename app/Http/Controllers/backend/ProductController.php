@@ -79,7 +79,7 @@ public function StoreProduct(Request $request)
             'health_concern'        => 'nullable|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'product_image'         => 'required|image|mimes:jpg,jpeg,png,webp|max:10248',
         ]);
 
         // Auto-generate product code
@@ -247,7 +247,7 @@ public function UpdateProduct(Request $request)
             'health_concern'        => 'required|string|max:100',
             'selling_price'         => 'required|numeric|min:0',
             'prescription_required' => 'nullable|boolean',
-            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'product_image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:10248',
         ], [
             'product_name.unique' => 'A product with the same name, brand, and dosage form already exists.',
             'product_name.required' => 'Please enter the product name.',

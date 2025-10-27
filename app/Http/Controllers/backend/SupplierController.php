@@ -123,6 +123,9 @@ public function StoreFormSupplier(Request $request)
 
 
 
+
+
+
     public function EditFormSupplier($id){
 
         $supplier = Supplier::findOrFail($id);

@@ -28,7 +28,7 @@
                         <!-- end page title -->
 
 
-  <div class="row">
+<div class="row">
 
                         <div class="col-lg-8 col-xl-12">
                                 <div class="card">
@@ -79,6 +79,9 @@
         <label for="example-fileinput" class="form-label">Supplier Image</label>
         <input type="file" name="image" id="image" class="form-control">
     </div>
+
+
+
 
     <div class="col-md-12">
         <div class="mb-3">
