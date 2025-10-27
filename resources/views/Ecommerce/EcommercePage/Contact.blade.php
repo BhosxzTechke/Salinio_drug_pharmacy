@@ -16,10 +16,11 @@
 <style>
   .body {
     font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: white
   }
 </style>
 
-<div class="relative w-full h-screen">
+<div class="relative w-full h-screen bg-white">
   <iframe
     class="top-0 left-0 w-full md:absolute h-1/2 md:h-full"
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3711.5626750659862!2d121.04740244306522!3d14.516851918477837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf34a5fbf4b5%3A0x89bb9c10fe82bfc3!2sSalinio%20Drug%20and%20General%20Merchandise!5e1!3m2!1sen!2sph!4v1761389129904!5m2!1sen!2sph" 
@@ -102,7 +103,7 @@
 </div>
 
 
-<br><br>
+<br><br><br><br>
 {{-- 
 <section class="bg-white dark:bg-gray-900">
 

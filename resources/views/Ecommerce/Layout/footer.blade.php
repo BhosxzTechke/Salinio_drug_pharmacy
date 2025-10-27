@@ -81,19 +81,22 @@
                                 Careers
                             </a>
                         </li> --}}
-                        <li>
+                        {{-- <li>
                             <a href="javascript:void(0)" class="inline-block text-base leading-loose text-gray-700 hover:text-green-600">
                                 Privacy Policy
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
+
+
+
                 <div class="w-1/2 sm:w-1/2 lg:w-2/12 px-4 mb-10">
                     <h4 class="mb-9 text-lg font-semibold text-green-900">
                         Quick Links
                     </h4>
                     <ul class="space-y-3">
-                        <li>
+                        {{-- <li>
                             <a href="javascript:void(0)" class="inline-block text-base leading-loose text-gray-700 hover:text-green-600">
                                 FAQs
                             </a>
@@ -102,7 +105,7 @@
                             <a href="javascript:void(0)" class="inline-block text-base leading-loose text-gray-700 hover:text-green-600">
                                 Health Blog
                             </a>
-                        </li>
+                        </li> --}}
                         {{-- <li>
                             <a href="javascript:void(0)" class="inline-block text-base leading-loose text-gray-700 hover:text-green-600">
                                 Promotions
@@ -115,6 +118,8 @@
                         </li> --}}
                     </ul>
                 </div>
+
+                
                 <div class="w-full sm:w-1/2 lg:w-3/12 px-4 mb-10">
                     <h4 class="mb-9 text-lg font-semibold text-green-900">
                         Follow Us On

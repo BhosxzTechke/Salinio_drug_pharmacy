@@ -22,13 +22,13 @@
 
 
 
-    <body >
+    <body bgcolor="white" >
 
 
 
 
 
-    <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    <nav class="bg-white dark:bg-gray-50 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-100">
     
 
 
@@ -36,11 +36,10 @@
 
 
 
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4">
+   <div class="max-w-screen-xl flex flex-wrap items-center justify-center mx-auto p-4">
 
-            <h2 class="flex flex-wrap mr-10"> Secure Check</h2>
+            <h2 class="flex flex-wrap mr-10 text-gray-800 font-medium"> Secure Check</h2>
     <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Salino Drug</span>
     </a>
 
@@ -63,9 +62,9 @@
         <br>
 
 
-        <div class="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
-            <p class="text-left">Product Details</p>
-            <p class="text-center">Subtotal</p>
+        <div class="grid grid-cols-[2fr_1fr_1fr] text-gray-100 text-base font-medium pb-3">
+            <p class="text-left text-gray-700">Product Details</p>
+            <p class="text-center text-gray-700">Subtotal</p>
         </div>
 
 
@@ -76,9 +75,9 @@
         @foreach($ProductsCart as $item)
 
         <!-- Example Product Rows (Repeat for each product) -->
-        <div class="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
+        <div class="grid grid-cols-[2fr_1fr_1fr] text-gray-700 items-center text-sm md:text-base font-medium pt-3">
             <div class="flex items-center md:gap-6 gap-3">
-                <div class="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
+                <div class="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-100 rounded overflow-hidden">
                     <img class="max-w-full h-full object-cover" src="{{ asset($item->options->image)}}" alt="Item not found" />
                 </div>
 
@@ -107,7 +106,7 @@
 
 
 
-    <div class="max-w-[360px] w-full bg-lime-200/40 p-5 max-md:mt-16 border border-gray-300/70">
+    <div class="max-w-[360px] w-full bg-lime-100/40 p-5 max-md:mt-16 border border-gray-300/70">
         <h2 class="text-xl md:text-xl font-medium">Order Summary</h2>
         <span class="text-sm text-indigo-500">{{ $ProductsCart->count() }} Items</span>
       

@@ -5,10 +5,10 @@
 
 
 
-<div class="min-h-screen bg-base-200 p-6 flex justify-center">
+<div class="min-h-screen bg-base-200 p-6 flex justify-center bg-slate-50">
   <div class="w-full max-w-5xl">
     <!-- Profile Header -->
-    <div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card bg-base-100 shadow-xl mb-6 bg-slate-50">
       <div class="card-body flex flex-col md:flex-row items-center gap-6">
         <div class="avatar">
           <div class="w-24 rounded-full">
@@ -20,12 +20,12 @@
           <p class="text-sm text-gray-500">{{ Auth::guard('customer')->user()->email }}</p>
           <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
             <a href="{{ route('customer.profile.edit') }}">
-            <button class="btn btn-inverse">Edit Profile</button></a>
+            <button class="btn btn-inverse bg-slate-100 text-gray-800 hover:bg-gray-900 hover:text-gray-100">Edit Profile</button></a>
 
 
         <form method="POST" action="{{ route('customer.logout') }}">
         @csrf
-            <button class="btn btn-inverse">Logout</button></a>
+            <button class="btn btn-inverse bg-slate-100 text-gray-800 hover:bg-gray-900 hover:text-gray-100">Logout</button></a>
         </form>
 
           </div>
@@ -47,21 +47,21 @@
            
 
 
-          <div class="card-body space-y-4">
+          <div class="card-body space-y-4 bg-slate-50">
 
 
             
             <div>
-              <label class="label">Name</label>
-              <input type="text" value="{{ Auth::guard('customer')->user()->name }}" class="input input-bordered w-full" readonly/>
+              <label class="label text-gray-600">Name</label>
+              <input type="text" value="{{ Auth::guard('customer')->user()->name }}" class="input input-bordered w-full bg-white" readonly/>
             </div>
             <div>
-              <label class="label">Email</label>
-              <input type="email" value="{{ Auth::guard('customer')->user()->email }}" class="input input-bordered w-full" readonly/>
+              <label class="label text-gray-600">Email</label>
+              <input type="email" value="{{ Auth::guard('customer')->user()->email }}" class="input input-bordered w-full bg-white" readonly/>
             </div>
             <div>
-              <label class="label">Phone</label>
-              <input type="tel" value="{{ Auth::guard('customer')->user()->phone }}" class="input input-bordered w-full" readonly/>
+              <label class="label text-gray-600">Phone</label>
+              <input type="tel" value="{{ Auth::guard('customer')->user()->phone }}" class="input input-bordered w-full bg-white" readonly/>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@
     <table class="table-auto w-full text-sm border-collapse">
       
       <!-- Header -->
-      <thead class="bg-base-200/70 text-gray-700 uppercase text-xs tracking-wide hidden md:table-header-group">
+      <thead class="bg-base-200/70 text-gray-900 bg-white uppercase text-xs tracking-wide hidden md:table-header-group">
         <tr>
           <th class="px-6 py-3 text-left">Order Number</th>
           <th class="px-6 py-3 text-center">Order Date</th>

@@ -21,7 +21,7 @@
               <div class="text-white max-w-lg px-4 sm:px-6 lg:px-8">
                 <h2 class="text-2xl md:text-4xl font-bold mb-3">Big Savings on Your Essentials</h2>
                 <p class="mb-4 text-sm md:text-base">Get exclusive discounts on top pharmacy and wellness products.</p>
-                <a href="#" class="px-4 py-2 bg-violet-500 hover:bg-violet-600 rounded-lg text-white text-sm md:text-base">Shop Now</a>
+                <a href="#" class="px-4 py-2 bg-green-500 hover:bg-green-900 rounded-lg text-white text-sm md:text-base">Shop Now</a>
               </div>
             </div>
           </div>
@@ -39,6 +39,8 @@
           <button class="dot btn btn-xs" data-slide="{{ $index }}">{{ $index + 1 }}</button>
         @endforeach
       </div>
+
+
     </div>
   </div>
 </section>
@@ -86,7 +88,7 @@
                     <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-lg">
                       {{ $inventories->product->stock }} in stock
                     </span>
-                    <button type="button" class="p-2 bg-white/90 rounded-full shadow hover:bg-pink-100 transition">
+                    {{-- <button type="button" class="p-2 bg-white/90 rounded-full shadow hover:bg-pink-100 transition">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="2" stroke="currentColor" class="w-5 h-5 text-pink-500">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -95,7 +97,7 @@
                           3.75 5.401 3.75 3.3 5.765 3.3 8.25c0 7.22 
                           8.7 11.25 8.7 11.25s8.7-4.03 8.7-11.25z" />
                       </svg>
-                    </button>
+                    </button> --}}
                   </div>
 
                   <!-- Overlay for Prescription Required IF 1 SIYA SA COLUMN DATA-->
@@ -127,7 +129,7 @@
                   {{--  IF HINDI SIA PRESCRIPTION REQUIRED OR 0 THEN PEDE MAG ADD TO CART --}}
                   @if(!$inventories->product->prescription_required)
                     <button type="submit" 
-                            class="btn bg-violet-600 text-white hover:bg-violet-700 flex-1 w-full">
+                            class="btn bg-green-600 text-white hover:bg-green-900 flex-1 w-full">
                       Add to Cart
                     </button>
                   @else

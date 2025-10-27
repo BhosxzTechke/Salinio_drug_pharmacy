@@ -56,6 +56,13 @@ use HasFactory;
     }
 
 
+        public function brand() {
+
+    return $this->belongsTo(Brand::class, 'brand_id', 'id');
+
+    }
+
+
     /////////////////// SUB CATEGORY RELATION /////////////////
     public function subcategory() {
 

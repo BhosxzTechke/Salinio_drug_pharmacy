@@ -37,8 +37,10 @@
     <!-- Name, Brand, Category -->
     <h1 class="text-2xl font-bold">{{ $inventory->product->product_name }}</h1>
     <p class="text-sm text-gray-500">
-      Brand: <span class="font-medium">{{ $inventory->product->brand->brand_name ?? 'N/A' }}</span>
+      Brand: <span class="font-medium">{{ $inventory->product->brand->name ?? 'N/A' }}</span>
     </p>
+
+
     <p class="text-sm text-gray-500">
       Category: <span class="font-medium">{{ $inventory->Product->category->category_name ?? 'No Category' }}</span>
     </p>
@@ -159,19 +161,24 @@ $ProductsItem = Cart::instance('ecommerce')->content()->filter(function($item) u
           <a class="tab tab-bordered">Dosage</a> 
           <a class="tab tab-bordered">Safety Info</a>
           <a class="tab tab-bordered">Storage</a>
-          <a class="tab tab-bordered">Reviews</a>
         </div>
         <div class="p-4 border rounded-b-lg text-sm text-gray-600 leading-relaxed">
-          <p><strong>Dosage Form:</strong> {{ $inventory->dosage_form ?? 'N/A' }}</p>
-          <p><strong>Dosage Instructions:</strong> {{ $inventory->product->usage_instructions ?? 'Consult your physician.' }}</p>
+          <p><strong>Description:</strong> {{ $inventory->product->description ?? 'N/A' }}</p>
+          <p><strong>Dosage Form:</strong> {{ $inventory->product->dosage_form ?? 'N/A' }}</p>
+
+          {{-- <p><strong>Dosage Instructions:</strong> {{ $inventory->product->usage_instructions ?? 'Consult your physician.' }}</p> --}}
           {{-- <p><strong>Contraindications:</strong> {{ $Product->contraindications ?? 'Not specified' }}</p> --}}
 
 
-          <p><strong>Storage Instructions:</strong> {{ $inventory->product->storage_instructions ?? 'Store in a cool, dry place below 25°C' }}</p>
+          <p><strong>Target Gender:</strong> {{ $inventory->product->target_gender ?? 'N/A' }}</p>
+          <p><strong>Age Group:</strong> {{ $inventory->product->age_group ?? 'N/A' }}</p>
+          <p><strong>Health Concern:</strong> {{ $inventory->product->health_concern ?? 'N/A' }}</p>
           <p><strong>Expiry Date:</strong> {{ $inventory->expiry_date ? date('M d, Y', strtotime($inventory->expiry_date)) : 'N/A' }}</p>
         </div>
       </div>
 
+
+      
       <!-- Trust Badges -->
       <div class="flex space-x-4 mt-4">
         <span class="badge badge-outline">✔ Genuine Medicine Guarantee</span>
