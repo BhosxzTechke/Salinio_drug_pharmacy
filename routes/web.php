@@ -1082,7 +1082,7 @@ use Illuminate\Http\Request;
 
             Route::controller(ReportController::class)->group(function () {
 
-            Route::get('/Reports-Daily', 'dailyReport')->name('daily.reports')->middleware('permission:view-daily-reports');
+            Route::get('/Reports-Daily', 'dailyReport')->name('daily.reports')->middleware('permission:view-daily-sales-report');
 
 
             Route::get('/Reports-Weekly', 'weeklyReport')->name('weekly.reports')->middleware('permission:view-weekly-sales-report');
