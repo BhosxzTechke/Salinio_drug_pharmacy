@@ -178,30 +178,37 @@ class RoleController extends Controller
 
 
     
-
 public function UpdateRoles(Request $request)
 {
     $rolesId = $request->input('id');
 
-    // Validate the request data
-    $request->validate([
-        'name' => 'required|string|max:255|unique:roles,name,' . $rolesId, // ✅ ignore current role
-        'permissions' => 'nullable|array', // optional array
-        'permissions.*' => 'exists:permissions,id', // each permission must exist
-    ]);
-
     // Find the role by ID
     $role = Role::findOrFail($rolesId);
+
+    // Prevent changing the Super Admin role name
+    if ($role->name === 'Super Admin' && $request->name !== 'Super Admin') {
+        return redirect()->back()->with([
+            'message' => 'The Super Admin role name cannot be changed.',
+            'alert-type' => 'error'
+        ]);
+    }
+
+    // Validate the request data
+    $request->validate([
+        'name' => 'required|string|max:255|unique:roles,name,' . $rolesId,
+        'permissions' => 'nullable|array',
+        'permissions.*' => 'exists:permissions,id',
+    ]);
 
     // Update the role name
     $role->name = $request->name;
     $role->save();
 
-    // Sync permissions if provided
-    if ($request->filled('permissions')) {
-        $role->syncPermissions($request->permissions);
+    // Sync permissions (protect Super Admin from losing permissions)
+    if ($role->name === 'Super Admin') {
+        $role->syncPermissions($role->permissions->pluck('id')->toArray());
     } else {
-        $role->syncPermissions([]); // clear all permissions if none provided
+        $role->syncPermissions($request->filled('permissions') ? $request->permissions : []);
     }
 
     $notification = [
@@ -209,10 +216,8 @@ public function UpdateRoles(Request $request)
         'alert-type' => 'success'
     ];
 
-    // Redirect back with a success message
     return redirect()->route('all.roles')->with($notification);
 }
-
 
 
 
