@@ -23,23 +23,26 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
+            public function store(Request $request): RedirectResponse
+            {
+                // Manual validation to prevent automatic error display
+                $validator = \Validator::make($request->all(), [
+                    'email' => ['required', 'email'],
+                ]);
 
-        // Use the "customers" broker instead of the default "users"
-        $status = Password::broker('customers')->sendResetLink(
-            $request->only('email')
-        );
+                if ($validator->fails()) {
+                    // Optionally, you can redirect silently without showing errors
+                    return back()->with('status', 'If your email exists, a reset link will be sent.');
+                }
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
-    }
+                // Attempt to send the password reset link using the "customers" broker
+                $status = Password::broker('customers')->sendResetLink(
+                    $request->only('email')
+                );
 
+                // Always return the same message to prevent exposing user existence
+                return back()->with('status', 'If your email exists, a reset link will be sent.');
+            }
 
     
 
