@@ -38,9 +38,8 @@
                                             <div class="col-md-6">
                                                 <div class="mt-3">
                                                     <p><b>Hello,{{ $Customer->name}}</b></p>
-                                                    <p class="text-muted">Thanks a lot because you keep purchasing our products. Our company
-                                                        promises to provide high quality products for you as well as outstanding
-                                                        customer service for every transaction. </p>
+                                                    <p class="text-muted">Thanks a lot because you keep purchasing our products. Our Pharmacy
+                                                        promises to provide high quality products for you. </p>
                                                 </div>
             
                                             </div><!-- end col -->
@@ -49,9 +48,9 @@
 
                                             <div class="col-md-4 offset-md-2">
                                                 <div class="mt-3 float-end">
-                                                    <p><strong>Order Date : </strong> <span class="float-end"> &nbsp;&nbsp;&nbsp;&nbsp; Jan 17, 2016</span></p>
+                                                    {{-- <p><strong>Order Date : </strong> <span class="float-end"> &nbsp;&nbsp;&nbsp;&nbsp; Jan 17, 2016</span></p>
                                                     <p><strong>Order Status : </strong> <span class="float-end"><span class="badge bg-danger">Unpaid</span></span></p>
-                                                    <p><strong>Order No. : </strong> <span class="float-end">000028 </span></p>
+                                                    <p><strong>Order No. : </strong> <span class="float-end">000028 </span></p> --}}
                                                 </div>
                                             </div><!-- end col -->
                                         </div>
@@ -59,13 +58,12 @@
             
                                         <div class="row mt-3">
                                             <div class="col-sm-6">
-                                                <h6>Billing Address</h6>
+                                                <h6> Address</h6>
                                                 <address>
-                                            	{{ $Customer->address }} - {{ $Customer->city }}
+                                            	{{ $Customer->address ?? '' }}
                                                     <br>
-                                            <abbr title="Phone">Shop Name:</abbr> {{ $Customer->shopname }}<br>
-                                            <abbr title="Phone">Phone:</abbr> {{ $Customer->phone }}<br>
-                                            <abbr title="Phone">Email:</abbr> {{ $Customer->email }}<br>
+                                            <abbr title="Phone">Phone:</abbr> {{ $Customer->phone ?? '' }}<br>
+                                            <abbr title="Phone">Email:</abbr> {{ $Customer->email ?? '' }}<br>
 
                                                 </address>
                                             </div> <!-- end col -->
@@ -155,7 +153,6 @@
             
                                         <div class="mt-4 mb-1">
                                             <div class="text-end d-print-none">
-                                                <a href="javascript:window.print()" class="btn btn-primary waves-effect waves-light"><i class="mdi mdi-printer me-1"></i> Print</a>
                                                <button type="submit" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invoice-modal">Submit</button>
                                             </div>
                                         </div>

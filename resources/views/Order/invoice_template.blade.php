@@ -48,14 +48,15 @@
     <tr>
         <td valign="top">
           <!-- {{-- <img src="" alt="" width="150"/> --}} -->
-          <h2 style="color: rgb(24, 30, 81); font-size: 26px;"><strong>SD-Prime-Opss</strong></h2>
+          <h2 style="color: rgb(24, 30, 81); font-size: 26px;"><strong>Salinio Drug</strong></h2>
         </td>
         <td align="right">
             <pre class="font" >
-               SD-Prime-Opss Head Office
+               Salinio Drug and General Merchandise <br>
+               1245454545 <br>
                Email:support@sdprime.com <br>
                Mob: 1245454545 <br>
-               Signal 1207,Taguig:#4 <br>
+               C5 Taguig, Manila, Philippines  <br>
               
             </pre>
         </td>
@@ -70,12 +71,11 @@
     <tr>
         <td>
           <p class="font" style="margin-left: 20px;">
-           <strong>Customer Name:</strong>{{ $order->customer->name }}   <br>
-           <strong>Customer Email:</strong>{{ $order->customer->email }}   <br>
-           <strong>Customer Phone:</strong>{{ $order->customer->phone }}   <br>
+           <strong>Customer Name:</strong>{{ $order->customer->name ?? '' }}   <br>
+           <strong>Customer Email:</strong>{{ $order->customer->email ?? '' }}   <br>
+           <strong>Customer Phone:</strong>{{ $order->customer->phone ?? '' }}   <br>
           
-           <strong>Address:</strong>  {{ $order->customer->address }} 
-            <strong>Shop Name:</strong>  {{ $order->customer->shopname }}  
+           <strong>Address:</strong>  {{ $order->customer->address ?? '' }} 
             
          </p>
         </td>
@@ -86,7 +86,6 @@
             Order Status: {{ $order->order_status }}  <br>
             Payment Status: {{ $order->payment_status }}  <br>
             Total Pay : {{ $order->pay }}  <br>
-            Total Due : {{ $order->due }}  </span>
 
          </p>
         </td>
@@ -104,7 +103,6 @@
         <th>Product Code</th>
         <th>Quantity</th>
         <th>Price</th>
-        <th>Total(+Vat)</th>
       </tr>
     </thead>
     <tbody>
@@ -121,18 +119,20 @@
 
          
         
-        <td align="center">${{  $item->unitcost }} </td>
-         <td align="center">${{  $item->total }} </td>
+         <td align="center">{{  $item->total }} </td>
       </tr>
       @endforeach
     </tbody>
+
+
+
   </table>
   <br>
   <table width="100%" style=" padding:0 10px 0 10px;">
     <tr>
         <td align="right" >
-            <h2><span style="color: rgb(75, 94, 75);">Subtotal:</span>${{ $order->sub_total }} </h2>
-            <h2><span style="color: rgb(57, 70, 57);">Total:</span> ${{ $order->total }} </h2>
+            <h2><span style="color: rgb(75, 94, 75);">VatTable:</span>{{ $order->sub_total }} </h2>
+            <h2><span style="color: rgb(57, 70, 57);">Total:</span> {{ $order->total }} </h2>
             {{-- <h2><span style="color: rgb(62, 84, 62);">Full Payment PAID</h2> --}}
         </td>
     </tr>

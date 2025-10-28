@@ -547,16 +547,19 @@ public function BackupNow()
     return redirect()->back()->with($notification);
 }
 
+public function DownloadDatabase($getFilename)
+{
+    $path = storage_path('app/POS-Ecommerce/' . $getFilename);
 
-    //  Downlaod Specific Database
-    public function DownloadDatabase($getFilename){
+    if (!file_exists($path)) {
+        return redirect()->back()->with([
+            'message' => 'File not found.',
+            'alert-type' => 'error'
+        ]);
+    }
 
-    $path = storage_path('app\\POS-Ecommerce/'.$getFilename);
     return response()->download($path);
-
-}// End Method
-
-
+}
 
     public function DeleteDatabase($getFilename){
 

@@ -52,10 +52,10 @@
                     @endforeach
                 </td>   
                 <td>
-                    {{-- @if($item->name === 'Super Admin')
+                    @if($item->name === 'Super Admin')
                         <span class="badge bg-success">Protected</span>
                     @else
-                     --}}
+                    
                         {{-- @if(Auth::user()->can('edit-role-permissions-button')) --}}
                             <a href="{{ route('edit.roles.permission', $item->id) }}" class="btn btn-blue rounded-pill waves-effect waves-light">Edit</a>
                         {{-- @endif --}}
@@ -64,7 +64,7 @@
                             <a href="{{ route('role.permission.delete',$item->id) }}" class="btn btn-danger rounded-pill waves-effect waves-light" id="delete">Delete</a>
                         {{-- @endif --}}
 
-                    {{-- @endif --}}
+                    @endif
                 </td>   
             </tr>
             @endforeach

@@ -36,37 +36,42 @@
 
     <!-- end timeline content-->
 
-    <div class="tab-pane" id="settings">
-        <form id="myForm" method="post" action="{{ route('update.roles') }}" >
-            @csrf
-            @method('PUT')
+<div class="tab-pane" id="settings">
+    <form id="myForm" method="post" action="{{ route('update.roles') }}">
+        @csrf
+        @method('PUT')
 
-            <input type="hidden" name="id" value="{{ $role->id }}">
+        <input type="hidden" name="id" value="{{ $role->id }}">
 
-            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Update Roles</h5>
+        <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Update Roles</h5>
 
-            <div class="row">
-
-
-    <div class="col-md-6">
-        <div class="form-group mb-3">
-            <label for="firstname" class="form-label">Roles Name</label>
-            <input type="text" value="{{ $role->name }}" name="name" class="form-control"   >
-           
-        </div>
-    </div>
-
-
-
-</div> <!-- end row -->
- 
-        
-            
-            <div class="text-end">
-                <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label for="name" class="form-label">Role Name</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="name"
+                        class="form-control @error('name') is-invalid @enderror" 
+                        value="{{ old('name', $role->name) }}" 
+                        placeholder="Enter role name"
+                    >
+                    {{-- Validation Error Message --}}
+                    @error('name')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
-        </form>
-    </div>
+        </div> <!-- end row -->
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-success waves-effect waves-light mt-2">
+                <i class="mdi mdi-content-save"></i> Save
+            </button>
+        </div>
+    </form>
+</div>
     <!-- end settings content-->
     
                                        

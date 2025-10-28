@@ -1038,7 +1038,7 @@ use Illuminate\Http\Request;
         });
 
 
-        
+
         });
 
 
@@ -1057,7 +1057,7 @@ use Illuminate\Http\Request;
 
         ////////////////////// BACKUP DATABASE ///////////////////////
     Route::middleware(['auth', 'web'])->group(function () {
-    Route::get('/admin/backup', [AdminController::class, 'BackupDatabase'])->name('backup.database')->middleware('permission:backup-database');
+    Route::get('/admin/backup', [AdminController::class, 'BackupDatabase'])->name('backup.database')->middleware('permission:view-backup-database');
     Route::post('/backup/now', [AdminController::class, 'BackupNow'])->name('backup.now');
     Route::get('/backup/{getFilename}', [AdminController::class, 'DownloadDatabase'])->name('backup.download');
     Route::delete('/backup/{getFilename}', [AdminController::class, 'DeleteDatabase'])->name('backup.delete');

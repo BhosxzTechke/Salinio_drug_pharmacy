@@ -135,30 +135,33 @@ class RoleController extends Controller
     } // End Method
 
 
-    public function StoreRoles(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'array',
-        ]);
+            public function StoreRoles(Request $request)
+            {
 
-        // Create a new role
-        $role = Role::create(['name' => $request->name]);
 
-        // Assign permissions to the role if provided
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
-        }
+                $request->validate([
+                    'name' => 'required|string|max:255|unique:roles,name', 
+                    'permissions' => 'nullable|array', 
+                    'permissions.*' => 'exists:permissions,id', 
+                ]);
 
-        $notification = array(
-            'message' => 'Role created successfully!',
-            'alert-type' => 'success'
-        );
 
-        // Redirect back with a success message
-        return redirect()->route('all.roles')->with($notification);
-    }
+
+
+                $role = Role::create(['name' => $request->name]);
+
+                if ($request->filled('permissions')) {
+                    $role->syncPermissions($request->permissions);
+                }
+
+                $notification = [
+                    'message' => 'Role created successfully!',
+                    'alert-type' => 'success'
+                ];
+
+                // Redirect back with a success message
+                return redirect()->route('all.roles')->with($notification);
+            }
 
 
     public function EditRoles($id)
@@ -176,38 +179,39 @@ class RoleController extends Controller
 
     
 
-    
-    public function UpdateRoles(Request $request)
-    {
+public function UpdateRoles(Request $request)
+{
+    $rolesId = $request->input('id');
 
-        $rolesId = $request->input('id');
-        // Validate the request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'permissions' => 'array',
-        ]);
+    // Validate the request data
+    $request->validate([
+        'name' => 'required|string|max:255|unique:roles,name,' . $rolesId, // ✅ ignore current role
+        'permissions' => 'nullable|array', // optional array
+        'permissions.*' => 'exists:permissions,id', // each permission must exist
+    ]);
 
-        // Find the role by ID
-        $role = Role::findOrFail($rolesId);
+    // Find the role by ID
+    $role = Role::findOrFail($rolesId);
 
-        // Update the role name
-        $role->name = $request->name;
-        $role->save();
+    // Update the role name
+    $role->name = $request->name;
+    $role->save();
 
-        // Sync permissions with the role if provided
-        if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
-        }
+    // Sync permissions if provided
+    if ($request->filled('permissions')) {
+        $role->syncPermissions($request->permissions);
+    } else {
+        $role->syncPermissions([]); // clear all permissions if none provided
+    }
 
-        $notification = array(
-            'message' => 'Role updated successfully!',
-            'alert-type' => 'success'
-        );
+    $notification = [
+        'message' => 'Role updated successfully!',
+        'alert-type' => 'success'
+    ];
 
-        // Redirect back with a success message
-        return redirect()->route('all.roles')->with($notification);
-    } // End Method
-
+    // Redirect back with a success message
+    return redirect()->route('all.roles')->with($notification);
+}
 
 
 

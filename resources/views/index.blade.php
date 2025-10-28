@@ -145,7 +145,6 @@
 
                 
                 <div class="widget-chart text-center" dir="ltr">
-                        <div id="total-revenue" data-colors="#f1556c"></div>
                     <!-- Remove chart div if not using chart -->
 
 

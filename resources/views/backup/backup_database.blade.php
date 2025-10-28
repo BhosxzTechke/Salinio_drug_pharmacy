@@ -14,12 +14,12 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                    <form method="POST" action="{{ route('backup.now') }}">
+                    {{-- <form method="POST" action="{{ route('backup.now') }}">
                         @csrf
                         <button class="btn btn-primary rounded-pill waves-effect waves-light">
                             Backup Now
                         </button>
-                    </form>                                 
+                    </form>                                  --}}
                 
                 </ol>
 
