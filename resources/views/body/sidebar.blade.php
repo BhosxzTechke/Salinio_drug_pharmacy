@@ -446,7 +446,7 @@
                                 @endif
 
 
-                        @if(Auth::user()->can('	view-complete-pickup-orders'))
+                        @if(Auth::user()->can('view-complete-pickup-orders'))
                                 <li><a href="{{ route('complete.pickup') }}">Complete Pickup</a></li>
                             @endif
 
