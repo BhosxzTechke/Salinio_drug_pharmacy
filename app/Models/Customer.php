@@ -16,15 +16,14 @@ class Customer extends Authenticatable
     use HasFactory , Notifiable;
     
 
-    protected $fillable = [
+    protected $fillable = [     
         'name',
         'email',
-        'phone',
-        'address',
-        'image',
         'password',
-        'added_by_staff',
-        'remember_token',
+        'phone',
+        'date_of_birth',
+        'gender',
+        'is_active',                                    
     ];
 
 
@@ -33,6 +32,27 @@ class Customer extends Authenticatable
         'updated_at',
     ];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     public function sendPasswordResetNotification($token)
 {
